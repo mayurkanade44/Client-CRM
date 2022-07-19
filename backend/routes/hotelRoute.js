@@ -12,7 +12,7 @@ const router = express.Router();
 router.route("/hotelRegistration").post(hotelRegister);
 router.route("/hotelLogin").post(hotelLogin);
 router
-  .route("/addLocations/:id")
+  .route("/locations/:id")
   .post(addTreatmentLocation)
   .patch(editTreatmentLocation)
   .delete(deleteTreatmentLocation);

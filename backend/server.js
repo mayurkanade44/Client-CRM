@@ -2,15 +2,16 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from 'dotenv'
 
-import hotelRouter from './routes/hotelRoute.js'
-
 const app = express()
 dotenv.config()
 
+import hotelRouter from './routes/hotelRoute.js'
+import hotelEmpRouter from './routes/hotelEmpRoute.js'
 
 app.use(express.json())
 
 app.use("/api/hotel", hotelRouter)
+app.use("/api/hotel/employee", hotelEmpRouter)
 
 
 const port = process.env.PORT || 5000

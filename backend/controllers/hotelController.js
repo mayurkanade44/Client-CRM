@@ -24,6 +24,20 @@ export const hotelRegister = async (req, res) => {
   }
 };
 
+export const hotelDeletion = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const hotel = await Hotel.findOne({ _id: id });
+    await hotel.remove();
+    res.status(200).json({ msg: "Hotel removed." });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
+  }
+};
+
 export const addTreatmentLocation = async (req, res) => {
   const { id } = req.params;
   const { floor, location } = req.body;
@@ -79,6 +93,36 @@ export const deleteTreatmentLocation = async (req, res) => {
   try {
     await TreatmentLocation.findByIdAndDelete(id);
     res.status(200).json({ msg: "Floor has been deleted" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
+  }
+};
+
+export const getAllHotels = async (req, res) => {
+  try {
+    const hotels = await Hotel.find();
+    res.status(200).json(hotels);
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
+  }
+};
+
+export const singleHotel = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const hotel = await Hotel.findOne({ _id: id }).populate("employees");
+    if (!hotel) {
+      return res.status(404).json({ msg: "Hotel not found" });
+    }
+
+    res.status(200).json({ hotel });
   } catch (error) {
     console.log(error);
     return res

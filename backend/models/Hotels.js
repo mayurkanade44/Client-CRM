@@ -11,8 +11,15 @@ const HotelSchema = new mongoose.Schema(
     hotelEmail: { type: String, required: true },
     password: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+HotelSchema.virtual("employees", {
+  ref: "HotelEmployee",
+  localField: "_id",
+  foreignField: "hotel",
+  justOne: false,
+});
 
 HotelSchema.pre("save", async function () {
   const salt = await bcrypt.genSalt(10);

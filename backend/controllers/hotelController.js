@@ -1,5 +1,5 @@
-import express from "express";
 import Hotel from "../models/Hotels.js";
+import TreatmentLocation from "../models/TreatmentLocation.js";
 
 export const hotelRegister = async (req, res) => {
   const { hotelName, hotelEmail, hotelAddress, password } = req.body;
@@ -10,21 +10,83 @@ export const hotelRegister = async (req, res) => {
     if (hotel) {
       return res
         .status(400)
-        .json({ msg: "Hotel name Or hotel email already exists" });
+        .json({ msg: "Hotel name Or email already exists" });
     }
 
-    const newHotel = await Hotel.create({
-      hotelName,
-      hotelAddress,
-      hotelEmail,
-      password,
-    });
+    const newHotel = await Hotel.create(req.body);
 
-    res.status(201).json({ msg:`${hotelName} is successfully added` });
+    res.status(201).json({ msg: `${hotelName} is successfully added` });
   } catch (error) {
     console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
   }
 };
+
+export const addTreatmentLocation = async (req, res) => {
+  const { id } = req.params;
+  const { floor, location } = req.body;
+
+  try {
+    const alreadyHotel = await Hotel.findOne({ _id: id });
+
+    if (!alreadyHotel) {
+      return res.status(404).json({ msg: "Hotel not found" });
+    }
+
+    const hotel = id;
+    const loc = await TreatmentLocation.create({ floor, location, hotel });
+    res.status(201).json({ loc, msg: "Treatment location added successfully" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
+  }
+};
+
+export const editTreatmentLocation = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const location = await TreatmentLocation.findById(id);
+
+    if (!location) {
+      return res.status(404).json({ msg: "Location not found" });
+    }
+
+    const loc = await TreatmentLocation.findByIdAndUpdate(
+      { _id: id },
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    res.status(201).json({ msg: "Treatment location updated successfully" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
+  }
+};
+
+export const deleteTreatmentLocation = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await TreatmentLocation.findByIdAndDelete(id);
+    res.status(200).json({ msg: "Floor has been deleted" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
+  }
+};
+
 export const hotelLogin = async (req, res) => {
   const { hotelEmail, password } = req.body;
 
@@ -46,5 +108,8 @@ export const hotelLogin = async (req, res) => {
     res.status(200).json({ hotel: hotel._id, token });
   } catch (error) {
     console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
   }
 };

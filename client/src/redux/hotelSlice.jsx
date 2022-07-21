@@ -4,13 +4,14 @@ import axios from "axios";
 
 const initialState = {
   loading: false,
+  hotelId: ''
 };
 
 export const hotelRegistration = createAsyncThunk(
   "hotel/registration",
   async (hotel, thunkAPI) => {
     try {
-      const res = await axios.post("/hotel/hotelRegistration");
+      const res = await axios.post("/api/hotel/hotelRegistration", hotel);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -28,12 +29,13 @@ const hotelSlice = createSlice({
     },
     [hotelRegistration.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      console.log(payload.msg);
+      state.hotelId = payload.hotel
+      toast.success(payload.msg)
     },
-    [hotelRegistration.rejected]: (state, {payload}) => {
-        state.loading = false;
-        console.log(payload)
-    }
+    [hotelRegistration.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload)
+    },
   },
 });
 

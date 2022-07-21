@@ -10,6 +10,8 @@ const initialState = {
   hotelEmail: "",
   contractNo: "",
   password: "",
+  floor: [],
+  locations: [],
 };
 
 const HotelRegister = () => {
@@ -17,6 +19,8 @@ const HotelRegister = () => {
   const dispatch = useDispatch();
 
   const [formValue, setFormValue] = useState(initialState);
+  const [tempFloor, setTempFloor] = useState("");
+  const [tempLocations, setTempLocations] = useState("");
 
   const {
     hotelName,
@@ -33,15 +37,26 @@ const HotelRegister = () => {
     setFormValue({ ...formValue, [name]: value });
   };
 
+  const addLocations = (e) => {
+    e.preventDefault();
+    setFormValue({
+      ...formValue,
+      floor: [...formValue.floor, tempFloor],
+      locations: [...formValue.locations, tempLocations],
+    });
+    setTempFloor("");
+    setTempLocations([]);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
     dispatch(hotelRegistration(formValue));
+    setFormValue(initialState)
   };
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit}>
+      <form>
         <InputRow
           label="Hotel Name"
           type="text"
@@ -101,7 +116,33 @@ const HotelRegister = () => {
               required={true}
             />
           </div>
-            <button className='btn btn-dark text-center'>Register</button>
+          <div className="col-md-4">
+            <InputRow
+              label="Floor Number"
+              type="text"
+              name="tempFloor"
+              value={tempFloor}
+              handleChange={(e) => setTempFloor(e.target.value)}
+            />
+          </div>
+          <div className="col-md-7">
+            <InputRow
+              label="Locations"
+              type="text"
+              name="tempLocations"
+              placeholder="Location should be comma separated"
+              value={tempLocations}
+              handleChange={(e) => setTempLocations(e.target.value)}
+            />
+          </div>
+          <div className="col-md-1 mt-1">
+            <button className="btn btn-primary" onClick={addLocations}>
+              Add
+            </button>
+          </div>
+          <button className="btn btn-dark text-center" onClick={handleSubmit}>
+            Register
+          </button>
         </div>
       </form>
     </div>

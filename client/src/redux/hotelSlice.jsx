@@ -4,7 +4,6 @@ import axios from "axios";
 
 const initialState = {
   loading: false,
-  hotelId: ''
 };
 
 export const hotelRegistration = createAsyncThunk(
@@ -29,12 +28,11 @@ const hotelSlice = createSlice({
     },
     [hotelRegistration.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.hotelId = payload.hotel
-      toast.success(payload.msg)
+      toast.success(payload.msg);
     },
     [hotelRegistration.rejected]: (state, { payload }) => {
       state.loading = false;
-      toast.error(payload)
+      toast.error(payload);
     },
   },
 });

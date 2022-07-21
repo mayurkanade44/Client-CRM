@@ -2,9 +2,7 @@ import express from "express";
 import {
   hotelRegister,
   hotelLogin,
-  addTreatmentLocation,
-  editTreatmentLocation,
-  deleteTreatmentLocation,
+  editHotel,
   hotelDeletion,
   getAllHotels,
   singleHotel,
@@ -16,10 +14,5 @@ router.route("/hotelRegistration").post(hotelRegister);
 router.route("/hotelLogin").post(hotelLogin);
 router.route("/allHotels").get(getAllHotels);
 router.route("/:id").delete(hotelDeletion).get(singleHotel);
-router
-  .route("/locations/:id")
-  .post(addTreatmentLocation)
-  .patch(editTreatmentLocation)
-  .delete(deleteTreatmentLocation);
 
 export default router;

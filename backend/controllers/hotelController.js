@@ -1,5 +1,5 @@
 import Hotel from "../models/Hotels.js";
-import TreatmentLocation from "../models/TreatmentLocation.js";
+
 
 export const hotelRegister = async (req, res) => {
   const { hotelName, hotelEmail, hotelAddress, password } = req.body;
@@ -15,7 +15,9 @@ export const hotelRegister = async (req, res) => {
 
     const newHotel = await Hotel.create(req.body);
 
-    res.status(201).json({ msg: `${hotelName} is successfully added` });
+    res
+      .status(201)
+      .json({ hotel: newHotel._id, msg: `${hotelName} is successfully added` });
   } catch (error) {
     console.log(error);
     return res
@@ -38,29 +40,8 @@ export const hotelDeletion = async (req, res) => {
   }
 };
 
-export const addTreatmentLocation = async (req, res) => {
-  const { id } = req.params;
-  const { floor, location } = req.body;
 
-  try {
-    const alreadyHotel = await Hotel.findOne({ _id: id });
-
-    if (!alreadyHotel) {
-      return res.status(404).json({ msg: "Hotel not found" });
-    }
-
-    const hotel = id;
-    const loc = await TreatmentLocation.create({ floor, location, hotel });
-    res.status(201).json({ loc, msg: "Treatment location added successfully" });
-  } catch (error) {
-    console.log(error);
-    return res
-      .status(500)
-      .json({ msg: "Something went wrong, please try again later" });
-  }
-};
-
-export const editTreatmentLocation = async (req, res) => {
+export const editHotel = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -87,19 +68,7 @@ export const editTreatmentLocation = async (req, res) => {
   }
 };
 
-export const deleteTreatmentLocation = async (req, res) => {
-  const { id } = req.params;
 
-  try {
-    await TreatmentLocation.findByIdAndDelete(id);
-    res.status(200).json({ msg: "Floor has been deleted" });
-  } catch (error) {
-    console.log(error);
-    return res
-      .status(500)
-      .json({ msg: "Something went wrong, please try again later" });
-  }
-};
 
 export const getAllHotels = async (req, res) => {
   try {

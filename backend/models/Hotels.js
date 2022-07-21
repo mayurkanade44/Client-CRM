@@ -10,6 +10,8 @@ const HotelSchema = new mongoose.Schema(
     billToAddress: { type: String, required: true },
     hotelEmail: { type: String, required: true },
     password: { type: String, required: true },
+    floor: [String],
+    locations: [String],
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );

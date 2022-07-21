@@ -35,14 +35,16 @@ export const employeeLogin = async (req, res) => {
 
     const user = await HotelEmployee.findOne({ username, hotel });
     if (!user) {
-      return res.status(400).json({ msg: "Invalid username" });
+      return res
+        .status(400)
+        .json({ msg: "Invalid username or Selected wrong hotel" });
     }
 
     const isPasswordMatch = await user.comparePassword(password);
     if (!isPasswordMatch) {
       return res.status(400).json({ msg: "Invalid password" });
     }
-    
+
     // const userHotel = user.hotel.toString().replace(/ObjectId\("(.*)"\)/, "$1");
     // if (hotel !== userHotel) {
     //   return res

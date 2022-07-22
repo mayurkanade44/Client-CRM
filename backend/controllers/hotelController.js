@@ -49,14 +49,10 @@ export const editHotel = async (req, res) => {
       return res.status(404).json({ msg: "Hotel not found" });
     }
 
-    const loc = await TreatmentLocation.findByIdAndUpdate(
-      { _id: id },
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const loc = await Hotel.findByIdAndUpdate({ _id: id }, req.body, {
+      new: true,
+      runValidators: true,
+    });
     res.status(201).json({ msg: "Treatment location updated successfully" });
   } catch (error) {
     console.log(error);
@@ -114,7 +110,7 @@ export const hotelLogin = async (req, res) => {
     }
 
     const token = await hotel.createJWT();
-    res.status(200).json({ hotel: hotel._id, token });
+    res.status(200).json({ user: { hotel: hotel._id, hotelName: hotel.hotelName, token: token } });
   } catch (error) {
     console.log(error);
     return res

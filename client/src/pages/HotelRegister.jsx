@@ -2,7 +2,7 @@ import { InputRow } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { hotelRegistration } from "../redux/hotelSlice";
-import { useNavigate } from "react-router-dom";
+
 
 const initialState = {
   hotelName: "",
@@ -22,7 +22,6 @@ const HotelRegister = () => {
   const [formValue, setFormValue] = useState(initialState);
   const [tempFloor, setTempFloor] = useState("");
   const [tempLocations, setTempLocations] = useState("");
-  const navigate = useNavigate;
 
   const {
     hotelName,

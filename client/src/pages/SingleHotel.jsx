@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -7,6 +8,7 @@ const SingleHotel = () => {
   const { loading, singleHotel } = useSelector((store) => store.hotel);
   const dispatch = useDispatch();
 
+  const [edit, setEdit] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -15,11 +17,18 @@ const SingleHotel = () => {
 
   return (
     <div className="container my-3">
-      <h2 className="text-center">{singleHotel.hotelName}</h2>
+      <div class="d-flex justify-content-around">
+        <h2 className="text-center">{singleHotel.hotelName}</h2>
+        <button className="btn btn-dark" onClick={() => setEdit(!edit)}>
+        {edit ? 'Save' : 'Edit'}
+        </button>
+      </div>
       <h4>Hotel Address: {singleHotel.hotelAddress}</h4>
       <h4>Billing Address: {singleHotel.billToAddress}</h4>
-      <h4>Email Address: {singleHotel.hotelEmail}</h4>
-      <h4>Contract Number: {singleHotel.contractNo}</h4>
+      <div class="d-flex justify-content-around">
+        <h4>Email Address: {singleHotel.hotelEmail}</h4>
+        <h4>Contract Number: {singleHotel.contractNo}</h4>
+      </div>
       <h4 className="text-center my-3">Treatment Locations</h4>
       <table className="table table-bordered">
         <thead>

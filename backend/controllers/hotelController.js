@@ -43,10 +43,10 @@ export const editHotel = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const location = await TreatmentLocation.findById(id);
+    const location = await Hotel.findById(id);
 
     if (!location) {
-      return res.status(404).json({ msg: "Location not found" });
+      return res.status(404).json({ msg: "Hotel not found" });
     }
 
     const loc = await TreatmentLocation.findByIdAndUpdate(

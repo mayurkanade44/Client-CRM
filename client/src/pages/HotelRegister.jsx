@@ -1,7 +1,7 @@
 import { InputRow } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { hotelRegistration } from "../redux/hotelSlice";
+import { hotelRegistration} from "../redux/hotelSlice";
 
 const initialState = {
   hotelName: "",
@@ -51,7 +51,7 @@ const HotelRegister = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(hotelRegistration(formValue));
-    setFormValue(initialState)
+    setFormValue(initialState);
   };
 
   return (

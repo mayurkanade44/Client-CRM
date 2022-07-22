@@ -4,6 +4,8 @@ import axios from "axios";
 
 const initialState = {
   loading: false,
+  allHotels: [],
+  singleHotel: {},
 };
 
 export const hotelRegistration = createAsyncThunk(
@@ -11,6 +13,19 @@ export const hotelRegistration = createAsyncThunk(
   async (hotel, thunkAPI) => {
     try {
       const res = await axios.post("/api/hotel/hotelRegistration", hotel);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
+export const getAllHotel = createAsyncThunk(
+  "hotel/allHotels",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axios.get("/api/hotel/allHotels");
       return res.data;
     } catch (error) {
       console.log(error);
@@ -31,6 +46,17 @@ const hotelSlice = createSlice({
       toast.success(payload.msg);
     },
     [hotelRegistration.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [getAllHotel.pending]: (state) => {
+      state.loading = true;
+    },
+    [getAllHotel.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.allHotels = payload;
+    },
+    [getAllHotel.rejected]: (state, { payload }) => {
       state.loading = false;
       toast.error(payload);
     },

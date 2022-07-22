@@ -1,6 +1,5 @@
 import Hotel from "../models/Hotels.js";
 
-
 export const hotelRegister = async (req, res) => {
   const { hotelName, hotelEmail, hotelAddress, password } = req.body;
 
@@ -40,7 +39,6 @@ export const hotelDeletion = async (req, res) => {
   }
 };
 
-
 export const editHotel = async (req, res) => {
   const { id } = req.params;
 
@@ -67,8 +65,6 @@ export const editHotel = async (req, res) => {
       .json({ msg: "Something went wrong, please try again later" });
   }
 };
-
-
 
 export const getAllHotels = async (req, res) => {
   try {

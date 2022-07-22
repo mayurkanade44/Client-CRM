@@ -34,6 +34,21 @@ export const getAllHotel = createAsyncThunk(
   }
 );
 
+export const hotelDetails = createAsyncThunk(
+  "hotel/singleHotel",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axios.get(`/api/hotel/${id}`);
+      return res.data
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg)
+    }
+  }
+);
+
+
+
 const hotelSlice = createSlice({
   name: "hotel",
   initialState,
@@ -57,6 +72,17 @@ const hotelSlice = createSlice({
       state.allHotels = payload;
     },
     [getAllHotel.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [hotelDetails.pending]: (state) => {
+      state.loading = true;
+    },
+    [hotelDetails.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.singleHotel = payload.hotel
+    },
+    [hotelDetails.rejected]: (state, { payload }) => {
       state.loading = false;
       toast.error(payload);
     },

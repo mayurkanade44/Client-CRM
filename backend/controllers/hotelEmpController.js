@@ -80,3 +80,20 @@ export const employeeDeletion = async (req, res) => {
       .json({ msg: "Something went wrong, please try again later" });
   }
 };
+
+export const getAllEmployee = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const employees = await HotelEmployee.find({ hotel: id });
+    if (employees.length === 0) {
+      return res.status(200).json({ msg: "No employee registered yet" });
+    }
+    res.status(200).json({ employees });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
+  }
+};

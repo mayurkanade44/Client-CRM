@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   allHotelEmployees,
+  employeeDeletion,
   hotelEmployeeRegistration,
 } from "../redux/hotelEmpSlice";
 import InputRow from "./InputRow";
@@ -18,6 +19,7 @@ const initialState = {
 const EmployeeRegister = ({ id, employees }) => {
   const dispatch = useDispatch();
   const [formValue, setFormValue] = useState(initialState);
+  const [update, setUpdate] = useState(false)
   const { name, department, username, password } = formValue;
 
   const handleChange = (e) => {
@@ -28,13 +30,19 @@ const EmployeeRegister = ({ id, employees }) => {
 
   useEffect(() => {
     dispatch(allHotelEmployees(id));
-  }, []);
+  }, [update]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     formValue.hotel = id;
     dispatch(hotelEmployeeRegistration(formValue));
     setFormValue(initialState);
+    setUpdate(!update)
+  };
+
+  const handleDelete = (id) => {
+    dispatch(employeeDeletion(id));
+    setUpdate(!update);
   };
 
   return (
@@ -95,7 +103,7 @@ const EmployeeRegister = ({ id, employees }) => {
         <thead>
           <tr>
             <th style={{ width: 50 }}>No</th>
-            <th className="text-center">Hotel Name</th>
+            <th className="text-center">Employee Name</th>
             <th style={{ width: 260 }}>Action</th>
           </tr>
         </thead>
@@ -107,9 +115,12 @@ const EmployeeRegister = ({ id, employees }) => {
                   <th>{index + 1}</th>
                   <td>{item.name}</td>
                   <td>
-                    <Link to={`/hotelDetails/${item._id}`}>
-                      <button className="btn btn-primary me-2">Delete</button>
-                    </Link>
+                    <button
+                      className="btn btn-danger me-2"
+                      onClick={() => handleDelete(item._id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               );

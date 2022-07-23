@@ -47,6 +47,19 @@ export const allHotelEmployees = createAsyncThunk(
   }
 );
 
+export const employeeDeletion = createAsyncThunk(
+  "hotel/employeeDeletion",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axios.delete(`/api/hotel/employee/${id}`);
+      return res.data
+    } catch (error) {
+       console.log(error);
+       return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const hotelEmpSlice = createSlice({
   name: "Employee",
   initialState,
@@ -84,6 +97,17 @@ const hotelEmpSlice = createSlice({
       toast.success(payload.msg);
     },
     [allHotelEmployees.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [employeeDeletion.pending]: (state) => {
+      state.loading = true;
+    },
+    [employeeDeletion.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      toast.success(payload.msg);
+    },
+    [employeeDeletion.rejected]: (state, { payload }) => {
       state.loading = false;
       toast.error(payload);
     },

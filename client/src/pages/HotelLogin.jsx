@@ -5,6 +5,7 @@ import { InputRow } from "../components";
 import { hotelLogin } from "../redux/hotelEmpSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { getAllHotel } from "../redux/hotelSlice";
 
 const initialState = {
   hotelEmail: "",
@@ -13,12 +14,17 @@ const initialState = {
 
 const HotelLogin = () => {
   const { loading, user } = useSelector((store) => store.employee);
+  const { allHotels } = useSelector((store) => store.hotel);
   const dispatch = useDispatch();
 
   const [formValue, setFormValue] = useState(initialState);
-  const { hotelEmail, password } = formValue;
+  const { hotelEmail, password, hotel } = formValue;
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getAllHotel());
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

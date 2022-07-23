@@ -53,7 +53,7 @@ export const employeeLogin = async (req, res) => {
     // }
 
     const token = await user.createJWT();
-    res.status(200).json({ token, msg: "logged in" });
+    res.status(200).json({ token, hotel, msg: "logged in" });
   } catch (error) {
     console.log(error);
     return res

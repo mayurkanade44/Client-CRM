@@ -34,6 +34,19 @@ export const hotelEmployeeRegistration = createAsyncThunk(
   }
 );
 
+export const hotelEmployeeLogin = createAsyncThunk(
+  "hotel/employeeLogin",
+  async (user, thunkAPI) => {
+    try {
+      const res = await axios.post("/api/hotel/employee/login", user);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 export const allHotelEmployees = createAsyncThunk(
   "hotel/allEmployees",
   async (id, thunkAPI) => {
@@ -52,10 +65,10 @@ export const employeeDeletion = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const res = await axios.delete(`/api/hotel/employee/${id}`);
-      return res.data
+      return res.data;
     } catch (error) {
-       console.log(error);
-       return thunkAPI.rejectWithValue(error.response.data.msg);
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
     }
   }
 );
@@ -108,6 +121,19 @@ const hotelEmpSlice = createSlice({
       toast.success(payload.msg);
     },
     [employeeDeletion.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [hotelEmployeeLogin.pending]: (state) => {
+      state.loading = true;
+    },
+    [hotelEmployeeLogin.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.user = payload.user;
+      localStorage.setItem("user", JSON.stringify(payload.user));
+      toast.success(`Welcome ${payload.user.hotelName}`);
+    },
+    [hotelEmployeeLogin.rejected]: (state, { payload }) => {
       state.loading = false;
       toast.error(payload);
     },

@@ -24,6 +24,6 @@ HotelEmployeeSchema.methods.createJWT = async function () {
   return jwt.sign({ empId: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_LIFETIME,
   });
-}
+};
 
 export default mongoose.model("HotelEmployee", HotelEmployeeSchema);

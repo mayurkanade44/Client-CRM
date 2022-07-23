@@ -20,6 +20,19 @@ export const hotelLogin = createAsyncThunk(
   }
 );
 
+export const hotelEmployeeRegistration = createAsyncThunk(
+  "hotel/employeeRegistration",
+  async (user, thunkAPI) => {
+    try {
+      const res = await axios.post("/api/hotel/employee/register", user);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const hotelEmpSlice = createSlice({
   name: "Employee",
   initialState,
@@ -37,8 +50,18 @@ const hotelEmpSlice = createSlice({
       state.loading = false;
       toast.error(payload);
     },
+    [hotelEmployeeRegistration.pending]: (state) => {
+      state.loading = true;
+    },
+    [hotelEmployeeRegistration.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      toast.success(payload.msg);
+    },
+    [hotelEmployeeRegistration.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
   },
 });
 
-
-export default hotelEmpSlice.reducer
+export default hotelEmpSlice.reducer;

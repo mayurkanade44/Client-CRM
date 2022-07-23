@@ -5,6 +5,7 @@ import axios from "axios";
 const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,
   loading: false,
+  allEmployees: [],
 };
 
 export const hotelLogin = createAsyncThunk(
@@ -25,6 +26,19 @@ export const hotelEmployeeRegistration = createAsyncThunk(
   async (user, thunkAPI) => {
     try {
       const res = await axios.post("/api/hotel/employee/register", user);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
+export const allHotelEmployees = createAsyncThunk(
+  "hotel/allEmployees",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axios.get(`/api/hotel/employee/allEmployees/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -58,6 +72,18 @@ const hotelEmpSlice = createSlice({
       toast.success(payload.msg);
     },
     [hotelEmployeeRegistration.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [allHotelEmployees.pending]: (state) => {
+      state.loading = true;
+    },
+    [allHotelEmployees.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.allEmployees = payload.employees;
+      toast.success(payload.msg);
+    },
+    [allHotelEmployees.rejected]: (state, { payload }) => {
       state.loading = false;
       toast.error(payload);
     },

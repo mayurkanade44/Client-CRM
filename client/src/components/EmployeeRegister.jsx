@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { hotelEmployeeRegistration } from "../redux/hotelEmpSlice";
+import { Link } from "react-router-dom";
+import {
+  allHotelEmployees,
+  hotelEmployeeRegistration,
+} from "../redux/hotelEmpSlice";
 import InputRow from "./InputRow";
 
 const initialState = {
@@ -11,7 +15,7 @@ const initialState = {
   hotel: "",
 };
 
-const EmployeeRegister = ({ id }) => {
+const EmployeeRegister = ({ id, employees }) => {
   const dispatch = useDispatch();
   const [formValue, setFormValue] = useState(initialState);
   const { name, department, username, password } = formValue;
@@ -21,6 +25,10 @@ const EmployeeRegister = ({ id }) => {
 
     setFormValue({ ...formValue, [name]: value });
   };
+
+  useEffect(() => {
+    dispatch(allHotelEmployees(id));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -83,6 +91,31 @@ const EmployeeRegister = ({ id }) => {
           </div>
         </div>
       </form>
+      <table className="table table-bordered my-4">
+        <thead>
+          <tr>
+            <th style={{ width: 50 }}>No</th>
+            <th className="text-center">Hotel Name</th>
+            <th style={{ width: 260 }}>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {employees &&
+            employees.map((item, index) => {
+              return (
+                <tr key={item._id}>
+                  <th>{index + 1}</th>
+                  <td>{item.name}</td>
+                  <td>
+                    <Link to={`/hotelDetails/${item._id}`}>
+                      <button className="btn btn-primary me-2">Delete</button>
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
     </div>
   );
 };

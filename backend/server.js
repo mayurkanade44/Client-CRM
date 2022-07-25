@@ -7,11 +7,13 @@ dotenv.config()
 
 import hotelRouter from './routes/hotelRoute.js'
 import hotelEmpRouter from './routes/hotelEmpRoute.js'
+import hotelRequestsRouter from './routes/requestRoute.js'
 
 app.use(express.json())
 
 app.use("/api/hotel", hotelRouter)
 app.use("/api/hotel/employee", hotelEmpRouter)
+app.use("/api/hotel/request", hotelRequestsRouter)
 
 
 const port = process.env.PORT || 5000

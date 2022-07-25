@@ -16,7 +16,7 @@ export const employeeRegister = async (req, res) => {
     }
 
     const emp = await HotelEmployee.create(req.body);
-    res.status(201).json({ msg: `${name} has been added`, emp });
+    res.status(201).json({ msg: `${name} has been added` });
   } catch (error) {
     console.log(error);
     return res
@@ -49,6 +49,7 @@ export const employeeLogin = async (req, res) => {
     res.status(200).json({
       user: {
         hotelId: user.hotel,
+        empId: user._id,
         name: user.name,
         role: user.hotelAdmin,
         token: token,

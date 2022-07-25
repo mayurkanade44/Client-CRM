@@ -78,7 +78,7 @@ export const singleHotel = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const hotel = await Hotel.findOne({ _id: id }).populate("employees");
+    const hotel = await Hotel.findOne({ _id: id });
     if (!hotel) {
       return res.status(404).json({ msg: "Hotel not found" });
     }
@@ -110,16 +110,14 @@ export const hotelLogin = async (req, res) => {
     }
 
     const token = await hotel.createJWT();
-    res
-      .status(200)
-      .json({
-        user: {
-          hotel: hotel._id,
-          hotelName: hotel.hotelName,
-          role: hotel.hotelAdmin,
-          token: token,
-        },
-      });
+    res.status(200).json({
+      user: {
+        hotel: hotel._id,
+        hotelName: hotel.hotelName,
+        role: hotel.hotelAdmin,
+        token: token,
+      },
+    });
   } catch (error) {
     console.log(error);
     return res

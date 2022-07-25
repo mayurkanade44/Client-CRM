@@ -131,7 +131,7 @@ const hotelEmpSlice = createSlice({
       state.loading = false;
       state.user = payload.user;
       localStorage.setItem("user", JSON.stringify(payload.user));
-      toast.success(`Welcome ${payload.user.hotelName}`);
+      toast.success(`Welcome ${payload.user.name}`);
     },
     [hotelEmployeeLogin.rejected]: (state, { payload }) => {
       state.loading = false;

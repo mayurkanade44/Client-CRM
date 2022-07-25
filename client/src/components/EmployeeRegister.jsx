@@ -11,7 +11,7 @@ import InputRow from "./InputRow";
 const initialState = {
   name: "",
   department: "",
-  username: "",
+  email: "",
   password: "",
   hotel: "",
 };
@@ -19,8 +19,8 @@ const initialState = {
 const EmployeeRegister = ({ id, employees }) => {
   const dispatch = useDispatch();
   const [formValue, setFormValue] = useState(initialState);
-  const [update, setUpdate] = useState(false)
-  const { name, department, username, password } = formValue;
+  const [update, setUpdate] = useState(false);
+  const { name, department, email, password } = formValue;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,7 +37,7 @@ const EmployeeRegister = ({ id, employees }) => {
     formValue.hotel = id;
     dispatch(hotelEmployeeRegistration(formValue));
     setFormValue(initialState);
-    setUpdate(!update)
+    setUpdate(!update);
   };
 
   const handleDelete = (id) => {
@@ -73,11 +73,11 @@ const EmployeeRegister = ({ id, employees }) => {
           </div>
           <div className="col-md-5">
             <InputRow
-              label="Username"
+              label="Email"
               type="text"
-              placeholder="Please provide username"
-              name="username"
-              value={username}
+              placeholder="Please provide email"
+              name="email"
+              value={email}
               handleChange={handleChange}
               required={true}
             />

@@ -1,17 +1,17 @@
 import HotelEmployee from "../models/HotelEmployee.js";
 
 export const employeeRegister = async (req, res) => {
-  const { name, username, department, password } = req.body;
+  const { name, email, department, password } = req.body;
 
   try {
-    if (!name || !department || !password || !username) {
+    if (!name || !department || !password || !email) {
       return res.status(400).json({ msg: "Please enter all values" });
     }
 
-    const alreadyExists = await HotelEmployee.findOne({ username });
+    const alreadyExists = await HotelEmployee.findOne({ email });
     if (alreadyExists) {
       return res.status(400).json({
-        msg: "Given username already exists. Try different username.",
+        msg: "Given email id already exists.",
       });
     }
 
@@ -26,18 +26,18 @@ export const employeeRegister = async (req, res) => {
 };
 
 export const employeeLogin = async (req, res) => {
-  const { username, password, hotel } = req.body;
+  const { email, password, hotel } = req.body;
 
   try {
-    if (!password || !username || !hotel) {
+    if (!password || !email || !hotel) {
       return res.status(400).json({ msg: "Please enter all values" });
     }
 
-    const user = await HotelEmployee.findOne({ username, hotel });
+    const user = await HotelEmployee.findOne({ email, hotel });
     if (!user) {
       return res
         .status(400)
-        .json({ msg: "Invalid username or Selected wrong hotel" });
+        .json({ msg: "Invalid email or Selected wrong hotel" });
     }
 
     const isPasswordMatch = await user.comparePassword(password);
@@ -45,15 +45,16 @@ export const employeeLogin = async (req, res) => {
       return res.status(400).json({ msg: "Invalid password" });
     }
 
-    // const userHotel = user.hotel.toString().replace(/ObjectId\("(.*)"\)/, "$1");
-    // if (hotel !== userHotel) {
-    //   return res
-    //     .status(400)
-    //     .json({ msg: "User is not registered in the selected hotel" });
-    // }
-
     const token = await user.createJWT();
-    res.status(200).json({ token, hotel, msg: "logged in" });
+    res.status(200).json({
+      user: {
+        hotelId: user.hotel,
+        name: user.name,
+        role: user.hotelAdmin,
+        token: token,
+      },
+      msg: "logged in",
+    });
   } catch (error) {
     console.log(error);
     return res

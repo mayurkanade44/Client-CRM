@@ -110,7 +110,16 @@ export const hotelLogin = async (req, res) => {
     }
 
     const token = await hotel.createJWT();
-    res.status(200).json({ user: { hotel: hotel._id, hotelName: hotel.hotelName, token: token } });
+    res
+      .status(200)
+      .json({
+        user: {
+          hotel: hotel._id,
+          hotelName: hotel.hotelName,
+          role: hotel.hotelAdmin,
+          token: token,
+        },
+      });
   } catch (error) {
     console.log(error);
     return res

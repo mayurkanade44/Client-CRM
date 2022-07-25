@@ -9,6 +9,7 @@ const HotelSchema = new mongoose.Schema(
     contractNo: { type: String, required: true },
     billToAddress: { type: String, required: true },
     hotelEmail: { type: String, required: true },
+    hotelAdmin: { type: Boolean, default: true },
     password: { type: String, required: true },
     floor: [String],
     locations: [String],

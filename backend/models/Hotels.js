@@ -13,6 +13,7 @@ const HotelSchema = new mongoose.Schema(
     password: { type: String, required: true },
     floor: [String],
     locations: [String],
+    pestService: [String],
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );

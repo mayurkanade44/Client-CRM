@@ -2,7 +2,8 @@ import { InputRow } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { hotelRegistration } from "../redux/hotelSlice";
-
+import MultiSelect from "react-multiple-select-dropdown-lite";
+import "react-multiple-select-dropdown-lite/dist/index.css";
 
 const initialState = {
   hotelName: "",
@@ -11,8 +12,8 @@ const initialState = {
   hotelEmail: "",
   contractNo: "",
   password: "",
-  floor: [],
-  locations: [],
+  floor: ["Select Floor"],
+  locations: ["Select Location"],
 };
 
 const HotelRegister = () => {
@@ -22,6 +23,7 @@ const HotelRegister = () => {
   const [formValue, setFormValue] = useState(initialState);
   const [tempFloor, setTempFloor] = useState("");
   const [tempLocations, setTempLocations] = useState("");
+  const [value, setValue] = useState("");
 
   const {
     hotelName,
@@ -38,6 +40,17 @@ const HotelRegister = () => {
     setFormValue({ ...formValue, [name]: value });
   };
 
+  const services = [
+    { label: "Green Shield", value: "Green Shield" },
+    { label: "Ratrid", value: "Ratrid" },
+    { label: "Flyban", value: "Flyban" },
+    { label: "Termiproof", value: "Termiproof" },
+  ];
+
+  const handleOnchange = (val) => {
+    setValue(val);
+  };
+
   const addLocations = (e) => {
     e.preventDefault();
     setFormValue({
@@ -51,8 +64,10 @@ const HotelRegister = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    formValue.pestService = value;
     dispatch(hotelRegistration(formValue));
     setFormValue(initialState);
+    setValue("")
   };
 
   return (
@@ -85,16 +100,36 @@ const HotelRegister = () => {
           handleChange={handleChange}
           required={true}
         />
-        <InputRow
-          label="Contract Number"
-          type="text"
-          placeholder="Please provide contract number"
-          name="contractNo"
-          value={contractNo}
-          handleChange={handleChange}
-          required={true}
-        />
         <div className="row">
+          <div className="col-md-6">
+            <InputRow
+              label="Contract Number"
+              type="text"
+              placeholder="Please provide contract number"
+              name="contractNo"
+              value={contractNo}
+              handleChange={handleChange}
+              required={true}
+            />
+          </div>
+          <div className="col-md-6">
+            <div className="row mt-2">
+              <div className="col-md-3">
+                <div className="preview-values">
+                  <h4>Services</h4>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <MultiSelect
+                  onChange={handleOnchange}
+                  options={services}
+                  className="multiselect"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
           <div className="col-md-6">
             <InputRow
               label="Hotel Email"

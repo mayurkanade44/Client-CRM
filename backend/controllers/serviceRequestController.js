@@ -8,13 +8,14 @@ export const createServiceRequest = async (req, res) => {
       return res.status(400).json({ msg: "Please provide all values" });
     }
 
-    let sr = `SR - ${Math.floor(1 + Math.random() * 10)}`,
+    let sr = `SR - ${Math.floor(1 + Math.random() * 9000)}`,
       unique = true;
 
+      
     while (unique) {
       const alreadySR = await ServiceRequest.findOne({ SRNumber: sr });
       if (alreadySR) {
-        sr = `SR - ${Math.floor(1 + Math.random() * 10)}`;
+        sr = `SR - ${Math.floor(1 + Math.random() * 9000)}`;
       } else {
         unique = false;
       }

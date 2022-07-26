@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { InputRow } from "../components";
 import { hotelEmployeeLogin, hotelLogin } from "../redux/hotelEmpSlice";
-import { getAllHotel } from "../redux/hotelSlice";
+import { getAllHotelNames } from "../redux/hotelSlice";
 import { useNavigate } from "react-router-dom";
 
 const initialState = {
@@ -14,7 +14,7 @@ const initialState = {
 
 const HotelLogin = () => {
   const { loading, user } = useSelector((store) => store.employee);
-  const { allHotels } = useSelector((store) => store.hotel);
+  const { allHotelsNames } = useSelector((store) => store.hotel);
   const dispatch = useDispatch();
 
   const [formValue, setFormValue] = useState(initialState);
@@ -56,7 +56,7 @@ const HotelLogin = () => {
         navigate("/newServiceRequest");
       }, 2000);
     }
-    dispatch(getAllHotel());
+    dispatch(getAllHotelNames());
     // eslint-disable-next-line
   }, [user]);
 
@@ -99,7 +99,7 @@ const HotelLogin = () => {
                 value={hotel}
                 onChange={handleChange}
               >
-                {allHotels.map((data) => {
+                {allHotelsNames.map((data) => {
                   return (
                     <option value={data.id} key={data.id}>
                       {data.hotelName}

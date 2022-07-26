@@ -1,9 +1,7 @@
-import { InputRow } from "../components";
+import { InputRow, Multiselect } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { hotelRegistration } from "../redux/hotelSlice";
-import MultiSelect from "react-multiple-select-dropdown-lite";
-import "react-multiple-select-dropdown-lite/dist/index.css";
 
 const initialState = {
   hotelName: "",
@@ -67,7 +65,7 @@ const HotelRegister = () => {
     formValue.pestService = value;
     dispatch(hotelRegistration(formValue));
     setFormValue(initialState);
-    setValue("")
+    setValue("");
   };
 
   return (
@@ -120,12 +118,7 @@ const HotelRegister = () => {
                 </div>
               </div>
               <div className="col-md-6">
-                <MultiSelect
-                  onChange={handleOnchange}
-                  options={services}
-                  className="multiselect"
-                  required
-                />
+                <Multiselect handleChange={handleOnchange} option={services} />
               </div>
             </div>
           </div>

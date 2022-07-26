@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Multiselect } from "../components";
 import { hotelDetails } from "../redux/hotelSlice";
-import MultiSelect from "react-multiple-select-dropdown-lite";
-import "react-multiple-select-dropdown-lite/dist/index.css";
-
-import Multiselect from "multiselect-react-dropdown";
 import { createServiceRequest } from "../redux/serviceReqSlice";
 
 const initialState = {
@@ -60,8 +57,8 @@ const NewSR = () => {
     formValue.hotel = user.hotelId;
     formValue.employee = user.empId;
     formValue.pestService = value;
-    dispatch(createServiceRequest(formValue))
-    setFormValue(initialState)
+    dispatch(createServiceRequest(formValue));
+    setFormValue(initialState);
   };
 
   return (
@@ -130,12 +127,7 @@ const NewSR = () => {
                 </div>
               </div>
               <div className="col-md-6">
-                <MultiSelect
-                  onChange={handleOnchange}
-                  options={objs}
-                  className="multiselect"
-                  required
-                />
+                <Multiselect handleChange={handleOnchange} option={objs} />
               </div>
             </div>
           </div>

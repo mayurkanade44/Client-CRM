@@ -35,6 +35,19 @@ export const getAllHotelNames = createAsyncThunk(
   }
 );
 
+export const getAllHotels = createAsyncThunk(
+  "hotel/allHotels",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axios.get("/api/hotel/allHotels");
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 export const hotelDetails = createAsyncThunk(
   "hotel/singleHotel",
   async (id, thunkAPI) => {
@@ -71,6 +84,17 @@ const hotelSlice = createSlice({
       state.allHotelsNames = payload.hotelNames;
     },
     [getAllHotelNames.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [getAllHotels.pending]: (state) => {
+      state.loading = true;
+    },
+    [getAllHotels.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.allHotels = payload.hotels;
+    },
+    [getAllHotels.rejected]: (state, { payload }) => {
       state.loading = false;
       toast.error(payload);
     },

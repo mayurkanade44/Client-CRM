@@ -54,7 +54,7 @@ const HotelRegister = () => {
     setFormValue({
       ...formValue,
       floor: [...formValue.floor, tempFloor],
-      locations: [...formValue.locations, tempLocations],
+      locations: [...formValue.locations, `Select,${tempLocations}`],
     });
     setTempFloor("");
     setTempLocations([]);

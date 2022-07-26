@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllHotel } from "../redux/hotelSlice";
+import { getAllHotels } from "../redux/hotelSlice";
 import { Link } from "react-router-dom";
 
 const AllHotels = () => {
@@ -8,7 +8,7 @@ const AllHotels = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllHotel());
+    dispatch(getAllHotels());
   }, []);
 
   return (

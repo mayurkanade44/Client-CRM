@@ -66,7 +66,6 @@ export const getAllHotels = async (req, res) => {
   try {
     const hotels = await Hotel.find();
     const hotelNames = await Hotel.find().select("hotelName");
-
     res.status(200).json({ hotels, hotelNames });
   } catch (error) {
     console.log(error);

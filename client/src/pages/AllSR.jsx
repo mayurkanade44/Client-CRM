@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { EmployeeRegister, SRtable } from "../components";
+import { EmployeeRegister, SRtable, NewSR } from "../components";
 import { employeeSR, hotelSR } from "../redux/serviceReqSlice";
-import NewSR from "./NewSR";
 
 const AllSR = () => {
   const { loading, user, allEmployees } = useSelector(

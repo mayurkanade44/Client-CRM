@@ -4,6 +4,10 @@ import axios from "axios";
 
 const initialState = {
   loading: false,
+  allEmployeeSR: [],
+  allHotelSR: [],
+  singleSR: [],
+  allSR: [],
 };
 
 export const createServiceRequest = createAsyncThunk(
@@ -11,6 +15,33 @@ export const createServiceRequest = createAsyncThunk(
   async (SR, thunkAPI) => {
     try {
       const res = await axios.post("/api/hotel/request/createSR", SR);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
+export const employeeSR = createAsyncThunk(
+  "hotel/employeeSR",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axios.get(`/api/hotel/request/employeeSR/${id}`);
+      console.log(res.data.sr);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
+export const hotelSR = createAsyncThunk(
+  "hotel/SR",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axios.get(`/api/hotel/request/hotelSR/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -31,6 +62,30 @@ const serviceRequestSlice = createSlice({
       toast.success(payload.msg);
     },
     [createServiceRequest.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [employeeSR.pending]: (state) => {
+      state.loading = true;
+    },
+    [employeeSR.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.allEmployeeSR = payload.sr;
+      toast.success(payload.msg);
+    },
+    [employeeSR.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [hotelSR.pending]: (state) => {
+      state.loading = true;
+    },
+    [hotelSR.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.allHotelSR = payload.sr;
+      toast.success(payload.msg);
+    },
+    [hotelSR.rejected]: (state, { payload }) => {
       state.loading = false;
       toast.error(payload);
     },

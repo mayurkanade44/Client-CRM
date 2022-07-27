@@ -28,7 +28,6 @@ export const employeeSR = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const res = await axios.get(`/api/hotel/request/employeeSR/${id}`);
-      console.log(res.data.sr);
       return res.data;
     } catch (error) {
       console.log(error);

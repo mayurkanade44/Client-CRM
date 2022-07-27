@@ -72,7 +72,10 @@ export const allEmployeeSR = async (req, res) => {
 export const allHotelSR = async (req, res) => {
   const { id } = req.params;
   try {
-    const sr = await ServiceRequest.find({ hotel: id });
+    const sr = await ServiceRequest.find({ hotel: id }).populate({
+      path: "employee",
+      select: "name department",
+    });;
     if (sr.length === 0) {
       return res.status(404).json({ msg: "No service request created yet" });
     }

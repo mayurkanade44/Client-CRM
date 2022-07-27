@@ -23,7 +23,7 @@ export const hotelRegistration = createAsyncThunk(
 );
 
 export const getAllHotelNames = createAsyncThunk(
-  "hotel/allHotels",
+  "hotel/allHotelsNames",
   async (_, thunkAPI) => {
     try {
       const res = await axios.get("/api/hotel/allHotels");

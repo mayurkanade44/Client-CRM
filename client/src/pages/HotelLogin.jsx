@@ -47,15 +47,12 @@ const HotelLogin = () => {
   };
 
   useEffect(() => {
-    if (user && user.role) {
+    if (user) {
       setTimeout(() => {
         navigate("/allServiceRequests");
       }, 2000);
-    } else if (user && !user.role) {
-      setTimeout(() => {
-        navigate("/newServiceRequest");
-      }, 2000);
     }
+
     dispatch(getAllHotelNames());
     // eslint-disable-next-line
   }, [user]);

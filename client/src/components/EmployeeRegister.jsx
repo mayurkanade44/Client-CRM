@@ -74,7 +74,7 @@ const EmployeeRegister = ({ id, employees }) => {
           <div className="col-md-5">
             <InputRow
               label="Email"
-              type="text"
+              type="email"
               placeholder="Please provide email"
               name="email"
               value={email}

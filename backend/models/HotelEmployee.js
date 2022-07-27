@@ -8,7 +8,7 @@ const HotelEmployeeSchema = new mongoose.Schema(
     email: { type: String, required: true },
     department: { type: String, required: true },
     password: { type: String, required: true },
-    hotelAdmin:{type:Boolean, default:false},
+    hotelAdmin: { type: Boolean, default: false },
     hotel: { type: mongoose.Types.ObjectId, ref: "Hotel", required: true },
   },
   { timestamps: true }
@@ -22,9 +22,13 @@ HotelEmployeeSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 HotelEmployeeSchema.methods.createJWT = async function () {
-  return jwt.sign({ empId: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_LIFETIME,
-  });
+  return jwt.sign(
+    { empId: this._id, hotelId: this.hotel },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_LIFETIME,
+    }
+  );
 };
 
 export default mongoose.model("HotelEmployee", HotelEmployeeSchema);

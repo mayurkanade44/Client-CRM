@@ -11,7 +11,6 @@ export const createServiceRequest = async (req, res) => {
     let sr = `SR - ${Math.floor(1 + Math.random() * 9000)}`,
       unique = true;
 
-      
     while (unique) {
       const alreadySR = await ServiceRequest.findOne({ SRNumber: sr });
       if (alreadySR) {
@@ -27,6 +26,41 @@ export const createServiceRequest = async (req, res) => {
     res.status(201).json({
       msg: `Your service request number is ${serviceReq.SRNumber}`,
     });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
+  }
+};
+
+export const getSingleSR = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const sr = await ServiceRequest.findOne({ _id: id });
+    if (!sr) {
+      return res.status(404).json({ msg: "Service Request not found" });
+    }
+
+    res.status(200).json({ sr });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
+  }
+};
+
+export const allEmployeeSR = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const sr = await ServiceRequest.find({ employee: id });
+    if (sr.length === 0) {
+      return res.status(404).json({ msg: "No service request cerated yet" });
+    }
+
+    res.status(200).json({ sr });
   } catch (error) {
     console.log(error);
     return res

@@ -1,9 +1,9 @@
 import express from "express";
-import { register } from "../controllers/epcornUserController.js";
+import { login, register } from "../controllers/epcornUserController.js";
 
 const router = express.Router();
 
 router.route("/register").post(register);
+router.route("/login").post(login);
 
-
-export default router
+export default router;

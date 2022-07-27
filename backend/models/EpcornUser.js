@@ -15,7 +15,7 @@ EpcornUserSchema.pre("save", async function(){
 EpcornUserSchema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password)
 }
-EpcornUserSchema.methods.cerateJWT = async function () {
+EpcornUserSchema.methods.createJWT = async function () {
     return jwt.sign(
       { userId: this._id, role: this.id },
       process.env.JWT_SECRET,

@@ -7,7 +7,9 @@ const SRtable = ({ data, role }) => {
           <th style={{ width: 200 }}>Floor</th>
           <th style={{ width: 250 }}>Location</th>
           <th style={{ width: 450 }}>Services</th>
-          {role && <th style={{ width: 300 }}>Name &amp; Department</th>}
+          {(role === "Hotel Admin" || role === "Admin") && (
+            <th style={{ width: 300 }}>Name &amp; Department</th>
+          )}
           <th style={{ width: 120 }}>Status</th>
         </tr>
       </thead>
@@ -20,7 +22,7 @@ const SRtable = ({ data, role }) => {
                 <td>{item.floor}</td>
                 <td>{item.locations}</td>
                 <td>{item.pestService}</td>
-                {role && (
+                {(role === "Hotel Admin" || role === "Admin") && (
                   <td>{`${item.employee.name.split(" ")[0]} / ${
                     item.employee.department
                   }`}</td>

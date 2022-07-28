@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   AllHotels,
   AllSR,
+  EpcornLogin,
   HotelLogin,
   HotelRegister,
   SingleHotel,
@@ -17,9 +18,11 @@ function App() {
       <Router>
         <Routes>
           <Route path="/hotelLogin" element={<HotelLogin />} />
+          <Route path="/epcornLogin" element={<EpcornLogin />} />
           <Route path="/allHotels" element={<AllHotels />} />
           <Route path="/hotelRegistration" element={<HotelRegister />} />
           <Route path="/allServiceRequests" element={<AllSR />} />
+          <Route path="/allServiceRequests/:id" element={<AllSR />} />
           <Route path="/hotelDetails/:id" element={<SingleHotel />} />
         </Routes>
       </Router>

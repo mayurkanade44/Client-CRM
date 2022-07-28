@@ -11,7 +11,7 @@ const initialState = {
   otherDetails: "",
 };
 const NewSR = () => {
-  const { loading, user } = useSelector((store) => store.employee);
+  const { loading, user } = useSelector((store) => store.user);
   const { singleHotel } = useSelector((store) => store.hotel);
   const dispatch = useDispatch();
   const [formValue, setFormValue] = useState(initialState);

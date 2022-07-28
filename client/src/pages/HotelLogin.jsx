@@ -2,18 +2,18 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { InputRow } from "../components";
-import { hotelEmployeeLogin, hotelLogin } from "../redux/hotelEmpSlice";
+import { hotelEmployeeLogin, hotelLogin } from "../redux/userSlice";
 import { getAllHotelNames } from "../redux/hotelSlice";
 import { useNavigate } from "react-router-dom";
 
 const initialState = {
   hotelEmail: "",
   password: "",
-  hotel: "admin",
+  hotel: "Hotel Admin",
 };
 
 const HotelLogin = () => {
-  const { loading, user } = useSelector((store) => store.employee);
+  const { loading, user } = useSelector((store) => store.user);
   const { allHotelsNames } = useSelector((store) => store.hotel);
   const dispatch = useDispatch();
 
@@ -33,7 +33,7 @@ const HotelLogin = () => {
     if (!hotelEmail || !password) {
       return toast.error("provide all values");
     }
-    if (hotel === "admin") {
+    if (hotel === "Hotel Admin" || hotel === "62e248cb62037f5644078a95") {
       dispatch(hotelLogin(formValue));
     } else {
       dispatch(

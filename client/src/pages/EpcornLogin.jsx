@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { InputRow } from "../components";
-import { epcornLogin } from "../redux/epcornSlice";
+import { epcornLogin } from "../redux/userSlice";
 
 const initialState = {
   name: "",
@@ -11,7 +11,7 @@ const initialState = {
 
 const EpcornLogin = () => {
   const [formValue, setFormValue] = useState(initialState);
-  const { loading, user } = useSelector((store) => store.epcorn);
+  const { loading, user } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

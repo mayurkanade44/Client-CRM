@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import {
   allHotelEmployees,
   employeeDeletion,
   hotelEmployeeRegistration,
-} from "../redux/hotelEmpSlice";
+} from "../redux/userSlice";
 import InputRow from "./InputRow";
 
 const initialState = {

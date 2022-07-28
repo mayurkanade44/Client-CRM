@@ -6,7 +6,7 @@ import { EpcornUserReg } from "../components";
 
 const AllHotels = () => {
   const { loading, allHotels } = useSelector((store) => store.hotel);
-  const { user } = useSelector((store) => store.epcorn);
+  const { user } = useSelector((store) => store.user);
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
 
@@ -37,7 +37,7 @@ const AllHotels = () => {
         </thead>
         <tbody>
           {allHotels &&
-            allHotels.map((item, index) => {
+            allHotels.slice(1).map((item, index) => {
               return (
                 <tr key={item.id}>
                   <th>{index + 1}</th>

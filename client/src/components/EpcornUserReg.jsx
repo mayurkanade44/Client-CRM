@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { epcornRegister } from "../redux/epcornSlice";
+import { epcornRegister } from "../redux/userSlice";
 import InputRow from "./InputRow";
 
 const initialState = {

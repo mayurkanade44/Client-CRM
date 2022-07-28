@@ -30,6 +30,8 @@ const HotelRegister = () => {
     hotelEmail,
     contractNo,
     password,
+    floor,
+    locations
   } = formValue;
 
   const handleChange = (e) => {
@@ -169,6 +171,26 @@ const HotelRegister = () => {
               Add
             </button>
           </div>
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th className="text-center" style={{ width: 200 }}>
+                  Floor
+                </th>
+                <th className="text-center">Locations</th>
+              </tr>
+            </thead>
+            <tbody>
+              {floor.map((item, index) => (
+                <tr key={index}>
+                  <td>{item}</td>
+                  <td>
+                    {locations.filter((loc, num) => num === index)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <button className="btn btn-dark text-center" onClick={handleSubmit}>
             Register
           </button>

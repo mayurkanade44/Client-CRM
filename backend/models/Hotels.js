@@ -33,9 +33,13 @@ HotelSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 HotelSchema.methods.createJWT = async function () {
-  return jwt.sign({ hotelId: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_LIFETIME,
-  });
+  return jwt.sign(
+    { userId: this._id, role: this.role },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_LIFETIME,
+    }
+  );
 };
 
 export default mongoose.model("Hotel", HotelSchema);

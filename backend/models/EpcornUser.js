@@ -17,7 +17,7 @@ EpcornUserSchema.methods.comparePassword = async function (password) {
 }
 EpcornUserSchema.methods.createJWT = async function () {
     return jwt.sign(
-      { userId: this._id, role: this.id },
+      { userId: this._id, role: this.role },
       process.env.JWT_SECRET,
       {
         expiresIn: process.env.JWT_LIFETIME,

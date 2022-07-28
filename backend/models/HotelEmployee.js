@@ -23,7 +23,7 @@ HotelEmployeeSchema.methods.comparePassword = async function (password) {
 };
 HotelEmployeeSchema.methods.createJWT = async function () {
   return jwt.sign(
-    { empId: this._id, hotelId: this.hotel },
+    { userId: this._id, role: this.role },
     process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_LIFETIME,

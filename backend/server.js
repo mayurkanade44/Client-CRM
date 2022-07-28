@@ -9,6 +9,7 @@ import hotelRouter from "./routes/hotelRoute.js";
 import hotelEmpRouter from "./routes/hotelEmpRoute.js";
 import hotelRequestsRouter from "./routes/requestRoute.js";
 import epcornRouter from "./routes/epcornUserRoute.js";
+import { notFoundError } from "./middleware/not-found.js";
 
 app.use(express.json());
 
@@ -16,6 +17,8 @@ app.use("/api/hotel", hotelRouter);
 app.use("/api/hotel/employee", hotelEmpRouter);
 app.use("/api/hotel/request", hotelRequestsRouter);
 app.use("/api/epcorn", epcornRouter);
+
+app.use(notFoundError)
 
 const port = process.env.PORT || 5000;
 const start = async () => {

@@ -17,7 +17,7 @@ const SingleHotel = () => {
 
   return (
     <div className="container my-3">
-      <div class="d-flex justify-content-around">
+      <div className="d-flex justify-content-around">
         <h2 className="text-center">{singleHotel.hotelName}</h2>
         <button className="btn btn-dark" onClick={() => setEdit(!edit)}>
         {edit ? 'Save' : 'Edit'}
@@ -25,9 +25,10 @@ const SingleHotel = () => {
       </div>
       <h4>Hotel Address: {singleHotel.hotelAddress}</h4>
       <h4>Billing Address: {singleHotel.billToAddress}</h4>
-      <div class="d-flex justify-content-around">
+      <div className="d-flex justify-content-between">
         <h4>Email Address: {singleHotel.hotelEmail}</h4>
         <h4>Contract Number: {singleHotel.contractNo}</h4>
+        <h4>Services: {singleHotel.pestService}</h4>
       </div>
       <h4 className="text-center my-3">Treatment Locations</h4>
       <table className="table table-bordered">

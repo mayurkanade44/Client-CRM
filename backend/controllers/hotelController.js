@@ -115,7 +115,7 @@ export const hotelLogin = async (req, res) => {
       user: {
         hotel: hotel._id,
         hotelName: hotel.hotelName,
-        role: hotel.hotelAdmin,
+        role: hotel.role,
         token: token,
       },
     });

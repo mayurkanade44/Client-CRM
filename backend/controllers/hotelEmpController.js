@@ -51,7 +51,7 @@ export const employeeLogin = async (req, res) => {
         hotelId: user.hotel,
         empId: user._id,
         name: user.name,
-        role: user.hotelAdmin,
+        role: user.role,
         token: token,
       },
       msg: "logged in",

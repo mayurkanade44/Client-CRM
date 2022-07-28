@@ -8,7 +8,7 @@ const HotelEmployeeSchema = new mongoose.Schema(
     email: { type: String, required: true },
     department: { type: String, required: true },
     password: { type: String, required: true },
-    hotelAdmin: { type: Boolean, default: false },
+    role: { type: String, default: "Hotel Employee" },
     hotel: { type: mongoose.Types.ObjectId, ref: "Hotel", required: true },
   },
   { timestamps: true }

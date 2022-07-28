@@ -2,14 +2,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-
 const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,
   loading: false,
   allUsers: [],
   allEmployees: [],
 };
-
 
 export const epcornLogin = createAsyncThunk(
   "epcorn/login",
@@ -37,6 +35,31 @@ export const epcornRegister = createAsyncThunk(
   }
 );
 
+export const allEpcornUsers = createAsyncThunk(
+  "epcorn/allUsers",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axios.get("/api/epcorn/allUSers");
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
+export const epcornDelete = createAsyncThunk(
+  "epcorn/delete",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axios.delete(`/api/epcorn/delete/${id}`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
 
 export const hotelLogin = createAsyncThunk(
   "hotel/login",
@@ -103,7 +126,6 @@ export const employeeDeletion = createAsyncThunk(
   }
 );
 
-
 const userSlice = createSlice({
   name: "User",
   initialState,
@@ -129,6 +151,29 @@ const userSlice = createSlice({
       toast.success(payload.msg);
     },
     [epcornRegister.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [allEpcornUsers.pending]: (state) => {
+      state.loading = true;
+    },
+    [allEpcornUsers.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.allUsers = payload.users;
+      toast.success(payload.msg);
+    },
+    [allEpcornUsers.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [epcornDelete.pending]: (state) => {
+      state.loading = true;
+    },
+    [epcornDelete.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      toast.success(payload.msg);
+    },
+    [epcornDelete.rejected]: (state, { payload }) => {
       state.loading = false;
       toast.error(payload);
     },
@@ -194,6 +239,5 @@ const userSlice = createSlice({
     },
   },
 });
-
 
 export default userSlice.reducer;

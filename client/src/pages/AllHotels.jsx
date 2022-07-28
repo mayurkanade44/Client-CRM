@@ -1,10 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllHotels } from "../redux/hotelSlice";
 import { Link } from "react-router-dom";
+import { EpcornUserReg } from "../components";
 
 const AllHotels = () => {
   const { loading, allHotels } = useSelector((store) => store.hotel);
+  const { user } = useSelector((store) => store.epcorn);
+  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -12,11 +15,18 @@ const AllHotels = () => {
   }, []);
 
   return (
-    <div className="container">
-      AllHotels
-      <Link to={"/hotelRegistration"}>
-        <button className="btn btn-primary">Hotel Registration</button>
-      </Link>
+    <div className="container my-3">
+      {user.role === "Admin" && (
+        <>
+          <Link to={"/hotelRegistration"}>
+            <button className="btn btn-primary me-3">Hotel Registration</button>
+          </Link>
+          <button className="btn btn-primary" onClick={() => setShow(!show)}>
+            Epcron Users
+          </button>
+        </>
+      )}
+      {show && <EpcornUserReg />}
       <table className="table table-bordered my-4">
         <thead>
           <tr>
@@ -36,7 +46,9 @@ const AllHotels = () => {
                     <Link to={`/hotelDetails/${item.id}`}>
                       <button className="btn btn-primary me-2">Details</button>
                     </Link>
-                    <button className="btn btn-info">Service Requests</button>
+                    <Link to={`/allServiceRequests/${item.id}`}>
+                      <button className="btn btn-info">Service Requests</button>
+                    </Link>
                   </td>
                 </tr>
               );

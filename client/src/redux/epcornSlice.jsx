@@ -21,6 +21,19 @@ export const epcornLogin = createAsyncThunk(
   }
 );
 
+export const epcornRegister = createAsyncThunk(
+  "epcorn/register",
+  async (user, thunkAPI) => {
+    try {
+      const res = await axios.post("/api/epcorn/register", user);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const epcornSlice = createSlice({
   name: "Epcorn",
   initialState,
@@ -35,6 +48,17 @@ const epcornSlice = createSlice({
       toast.success(`Welcome ${payload.user.name}`);
     },
     [epcornLogin.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [epcornRegister.pending]: (state) => {
+      state.loading = true;
+    },
+    [epcornRegister.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      toast.success(payload.msg);
+    },
+    [epcornRegister.rejected]: (state, { payload }) => {
       state.loading = false;
       toast.error(payload);
     },

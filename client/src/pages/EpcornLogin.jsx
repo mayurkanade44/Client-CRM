@@ -29,7 +29,7 @@ const EpcornLogin = () => {
   };
 
   useEffect(() => {
-    if (user && user.role === "Admin") {
+    if (user) {
       setTimeout(() => {
         navigate("/allHotels");
       }, 2000);

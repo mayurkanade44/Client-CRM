@@ -1,6 +1,6 @@
 import express from "express";
 import {
-    allEmployeeSR,
+  allEmployeeSR,
   allHotelSR,
   createServiceRequest,
   getSingleSR,

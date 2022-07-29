@@ -9,6 +9,7 @@ import {
   HotelLogin,
   HotelRegister,
   SingleHotel,
+  SingleSR,
 } from "./pages";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/hotelRegistration" element={<HotelRegister />} />
           <Route path="/allServiceRequests" element={<AllSR />} />
           <Route path="/allServiceRequests/:id" element={<AllSR />} />
+          <Route path="/singleSR/:id" element={<SingleSR />} />
           <Route path="/hotelDetails/:id" element={<SingleHotel />} />
         </Routes>
       </Router>

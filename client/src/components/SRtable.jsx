@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const SRtable = ({ data, role }) => {
   return (
     <table className="table table-bordered my-4">
@@ -29,13 +31,19 @@ const SRtable = ({ data, role }) => {
                 )}
                 <td>
                   {item.status === "Open" && (
-                    <button className="btn btn-danger">Open</button>
+                    <Link to={`/singleSR/${item._id}`}>
+                      <button className="btn btn-danger">Open</button>
+                    </Link>
                   )}
                   {item.status === "Closed" && (
-                    <button className="btn btn-success">Closed</button>
+                    <Link to={`/singleSR/${item._id}`}>
+                      <button className="btn btn-success">Closed</button>
+                    </Link>
                   )}
                   {item.status === "Pending" && (
-                    <button className="btn btn-primary">Pending</button>
+                    <Link to={`/singleSR/${item._id}`}>
+                      <button className="btn btn-primary">Pending</button>
+                    </Link>
                   )}
                 </td>
               </tr>

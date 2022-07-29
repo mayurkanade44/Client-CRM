@@ -4,6 +4,7 @@ import EpcornLogin from "./EpcornLogin";
 import HotelLogin from "./HotelLogin";
 import HotelRegister from "./HotelRegister";
 import SingleHotel from "./SingleHotel";
+import SingleSR from "./SingleSR";
 
 export {
   AllHotels,
@@ -12,4 +13,5 @@ export {
   HotelLogin,
   AllSR,
   EpcornLogin,
+  SingleSR,
 };

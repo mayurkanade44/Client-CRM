@@ -6,7 +6,7 @@ const initialState = {
   loading: false,
   allEmployeeSR: [],
   allHotelSR: [],
-  singleSR: [],
+  singleSR: {},
   allSR: [],
 };
 
@@ -36,11 +36,21 @@ export const employeeSR = createAsyncThunk(
   }
 );
 
-export const hotelSR = createAsyncThunk(
-  "hotel/SR",
+export const hotelSR = createAsyncThunk("hotel/SR", async (id, thunkAPI) => {
+  try {
+    const res = await axios.get(`/api/hotel/request/hotelSR/${id}`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return thunkAPI.rejectWithValue(error.response.data.msg);
+  }
+});
+
+export const getSingleSR = createAsyncThunk(
+  "hotel/singleSR",
   async (id, thunkAPI) => {
     try {
-      const res = await axios.get(`/api/hotel/request/hotelSR/${id}`);
+      const res = await axios.get(`/api/hotel/request/singleSR/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -85,6 +95,17 @@ const serviceRequestSlice = createSlice({
       toast.success(payload.msg);
     },
     [hotelSR.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [getSingleSR.pending]: (state) => {
+      state.loading = true;
+    },
+    [getSingleSR.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.singleSR= payload.sr;
+    },
+    [getSingleSR.rejected]: (state, { payload }) => {
       state.loading = false;
       toast.error(payload);
     },

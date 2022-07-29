@@ -28,10 +28,14 @@ const SRtable = ({ data, role }) => {
                   }`}</td>
                 )}
                 <td>
-                  {item.statusOpen ? (
+                  {item.status === "Open" && (
                     <button className="btn btn-danger">Open</button>
-                  ) : (
+                  )}
+                  {item.status === "Closed" && (
                     <button className="btn btn-success">Closed</button>
+                  )}
+                  {item.status === "Pending" && (
+                    <button className="btn btn-primary">Pending</button>
                   )}
                 </td>
               </tr>

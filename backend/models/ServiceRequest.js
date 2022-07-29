@@ -6,7 +6,7 @@ const ServiceRequestSchema = new mongoose.Schema({
   locations: { type: String, required: true },
   pestService: { type: String, required: true },
   otherDetails: { type: String },
-  statusOpen: { type: Boolean, default: true },
+  status: { type: String, default: "Open" },
   hotel: { type: mongoose.Types.ObjectId, ref: "Hotel", required: true },
   employee: {
     type: mongoose.Types.ObjectId,

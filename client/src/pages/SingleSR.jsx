@@ -30,11 +30,21 @@ const SingleSR = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (singleSR.status === "Close") {
+      return toast.error("SR is already closed");
+    }
     if (!formValue.comment || !formValue.status) {
       return toast.error("Please provide all values");
     }
-    const comment = `${moment(new Date()).format("L")} - ${formValue.comment}`;
-    dispatch(updateSR({ id, sr: { comment, status: formValue.status } }));
+    const comment = `${moment(new Date()).format("L")} - ${
+      formValue.comment
+    } by ${user.name}`;
+    dispatch(
+      updateSR({
+        id,
+        sr: { comment, status: formValue.status },
+      })
+    );
     setTimeout(() => {
       navigate(-1);
     }, 3000);
@@ -111,7 +121,7 @@ const SingleSR = () => {
       <table className="table table-bordered my-4">
         <thead>
           <tr>
-            <th>Operator Comments</th>
+            <th className="text-center">Operator Comments</th>
           </tr>
         </thead>
         <tbody>

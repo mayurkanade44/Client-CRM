@@ -63,6 +63,10 @@ export const updateSingleSR = async (req, res) => {
         .json({ msg: "No service request with this number" });
     }
 
+    if (sr.status === "Close") {
+      return res.status(400).json({ msg: "SR already closed" });
+    }
+
     sr.operatorComment.push(comment);
     sr.status = status;
 

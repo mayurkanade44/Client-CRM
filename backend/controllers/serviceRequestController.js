@@ -52,6 +52,30 @@ export const getSingleSR = async (req, res) => {
   }
 };
 
+export const updateSingleSR = async (req, res) => {
+  const { id } = req.params;
+  const { comment, status } = req.body;
+  try {
+    const sr = await ServiceRequest.findOne({ _id: id });
+    if (!sr) {
+      return res
+        .status(404)
+        .json({ msg: "No service request with this number" });
+    }
+
+    sr.operatorComment.push(comment);
+    sr.status = status;
+
+    await sr.save();
+    res.status(200).json({ msg: "SR has been updated" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
+  }
+};
+
 export const allEmployeeSR = async (req, res) => {
   const { id } = req.params;
   try {

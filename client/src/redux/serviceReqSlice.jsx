@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import axios from "axios";
 
+
 const initialState = {
   loading: false,
   allEmployeeSR: [],
@@ -59,6 +60,20 @@ export const getSingleSR = createAsyncThunk(
   }
 );
 
+export const updateSR = createAsyncThunk(
+  "hotel/updateSR",
+  async ({ id, sr }, thunkAPI) => {
+    try {
+      const res = await axios.put(`/api/hotel/request/singleSR/${id}`, sr);
+
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
+
 const serviceRequestSlice = createSlice({
   name: "serviceRequest",
   initialState,
@@ -103,9 +118,20 @@ const serviceRequestSlice = createSlice({
     },
     [getSingleSR.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.singleSR= payload.sr;
+      state.singleSR = payload.sr;
     },
     [getSingleSR.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [updateSR.pending]: (state) => {
+      state.loading = true;
+    },
+    [updateSR.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      toast.success(payload.msg);
+    },
+    [updateSR.rejected]: (state, { payload }) => {
       state.loading = false;
       toast.error(payload);
     },

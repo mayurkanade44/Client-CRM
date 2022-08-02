@@ -3,12 +3,12 @@ import EpcornUser from "../models/EpcornUser.js";
 export const register = async (req, res) => {
   const { name, password } = req.body;
   try {
-    if (!name || !password) {
+    if (!name || !password || !email) {
       return res.status(400).json({ msg: "Please provide all values" });
     }
-    const alreadyUser = await EpcornUser.findOne({ name });
+    const alreadyUser = await EpcornUser.findOne({ name, email });
     if (alreadyUser) {
-      return res.status(400).json({ msg: "Name already exists" });
+      return res.status(400).json({ msg: "Name or Email id already exists" });
     }
 
     const user = await EpcornUser.create(req.body);
@@ -22,15 +22,15 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { name, password } = req.body;
+  const { email, password } = req.body;
   try {
-    if (!name || !password) {
+    if (!email || !password) {
       return res.status(400).json({ msg: "Please provide all values" });
     }
 
-    const user = await EpcornUser.findOne({ name });
+    const user = await EpcornUser.findOne({ email });
     if (!user) {
-      return res.status(400).json({ msg: "Invalid Name" });
+      return res.status(400).json({ msg: "Invalid Email Id" });
     }
 
     const passwordMatch = await user.comparePassword(password);

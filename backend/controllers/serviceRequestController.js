@@ -42,7 +42,6 @@ export const getSingleSR = async (req, res) => {
     if (!sr) {
       return res.status(404).json({ msg: "Service Request not found" });
     }
-
     res.status(200).json({ sr });
   } catch (error) {
     console.log(error);
@@ -84,7 +83,6 @@ export const allEmployeeSR = async (req, res) => {
   const { id } = req.params;
   try {
     const sr = await ServiceRequest.find({ employee: id });
-
     res.status(200).json({ sr });
   } catch (error) {
     console.log(error);
@@ -101,7 +99,6 @@ export const allHotelSR = async (req, res) => {
       path: "employee",
       select: "name department",
     });
-
     res.status(200).json({ sr });
   } catch (error) {
     console.log(error);

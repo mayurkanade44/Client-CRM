@@ -171,7 +171,7 @@ const userSlice = createSlice({
     },
     [epcornDelete.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      toast.success(payload.msg);
+      toast.error(payload.msg);
     },
     [epcornDelete.rejected]: (state, { payload }) => {
       state.loading = false;

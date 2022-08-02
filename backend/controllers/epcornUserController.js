@@ -1,7 +1,7 @@
 import EpcornUser from "../models/EpcornUser.js";
 
 export const register = async (req, res) => {
-  const { name, password } = req.body;
+  const { name, password, email } = req.body;
   try {
     if (!name || !password || !email) {
       return res.status(400).json({ msg: "Please provide all values" });

@@ -6,11 +6,12 @@ import InputRow from "./InputRow";
 const initialState = {
   name: "",
   password: "",
+  email:""
 };
 
 const EpcornUserReg = ({ allUsers }) => {
   const [formValue, setFormValue] = useState(initialState);
-  const { name, password } = formValue;
+  const { name, email, password } = formValue;
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -29,7 +30,7 @@ const EpcornUserReg = ({ allUsers }) => {
     <>
       <form className="my-3" onSubmit={handleSubmit}>
         <div className="row">
-          <div className="col-md-5">
+          <div className="col-md-4">
             <InputRow
               label="Name"
               type="text"
@@ -40,7 +41,18 @@ const EpcornUserReg = ({ allUsers }) => {
               required={true}
             />
           </div>
-          <div className="col-md-5">
+          <div className="col-md-3">
+            <InputRow
+              label="Email"
+              type="email"
+              placeholder="abc@xyz.com"
+              name="email"
+              value={email}
+              handleChange={handleChange}
+              required={true}
+            />
+          </div>
+          <div className="col-md-4">
             <InputRow
               label="Password"
               type="password"
@@ -51,7 +63,8 @@ const EpcornUserReg = ({ allUsers }) => {
               required={true}
             />
           </div>
-          <div className="col-md-2">
+
+          <div className="col-md-1">
             <button type="submit" className="btn btn-primary mt-2">
               Register
             </button>

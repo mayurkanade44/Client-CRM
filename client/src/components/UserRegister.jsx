@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import {
+import userSlice, {
   allHotelEmployees,
   employeeDeletion,
+  epcornDelete,
+  epcornRegister,
   hotelEmployeeRegistration,
 } from "../redux/userSlice";
 import InputRow from "./InputRow";
@@ -15,7 +17,7 @@ const initialState = {
   hotel: "",
 };
 
-const EmployeeRegister = ({ id, employees }) => {
+const UserRegister = ({ id, employees, role }) => {
   const dispatch = useDispatch();
   const [formValue, setFormValue] = useState(initialState);
   const [update, setUpdate] = useState(false);
@@ -28,27 +30,34 @@ const EmployeeRegister = ({ id, employees }) => {
   };
 
   useEffect(() => {
-    dispatch(allHotelEmployees(id));
+    if (role === "Hotel Admin") dispatch(allHotelEmployees(id));
   }, [update]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    formValue.hotel = id;
-    dispatch(hotelEmployeeRegistration(formValue));
+    if (role === "Hotel Admin") {
+      formValue.hotel = id;
+      dispatch(hotelEmployeeRegistration(formValue));
+    }
+    if (role === "Admin") {
+      dispatch(epcornRegister({ name, email, password }));
+    }
+
     setFormValue(initialState);
     setUpdate(!update);
   };
 
   const handleDelete = (id) => {
-    dispatch(employeeDeletion(id));
+    if (role === "Hotel Admin") dispatch(employeeDeletion(id));
+    if (role === "Admin") dispatch(epcornDelete(id));
     setUpdate(!update);
   };
 
   return (
-    <div className="container">
+    <div className="container mt-3">
       <form onSubmit={handleSubmit}>
         <div className="row">
-          <div className="col-md-6">
+          <div className={role === "Hotel Admin" ? "col-md-6" : "col-md-4"}>
             <InputRow
               label="Full Name"
               type="text"
@@ -59,18 +68,20 @@ const EmployeeRegister = ({ id, employees }) => {
               required={true}
             />
           </div>
-          <div className="col-md-6">
-            <InputRow
-              label="Department"
-              type="text"
-              placeholder="Please provide department"
-              name="department"
-              value={department}
-              handleChange={handleChange}
-              required={true}
-            />
-          </div>
-          <div className="col-md-5">
+          {role === "Hotel Admin" && (
+            <div className="col-md-6">
+              <InputRow
+                label="Department"
+                type="text"
+                placeholder="Please provide department"
+                name="department"
+                value={department}
+                handleChange={handleChange}
+                required={true}
+              />
+            </div>
+          )}
+          <div className={role === "Hotel Admin" ? "col-md-5" : "col-md-3"}>
             <InputRow
               label="Email"
               type="email"
@@ -81,7 +92,7 @@ const EmployeeRegister = ({ id, employees }) => {
               required={true}
             />
           </div>
-          <div className="col-md-5">
+          <div className={role === "Hotel Admin" ? "col-md-5" : "col-md-4"}>
             <InputRow
               label="Password"
               type="password"
@@ -91,7 +102,7 @@ const EmployeeRegister = ({ id, employees }) => {
               required={true}
             />
           </div>
-          <div className="col-md-2">
+          <div className="col-md-1">
             <button type="submit" className="btn btn-primary mt-1">
               Register
             </button>
@@ -129,4 +140,4 @@ const EmployeeRegister = ({ id, employees }) => {
     </div>
   );
 };
-export default EmployeeRegister;
+export default UserRegister;

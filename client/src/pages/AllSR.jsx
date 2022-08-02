@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { EmployeeRegister, SRtable, NewSR } from "../components";
+import { SRtable, NewSR, UserRegister } from "../components";
 import { employeeSR, hotelSR } from "../redux/serviceReqSlice";
 
 const AllSR = () => {
@@ -34,7 +34,11 @@ const AllSR = () => {
             {!showSR ? "Add Employee" : "Back"}
           </button>
           {showSR && (
-            <EmployeeRegister id={user.hotel} employees={allEmployees} />
+            <UserRegister
+              id={user.hotel}
+              employees={allEmployees}
+              role={user.role}
+            />
           )}
         </>
       )}

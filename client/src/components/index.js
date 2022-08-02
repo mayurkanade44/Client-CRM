@@ -1,17 +1,8 @@
-import EmployeeRegister from "./EmployeeRegister";
 import InputRow from "./InputRow";
 import Navbar from "./Navbar";
 import Multiselect from "./Multiselect";
 import SRtable from "./SRtable";
 import NewSR from "./NewSR";
-import EpcornUserReg from "./EpcornUserReg";
+import UserRegister from "./UserRegister";
 
-export {
-  InputRow,
-  Navbar,
-  EmployeeRegister,
-  Multiselect,
-  SRtable,
-  NewSR,
-  EpcornUserReg,
-};
+export { InputRow, Navbar, Multiselect, SRtable, NewSR, UserRegister };

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllHotels } from "../redux/hotelSlice";
 import { Link } from "react-router-dom";
-import { EpcornUserReg } from "../components";
+import { UserRegister } from "../components";
 import { allEpcornUsers } from "../redux/userSlice";
 
 const AllHotels = () => {
@@ -29,7 +29,11 @@ const AllHotels = () => {
         </>
       )}
       {show ? (
-        <EpcornUserReg allUsers={allUsers} />
+        <UserRegister
+          id={user.hotel}
+          employees={allUsers}
+          role={user.role}
+        />
       ) : (
         <table className="table table-bordered my-4">
           <thead>

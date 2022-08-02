@@ -5,9 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   AllHotels,
   AllSR,
-  EpcornLogin,
-  HotelLogin,
   HotelRegister,
+  Landing,
   SingleHotel,
   SingleSR,
 } from "./pages";
@@ -18,8 +17,8 @@ function App() {
       <ToastContainer position="top-center" />
       <Router>
         <Routes>
-          <Route path="/hotelLogin" element={<HotelLogin />} />
-          <Route path="/epcornLogin" element={<EpcornLogin />} />
+          <Route path="/" element={<Landing />} />
+
           <Route path="/allHotels" element={<AllHotels />} />
           <Route path="/hotelRegistration" element={<HotelRegister />} />
           <Route path="/allServiceRequests" element={<AllSR />} />

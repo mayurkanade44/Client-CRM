@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllHotels } from "../redux/hotelSlice";
 import { Link } from "react-router-dom";
-import { UserRegister } from "../components";
+import { Loading, UserRegister } from "../components";
 import { allEpcornUsers } from "../redux/userSlice";
 
 const AllHotels = () => {
@@ -15,6 +15,10 @@ const AllHotels = () => {
     dispatch(getAllHotels());
     dispatch(allEpcornUsers());
   }, []);
+
+  if (loading) {
+    <Loading />;
+  }
 
   return (
     <div className="container my-3">
@@ -29,11 +33,7 @@ const AllHotels = () => {
         </>
       )}
       {show ? (
-        <UserRegister
-          id={user.hotel}
-          employees={allUsers}
-          role={user.role}
-        />
+        <UserRegister id={user.hotel} employees={allUsers} role={user.role} />
       ) : (
         <table className="table table-bordered my-4">
           <thead>

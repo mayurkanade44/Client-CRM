@@ -19,7 +19,7 @@ const initialState = {
 const Landing = () => {
   const [hotelUser, setHotelUser] = useState(false);
   const [epcornUser, setEpcornUser] = useState(false);
-  const { loading, user } = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.user);
   const { allHotelsNames } = useSelector((store) => store.hotel);
   const dispatch = useDispatch();
 
@@ -59,15 +59,14 @@ const Landing = () => {
 
   useEffect(() => {
     if (user) {
-      if (hotelUser) {
-        setTimeout(() => {
+      setTimeout(() => {
+        if (user.role === "Hotel Employee" || user.role === "Hotel Admin") {
           navigate("/allServiceRequests");
-        }, 2000);
-      } else {
-        setTimeout(() => {
+        }
+        if (user.role === "Epcorn" || user.role === "Admin") {
           navigate("/allHotels");
-        }, 2000);
-      }
+        }
+      }, 3000);
     }
 
     dispatch(getAllHotelNames());

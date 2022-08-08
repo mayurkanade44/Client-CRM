@@ -17,6 +17,7 @@ const SingleSR = () => {
     status: "",
   });
   const statusValue = ["Select Status", "Open", "Pending", "Close"];
+  
 
   useEffect(() => {
     dispatch(getSingleSR(id));

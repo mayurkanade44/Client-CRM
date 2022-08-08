@@ -16,8 +16,7 @@ const SingleSR = () => {
     comment: "",
     status: "",
   });
-  const statusValue = ["Select Status", "Open", "Pending", "Close"];
-  
+  const statusValue = ["Select Status", "Pending", "Close"];
 
   useEffect(() => {
     dispatch(getSingleSR(id));
@@ -54,10 +53,8 @@ const SingleSR = () => {
   return (
     <div className="container my-3">
       <div className="row">
-        <div className="col-md-6">
-          <h3>{singleSR.SRNumber}</h3>
-        </div>
-        <div className="col-md-6">
+        <div className="col-md-12 d-flex">
+          <h4 className="me-auto">{singleSR.SRNumber}</h4>
           <button
             className={`btn btn-${
               singleSR.status === "Open"
@@ -71,23 +68,19 @@ const SingleSR = () => {
           </button>
         </div>
       </div>
-      <h3>{`Services - ${singleSR.pestService}`}</h3>
-      <h3>{`Other Details - ${singleSR.otherDetails}`}</h3>
+      <h4>{`Services - ${singleSR.pestService}`}</h4>
+      <h4>{`Other Details - ${singleSR.otherDetails}`}</h4>
       {(user.role === "Admin" || user.role === "Epcorn") && (
         <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-md-2">
-              <label htmlFor="floatingTextarea2">
-                <h4>Comment</h4>
-              </label>
-            </div>
+          <div className="row g-3">
             <div className="col-md-4">
               <textarea
                 className="form-control"
+                placeholder="Please provide some comment of the service"
                 name="comment"
                 value={formValue.comment}
                 onChange={handleChange}
-                style={{ height: 100 }}
+                style={{ height: 70 }}
               ></textarea>
             </div>
             <div className="col-md-2">

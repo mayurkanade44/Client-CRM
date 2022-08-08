@@ -19,7 +19,7 @@ const initialState = {
 const Landing = () => {
   const [hotelUser, setHotelUser] = useState(false);
   const [epcornUser, setEpcornUser] = useState(false);
-  const { loading, user } = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.user);
   const { allHotelsNames } = useSelector((store) => store.hotel);
   const dispatch = useDispatch();
 

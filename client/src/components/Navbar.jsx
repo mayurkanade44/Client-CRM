@@ -16,8 +16,9 @@ const Navbar = () => {
               ? "/allHotels"
               : "/allServiceRequests"
           }
-          className="nav-link active"
+          className="nav-link"
           aria-current="page"
+          style={{ paddingBottom: 0 }}
         >
           <img src={epcorn} alt="epcorn" style={{ width: 60 }} />
         </Link>

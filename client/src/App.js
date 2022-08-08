@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Navbar } from "./components";
 
 import {
   AllHotels,
@@ -16,9 +17,9 @@ function App() {
     <>
       <ToastContainer position="top-center" />
       <Router>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Landing />} />
-
           <Route path="/allHotels" element={<AllHotels />} />
           <Route path="/hotelRegistration" element={<HotelRegister />} />
           <Route path="/allServiceRequests" element={<AllSR />} />

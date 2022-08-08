@@ -19,7 +19,7 @@ const initialState = {
 const Landing = () => {
   const [hotelUser, setHotelUser] = useState(false);
   const [epcornUser, setEpcornUser] = useState(false);
-  const { user } = useSelector((store) => store.user);
+  const { loading, user } = useSelector((store) => store.user);
   const { allHotelsNames } = useSelector((store) => store.hotel);
   const dispatch = useDispatch();
 
@@ -142,8 +142,11 @@ const Landing = () => {
                     </div>
                   </div>
                 )}
-
-                <button type="submit" className="btn btn-primary mt-2">
+                <button
+                  type="submit"
+                  className="btn btn-primary mt-2"
+                  disabled={user ? true : false}
+                >
                   Login
                 </button>
               </form>

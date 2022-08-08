@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Navbar } from "./components";
+import { Navbar, ProtectedRoute } from "./components";
 
 import {
   AllHotels,
@@ -22,7 +22,14 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/allHotels" element={<AllHotels />} />
           <Route path="/hotelRegistration" element={<HotelRegister />} />
-          <Route path="/allServiceRequests" element={<AllSR />} />
+          <Route
+            path="/allServiceRequests"
+            element={
+              <ProtectedRoute>
+                <AllSR />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/allServiceRequests/:id" element={<AllSR />} />
           <Route path="/singleSR/:id" element={<SingleSR />} />
           <Route path="/hotelDetails/:id" element={<SingleHotel />} />

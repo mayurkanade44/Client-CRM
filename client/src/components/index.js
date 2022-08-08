@@ -5,5 +5,16 @@ import SRtable from "./SRtable";
 import NewSR from "./NewSR";
 import UserRegister from "./UserRegister";
 import Loading from "./Loading";
+import ProtectedRoute from "./ProtectedRoute";
 
-export { InputRow, Navbar, Multiselect, SRtable, NewSR, UserRegister, Loading };
+
+export {
+  InputRow,
+  Navbar,
+  Multiselect,
+  SRtable,
+  NewSR,
+  UserRegister,
+  Loading,
+  ProtectedRoute,
+};

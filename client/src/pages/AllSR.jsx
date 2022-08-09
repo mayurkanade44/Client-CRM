@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { SRtable, NewSR, UserRegister } from "../components";
-import { employeeSR, hotelSR } from "../redux/serviceReqSlice";
+import { SRtable, NewSR, UserRegister, PieCharts } from "../components";
+import { employeeSR, hotelSR, serviceStats } from "../redux/serviceReqSlice";
 
 const AllSR = () => {
   const { loading, user, allEmployees } = useSelector((store) => store.user);
-  const { allEmployeeSR, allHotelSR } = useSelector(
+  const { allEmployeeSR, allHotelSR, stats } = useSelector(
     (store) => store.serviceRequest
   );
   const dispatch = useDispatch();
   const [showSR, setShowSR] = useState(false);
+  const [showStats, setShowStats] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -23,6 +24,12 @@ const AllSR = () => {
     }
   }, [showSR, id]);
 
+  useEffect(() => {
+    if (user && user.role === "Hotel Admin") {
+      dispatch(serviceStats(user.hotel));
+    }
+  }, [showStats]);
+
   return (
     <div className="container my-2">
       {user.role === "Hotel Admin" && (
@@ -33,6 +40,12 @@ const AllSR = () => {
           >
             {!showSR ? "Add Employee" : "Back"}
           </button>
+          <button
+            className="btn btn-info ms-3"
+            onClick={() => setShowStats(!showStats)}
+          >
+            {!showStats ? "Show Stats" : "Back"}
+          </button>
           {showSR && (
             <UserRegister
               id={user.hotel}
@@ -40,6 +53,7 @@ const AllSR = () => {
               role={user.role}
             />
           )}
+          {showStats && <PieCharts data={stats} />}
         </>
       )}
       {user.role === "Hotel Employee" && (

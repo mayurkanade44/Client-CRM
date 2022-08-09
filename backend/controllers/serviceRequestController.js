@@ -113,7 +113,7 @@ export const serviceStats = async (req, res) => {
   try {
     const services = await ServiceRequest.find({ hotel: id });
 
-    const serviceNames = ["Green Shield", "Ratrid", "Flyban", "Termiproof"];
+    const serviceNames = ["Green Shield", "Ratrid", "Bedbugs", "Termiproof"];
 
     const serviceCount = [];
     for (let service of serviceNames) {
@@ -121,7 +121,7 @@ export const serviceStats = async (req, res) => {
         item.pestService.includes(service)
       ).length;
       if (count > 0) {
-        serviceCount.push({ x: service, y: count });
+        serviceCount.push({ name: service, y: count });
       }
     }
     res.status(200).json({ serviceCount });

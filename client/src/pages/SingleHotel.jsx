@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import PieCharts from "../components/PieCharts";
+import { Loading, PieCharts } from "../components";
+
 import { hotelDetails } from "../redux/hotelSlice";
 import { serviceStats } from "../redux/serviceReqSlice";
 
@@ -17,6 +18,10 @@ const SingleHotel = () => {
     dispatch(hotelDetails(id));
     dispatch(serviceStats(id));
   }, [id]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="container my-3">

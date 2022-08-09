@@ -37,7 +37,7 @@ const SRtable = ({ data, role }) => {
                       <button className="btn btn-danger">Open</button>
                     </Link>
                   )}
-                  {item.status === "Closed" && (
+                  {item.status === "Close" && (
                     <Link to={`/singleSR/${item._id}`}>
                       <button className="btn btn-success ">Closed</button>
                     </Link>

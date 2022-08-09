@@ -104,7 +104,7 @@ const SingleSR = () => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                disabled={singleSR.status === "Closed"}
+                disabled={singleSR.status === "Close"}
               >
                 Save
               </button>

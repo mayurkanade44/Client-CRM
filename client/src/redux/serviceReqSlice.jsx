@@ -8,6 +8,7 @@ const initialState = {
   allHotelSR: [],
   singleSR: {},
   allSR: [],
+  stats: [],
 };
 
 export const createServiceRequest = createAsyncThunk(
@@ -64,7 +65,19 @@ export const updateSR = createAsyncThunk(
   async ({ id, sr }, thunkAPI) => {
     try {
       const res = await axios.put(`/api/hotel/request/singleSR/${id}`, sr);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  }
+);
 
+export const serviceStats = createAsyncThunk(
+  "hotel/SRstats",
+  async (id, thunkAPI) => {
+    try {
+      const res = await axios.get(`/api/hotel/request/srStats/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -131,6 +144,17 @@ const serviceRequestSlice = createSlice({
       toast.success(payload.msg);
     },
     [updateSR.rejected]: (state, { payload }) => {
+      state.loading = false;
+      toast.error(payload);
+    },
+    [serviceStats.pending]: (state) => {
+      state.loading = true;
+    },
+    [serviceStats.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.stats = payload.serviceCount;
+    },
+    [serviceStats.rejected]: (state, { payload }) => {
       state.loading = false;
       toast.error(payload);
     },

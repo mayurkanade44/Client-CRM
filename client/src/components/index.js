@@ -6,7 +6,7 @@ import NewSR from "./NewSR";
 import UserRegister from "./UserRegister";
 import Loading from "./Loading";
 import ProtectedRoute from "./ProtectedRoute";
-
+import PieCharts from "./PieCharts";
 
 export {
   InputRow,
@@ -17,4 +17,5 @@ export {
   UserRegister,
   Loading,
   ProtectedRoute,
+  PieCharts,
 };

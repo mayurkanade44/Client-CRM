@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import PieCharts from "../components/PieCharts";
 import { hotelDetails } from "../redux/hotelSlice";
+import { serviceStats } from "../redux/serviceReqSlice";
 
 const SingleHotel = () => {
   const { loading, singleHotel } = useSelector((store) => store.hotel);
+  const { stats } = useSelector((store) => store.serviceRequest);
   const dispatch = useDispatch();
 
   const [edit, setEdit] = useState(false);
@@ -13,6 +15,7 @@ const SingleHotel = () => {
 
   useEffect(() => {
     dispatch(hotelDetails(id));
+    dispatch(serviceStats(id));
   }, [id]);
 
   return (
@@ -20,7 +23,7 @@ const SingleHotel = () => {
       <div className="d-flex justify-content-around">
         <h2 className="text-center">{singleHotel.hotelName}</h2>
         <button className="btn btn-dark" onClick={() => setEdit(!edit)}>
-        {edit ? 'Save' : 'Edit'}
+          {edit ? "Save" : "Edit"}
         </button>
       </div>
       <h4>Hotel Address: {singleHotel.hotelAddress}</h4>
@@ -53,6 +56,7 @@ const SingleHotel = () => {
             ))}
         </tbody>
       </table>
+      <PieCharts data={stats} />
     </div>
   );
 };

@@ -8,13 +8,13 @@ const InputRow = ({
   required,
 }) => {
   return (
-    <div className="row align-items-center">
-      <div className="col-md-4 ">
+    <div className="row g-3 align-items-center">
+      <div className="col-auto ">
         <label className="col-form-label">
           <h4>{label}</h4>
         </label>
       </div>
-      <div className="col-md-8">
+      <div className="col">
         <input
           className="form-control"
           type={type}

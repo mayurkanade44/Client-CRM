@@ -107,3 +107,28 @@ export const allHotelSR = async (req, res) => {
       .json({ msg: "Something went wrong, please try again later" });
   }
 };
+
+export const serviceStats = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const services = await ServiceRequest.find({ hotel: id });
+
+    const serviceNames = ["Green Shield", "Ratrid", "Flyban", "Termiproof"];
+
+    const serviceCount = [];
+    for (let service of serviceNames) {
+      const count = services.filter((item) =>
+        item.pestService.includes(service)
+      ).length;
+      if (count > 0) {
+        serviceCount.push({ x: service, y: count });
+      }
+    }
+    res.status(200).json({ serviceCount });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong, please try again later" });
+  }
+};

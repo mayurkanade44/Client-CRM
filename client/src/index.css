@@ -12,11 +12,6 @@ code {
     monospace;
 }
 
-
-
-
-
-
 @media (max-width: 767px) {
   .mobile-table {
     display: none;
@@ -32,8 +27,11 @@ code {
   }
   .mobile-btn button {
     padding: 1px 5px;
-    font-size: .65rem;
+    font-size: 0.65rem;
     border-radius: 0.2rem;
     font-weight: 200;
+  }
+  .input-h4 {
+    margin-bottom: 0px !important;
   }
 }

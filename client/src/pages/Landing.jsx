@@ -96,7 +96,7 @@ const Landing = () => {
           {(hotelUser || epcornUser) && (
             <div className="d-flex justify-content-center">
               <form onSubmit={handleSubmit}>
-                <div className="mb-3">
+                <div className="mb-2">
                   <InputRow
                     label="Email Id"
                     type="email"
@@ -105,9 +105,11 @@ const Landing = () => {
                     value={email}
                     handleChange={handleChange}
                     required={true}
+                    labelW="md-4"
+                  
                   />
                 </div>
-                <div className="mb-3">
+                <div className="mb-2">
                   <InputRow
                     label="Password"
                     type="password"
@@ -116,10 +118,12 @@ const Landing = () => {
                     value={password}
                     handleChange={handleChange}
                     required={true}
+                    labelW="md-4"
+                
                   />
                 </div>
                 {hotelUser && (
-                  <div className="row mt-2">
+                  <div className="row mt-3">
                     <div className="col-md-4">
                       <h4>Hotel</h4>
                     </div>

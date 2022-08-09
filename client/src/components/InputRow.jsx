@@ -6,10 +6,11 @@ const InputRow = ({
   handleChange,
   placeholder,
   required,
+  labelW,
 }) => {
   return (
-    <div className="row g-3 align-items-center">
-      <div className="col-auto ">
+    <div className="row align-items-center">
+      <div className={`col-${labelW}`}>
         <label className="col-form-label">
           <h4>{label}</h4>
         </label>

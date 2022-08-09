@@ -66,6 +66,7 @@ const UserRegister = ({ id, employees, role }) => {
               value={name}
               handleChange={handleChange}
               required={true}
+              labelW="auto"
             />
           </div>
           {role === "Hotel Admin" && (
@@ -78,6 +79,7 @@ const UserRegister = ({ id, employees, role }) => {
                 value={department}
                 handleChange={handleChange}
                 required={true}
+                labelW="auto"
               />
             </div>
           )}
@@ -85,11 +87,12 @@ const UserRegister = ({ id, employees, role }) => {
             <InputRow
               label="Email"
               type="email"
-              placeholder="Please provide email"
+              placeholder="abc@xyz.com"
               name="email"
               value={email}
               handleChange={handleChange}
               required={true}
+              labelW="auto"
             />
           </div>
           <div className={role === "Hotel Admin" ? "col-md-5" : "col-md-4"}>
@@ -100,6 +103,7 @@ const UserRegister = ({ id, employees, role }) => {
               value={password}
               handleChange={handleChange}
               required={true}
+              labelW="auto"
             />
           </div>
           <div className="col-md-1">

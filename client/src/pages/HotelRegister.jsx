@@ -1,6 +1,6 @@
 import { InputRow, Multiselect } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { hotelRegistration } from "../redux/hotelSlice";
 
 const initialState = {
@@ -31,7 +31,7 @@ const HotelRegister = () => {
     contractNo,
     password,
     floor,
-    locations
+    locations,
   } = formValue;
 
   const handleChange = (e) => {
@@ -81,6 +81,7 @@ const HotelRegister = () => {
           value={hotelName}
           handleChange={handleChange}
           required={true}
+          labelW="auto"
         />
         <InputRow
           label="Hotel Address"
@@ -90,6 +91,7 @@ const HotelRegister = () => {
           value={hotelAddress}
           handleChange={handleChange}
           required={true}
+          labelW="auto"
         />
         <InputRow
           label="Bill To Address"
@@ -99,6 +101,7 @@ const HotelRegister = () => {
           value={billToAddress}
           handleChange={handleChange}
           required={true}
+          labelW="auto"
         />
         <div className="row">
           <div className="col-md-6">
@@ -110,6 +113,7 @@ const HotelRegister = () => {
               value={contractNo}
               handleChange={handleChange}
               required={true}
+              labelW="auto"
             />
           </div>
           <div className="col-md-6">
@@ -134,6 +138,7 @@ const HotelRegister = () => {
               value={hotelEmail}
               handleChange={handleChange}
               required={true}
+              labelW="auto"
             />
           </div>
           <div className="col-md-6">
@@ -145,6 +150,7 @@ const HotelRegister = () => {
               value={password}
               handleChange={handleChange}
               required={true}
+              labelW="auto"
             />
           </div>
           <div className="col-md-4">
@@ -153,6 +159,7 @@ const HotelRegister = () => {
               type="text"
               name="tempFloor"
               value={tempFloor}
+              labelW="auto"
               handleChange={(e) => setTempFloor(e.target.value)}
             />
           </div>
@@ -163,6 +170,7 @@ const HotelRegister = () => {
               name="tempLocations"
               placeholder="Location should be comma separated"
               value={tempLocations}
+              labelW="auto"
               handleChange={(e) => setTempLocations(e.target.value)}
             />
           </div>
@@ -184,9 +192,7 @@ const HotelRegister = () => {
               {floor.map((item, index) => (
                 <tr key={index}>
                   <td>{item}</td>
-                  <td>
-                    {locations.filter((loc, num) => num === index)}
-                  </td>
+                  <td>{locations.filter((loc, num) => num === index)}</td>
                 </tr>
               ))}
             </tbody>

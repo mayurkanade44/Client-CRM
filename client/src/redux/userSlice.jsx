@@ -212,7 +212,7 @@ const userSlice = createSlice({
     },
     [allHotelEmployees.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.allEmployees = payload.employees;
+      state.allUsers = payload.employees;
       toast.success(payload.msg);
     },
     [allHotelEmployees.rejected]: (state, { payload }) => {

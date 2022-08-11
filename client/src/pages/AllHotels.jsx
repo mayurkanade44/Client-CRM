@@ -7,13 +7,12 @@ import { allEpcornUsers } from "../redux/userSlice";
 
 const AllHotels = () => {
   const { loading, allHotels } = useSelector((store) => store.hotel);
-  const { user, allUsers } = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.user);
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllHotels());
-    dispatch(allEpcornUsers());
   }, []);
 
   if (loading) {
@@ -33,7 +32,7 @@ const AllHotels = () => {
         </>
       )}
       {show ? (
-        <UserRegister id={user.hotel} employees={allUsers} role={user.role} />
+        <UserRegister />
       ) : (
         <table className="table table-bordered my-4">
           <thead>

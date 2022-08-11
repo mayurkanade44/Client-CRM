@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import userSlice, {
+import { useDispatch, useSelector } from "react-redux";
+import {
+  allEpcornUsers,
   allHotelEmployees,
   employeeDeletion,
   epcornDelete,
@@ -8,6 +9,7 @@ import userSlice, {
   hotelEmployeeRegistration,
 } from "../redux/userSlice";
 import InputRow from "./InputRow";
+import Loading from "./Loading";
 
 const initialState = {
   name: "",
@@ -17,8 +19,9 @@ const initialState = {
   hotel: "",
 };
 
-const UserRegister = ({ id, employees, role }) => {
+const UserRegister = ({ s }) => {
   const dispatch = useDispatch();
+  const { loading, user, allUsers } = useSelector((store) => store.user);
   const [formValue, setFormValue] = useState(initialState);
   const [update, setUpdate] = useState(false);
   const { name, department, email, password } = formValue;
@@ -30,16 +33,20 @@ const UserRegister = ({ id, employees, role }) => {
   };
 
   useEffect(() => {
-    if (role === "Hotel Admin") dispatch(allHotelEmployees(id));
+    if (user.role === "Hotel Admin") {
+      dispatch(allHotelEmployees(user.hotel));
+    } else {
+      dispatch(allEpcornUsers());
+    }
   }, [update]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (role === "Hotel Admin") {
-      formValue.hotel = id;
+    if (user.role === "Hotel Admin") {
+      formValue.hotel = user.hotel;
       dispatch(hotelEmployeeRegistration(formValue));
     }
-    if (role === "Admin") {
+    if (user.role === "Admin") {
       dispatch(epcornRegister({ name, email, password }));
     }
 
@@ -48,16 +55,22 @@ const UserRegister = ({ id, employees, role }) => {
   };
 
   const handleDelete = (id) => {
-    if (role === "Hotel Admin") dispatch(employeeDeletion(id));
-    if (role === "Admin") dispatch(epcornDelete(id));
+    if (user.role === "Hotel Admin") dispatch(employeeDeletion(id));
+    if (user.role === "Admin") dispatch(epcornDelete(id));
     setUpdate(!update);
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="container mt-3">
       <form onSubmit={handleSubmit}>
         <div className="row">
-          <div className={role === "Hotel Admin" ? "col-md-6" : "col-md-4"}>
+          <div
+            className={user.role === "Hotel Admin" ? "col-md-6" : "col-md-4"}
+          >
             <InputRow
               label="Full Name"
               type="text"
@@ -69,7 +82,7 @@ const UserRegister = ({ id, employees, role }) => {
               labelW="auto"
             />
           </div>
-          {role === "Hotel Admin" && (
+          {user.role === "Hotel Admin" && (
             <div className="col-md-6">
               <InputRow
                 label="Department"
@@ -83,7 +96,9 @@ const UserRegister = ({ id, employees, role }) => {
               />
             </div>
           )}
-          <div className={role === "Hotel Admin" ? "col-md-5" : "col-md-3"}>
+          <div
+            className={user.role === "Hotel Admin" ? "col-md-5" : "col-md-3"}
+          >
             <InputRow
               label="Email"
               type="email"
@@ -95,7 +110,9 @@ const UserRegister = ({ id, employees, role }) => {
               labelW="auto"
             />
           </div>
-          <div className={role === "Hotel Admin" ? "col-md-5" : "col-md-4"}>
+          <div
+            className={user.role === "Hotel Admin" ? "col-md-5" : "col-md-4"}
+          >
             <InputRow
               label="Password"
               type="password"
@@ -122,8 +139,8 @@ const UserRegister = ({ id, employees, role }) => {
           </tr>
         </thead>
         <tbody>
-          {employees &&
-            employees.map((item, index) => {
+          {allUsers &&
+            allUsers.map((item, index) => {
               return (
                 <tr key={item._id}>
                   <th>{index + 1}</th>

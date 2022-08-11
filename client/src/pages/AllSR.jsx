@@ -46,13 +46,7 @@ const AllSR = () => {
           >
             {!showStats ? "Show Stats" : "Back"}
           </button>
-          {showSR && (
-            <UserRegister
-              id={user.hotel}
-              employees={allEmployees}
-              role={user.role}
-            />
-          )}
+          {showSR && <UserRegister />}
           {showStats && <PieCharts data={stats} />}
         </>
       )}

@@ -1,4 +1,4 @@
-import { InputRow, Multiselect } from "../components";
+import { InputRow, Loading, Multiselect } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { hotelRegistration } from "../redux/hotelSlice";
@@ -10,6 +10,9 @@ const initialState = {
   hotelEmail: "",
   contractNo: "",
   password: "",
+  hotelAdminName: "",
+  hotelAdminEmail: "",
+  hotelAdminContact: "",
   floor: ["Select Floor"],
   locations: ["Select Location"],
 };
@@ -30,6 +33,9 @@ const HotelRegister = () => {
     hotelEmail,
     contractNo,
     password,
+    hotelAdminName,
+    hotelAdminEmail,
+    hotelAdminContact,
     floor,
     locations,
   } = formValue;
@@ -70,9 +76,13 @@ const HotelRegister = () => {
     setValue("");
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <div className="container my-3">
-      <form>
+      <form onSubmit={handleSubmit}>
         <InputRow
           label="Hotel Name"
           type="text"
@@ -131,7 +141,7 @@ const HotelRegister = () => {
 
           <div className="col-md-6">
             <InputRow
-              label="Hotel Email"
+              label="Hotel Login Email"
               type="email"
               placeholder="abc@xyz.com"
               name="hotelEmail"
@@ -148,6 +158,41 @@ const HotelRegister = () => {
               placeholder="Password must be at least 5 characters"
               name="password"
               value={password}
+              handleChange={handleChange}
+              required={true}
+              labelW="auto"
+            />
+          </div>
+          <div className="col-md-4">
+            <InputRow
+              label="Admin Name"
+              type="text"
+              name="hotelAdminName"
+              value={hotelAdminName}
+              handleChange={handleChange}
+              required={true}
+              labelW="auto"
+            />
+          </div>
+          <div className="col-md-4">
+            <InputRow
+              label="Email"
+              type="email"
+              placeholder="abc@xyz.com"
+              name="hotelAdminEmail"
+              value={hotelAdminEmail}
+              handleChange={handleChange}
+              required={true}
+              labelW="auto"
+            />
+          </div>
+          <div className="col-md-4">
+            <InputRow
+              label="Contact"
+              type="number"
+              placeholder="Mobile number"
+              name="hotelAdminContact"
+              value={hotelAdminContact}
               handleChange={handleChange}
               required={true}
               labelW="auto"
@@ -197,7 +242,7 @@ const HotelRegister = () => {
               ))}
             </tbody>
           </table>
-          <button className="btn btn-dark text-center" onClick={handleSubmit}>
+          <button className="btn btn-dark text-center" type="submit">
             Register
           </button>
         </div>

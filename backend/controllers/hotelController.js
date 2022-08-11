@@ -5,7 +5,6 @@ export const hotelRegister = async (req, res) => {
 
   try {
     const hotel = await Hotel.findOne({ $or: [{ hotelName }, { hotelEmail }] });
-
     if (hotel) {
       return res
         .status(400)
@@ -13,7 +12,6 @@ export const hotelRegister = async (req, res) => {
     }
 
     const newHotel = await Hotel.create(req.body);
-
     res
       .status(201)
       .json({ hotel: newHotel._id, msg: `${hotelName} is successfully added` });
@@ -83,7 +81,6 @@ export const singleHotel = async (req, res) => {
     if (!hotel) {
       return res.status(404).json({ msg: "Hotel not found" });
     }
-
     res.status(200).json({ hotel });
   } catch (error) {
     console.log(error);
@@ -98,7 +95,6 @@ export const hotelLogin = async (req, res) => {
 
   try {
     const hotel = await Hotel.findOne({ hotelEmail });
-
     if (!hotel) {
       return res.status(404).json({
         msg: "There is no hotel registered with this email id. Please contact EPCORN Admin",

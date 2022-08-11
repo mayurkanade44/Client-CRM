@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const SRtable = ({ data, role }) => {
   return (
-    <table className="table table-bordered my-4 mobile-th">
+    <table className="table table-bordered my-3 mobile-th">
       <thead>
         <tr>
           <th style={{ width: 160 }}>SR Number</th>

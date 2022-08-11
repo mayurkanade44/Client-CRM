@@ -242,7 +242,7 @@ const HotelRegister = () => {
               ))}
             </tbody>
           </table>
-          <button className="btn btn-dark text-center" type="submit">
+          <button className="btn btn-success mt-2 text-center" type="submit">
             Register
           </button>
         </div>

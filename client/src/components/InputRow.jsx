@@ -11,7 +11,7 @@ const InputRow = ({
   return (
     <div className="row align-items-center">
       <div className={`col-${labelW}`}>
-        <label className="col-form-label">
+        <label className="col-form-label mobile-sr">
           <h4>{label}</h4>
         </label>
       </div>

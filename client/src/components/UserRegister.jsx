@@ -130,11 +130,13 @@ const UserRegister = ({ s }) => {
           </div>
         </div>
       </form>
-      <table className="table table-bordered my-4">
+      <table className="table table-bordered my-4 mobile-th">
         <thead>
           <tr>
             <th style={{ width: 50 }}>No</th>
-            <th className="text-center">Employee Name</th>
+            <th style={{ width: 150 }}>
+              Employee Name
+            </th>
             <th style={{ width: 260 }}>Action</th>
           </tr>
         </thead>
@@ -145,7 +147,7 @@ const UserRegister = ({ s }) => {
                 <tr key={item._id}>
                   <th>{index + 1}</th>
                   <td>{item.name}</td>
-                  <td>
+                  <td className="mobile-btn">
                     <button
                       className="btn btn-danger me-2"
                       onClick={() => handleDelete(item._id)}

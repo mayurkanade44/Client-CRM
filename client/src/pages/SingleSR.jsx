@@ -55,21 +55,24 @@ const SingleSR = () => {
   };
 
   return (
-    <div className="container my-3">
+    <div className="container my-3 mobile-sr">
       <div className="row">
-        <div className="col-md-12 d-flex">
-          <h4 className="me-auto">{singleSR.SRNumber}</h4>
-          <button
-            className={`btn btn-${
-              singleSR.status === "Open"
-                ? "danger"
-                : singleSR.status === "Pending"
-                ? "info"
-                : "success"
-            }`}
-          >
-            {singleSR.status}
-          </button>
+        <div className="col-md-12 ">
+          <h4>
+            {singleSR.SRNumber} is{" "}
+            <span
+              className={`badge bg-${
+                singleSR.status === "Open"
+                  ? "danger"
+                  : singleSR.status === "Pending"
+                  ? "info"
+                  : "success"
+              }`}
+            >
+              {singleSR.status}
+            </span>{" "}
+            created by {singleSR.employee && singleSR.employee.name}
+          </h4>
         </div>
       </div>
       <h4>{`Services - ${singleSR.pestService}`}</h4>

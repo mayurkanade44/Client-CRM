@@ -14,28 +14,30 @@ import {
 
 function App() {
   return (
-    <>
-      <ToastContainer position="top-center" />
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/allHotels" element={<AllHotels />} />
-          <Route path="/hotelRegistration" element={<HotelRegister />} />
-          <Route
-            path="/allServiceRequests"
-            element={
-              <ProtectedRoute>
-                <AllSR />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/allServiceRequests/:id" element={<AllSR />} />
-          <Route path="/singleSR/:id" element={<SingleSR />} />
-          <Route path="/hotelDetails/:id" element={<SingleHotel />} />
-        </Routes>
-      </Router>
-    </>
+    <Router>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        pauseOnFocusLoss={false}
+      />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/allHotels" element={<AllHotels />} />
+        <Route path="/hotelRegistration" element={<HotelRegister />} />
+        <Route
+          path="/allServiceRequests"
+          element={
+            <ProtectedRoute>
+              <AllSR />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/allServiceRequests/:id" element={<AllSR />} />
+        <Route path="/singleSR/:id" element={<SingleSR />} />
+        <Route path="/hotelDetails/:id" element={<SingleHotel />} />
+      </Routes>
+    </Router>
   );
 }
 

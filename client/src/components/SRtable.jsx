@@ -26,10 +26,13 @@ const SRtable = ({ data, role }) => {
                 <td>{item.floor}</td>
                 <td>{item.locations}</td>
                 <td>{item.pestService}</td>
-                {(role === "Hotel Admin" || role === "Admin") && (
+                {(role === "Hotel Admin" || role === "Admin") &&
+                item.employee ? (
                   <td className="mobile-table">{`${
                     item.employee.name.split(" ")[0]
                   } / ${item.employee.department}`}</td>
+                ) : (
+                  <td className="mobile-table">User Deleted</td>
                 )}
                 <td className="mobile-btn">
                   {item.status === "Open" && (

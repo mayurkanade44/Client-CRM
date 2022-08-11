@@ -5,7 +5,7 @@ import { SRtable, NewSR, UserRegister, PieCharts } from "../components";
 import { employeeSR, hotelSR, serviceStats } from "../redux/serviceReqSlice";
 
 const AllSR = () => {
-  const { loading, user, allEmployees } = useSelector((store) => store.user);
+  const { loading, user } = useSelector((store) => store.user);
   const { allEmployeeSR, allHotelSR, stats } = useSelector(
     (store) => store.serviceRequest
   );
@@ -22,12 +22,14 @@ const AllSR = () => {
     } else if (user.role === "Hotel Employee") {
       dispatch(employeeSR(user.empId));
     }
+    // eslint-disable-next-line
   }, [showSR, id]);
 
   useEffect(() => {
     if (user && user.role === "Hotel Admin") {
       dispatch(serviceStats(user.hotel));
     }
+    // eslint-disable-next-line
   }, [showStats]);
 
   return (

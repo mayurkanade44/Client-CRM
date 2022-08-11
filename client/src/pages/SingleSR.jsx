@@ -5,6 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getSingleSR, updateSR } from "../redux/serviceReqSlice";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { Loading } from "../components";
 
 const SingleSR = () => {
   const { id } = useParams();
@@ -53,6 +54,10 @@ const SingleSR = () => {
       navigate(-1);
     }, 2000);
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="container my-3 mobile-sr">

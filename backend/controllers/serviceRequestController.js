@@ -38,7 +38,10 @@ export const getSingleSR = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const sr = await ServiceRequest.findOne({ _id: id });
+    const sr = await ServiceRequest.findOne({ _id: id }).populate({
+      path: "employee",
+      select: "name department",
+    });
     if (!sr) {
       return res.status(404).json({ msg: "Service Request not found" });
     }
@@ -82,7 +85,7 @@ export const updateSingleSR = async (req, res) => {
 export const allEmployeeSR = async (req, res) => {
   const { id } = req.params;
   try {
-    const sr = await ServiceRequest.find({ employee: id });
+    const sr = await ServiceRequest.find({ employee: id }).sort("-createdAt");
     res.status(200).json({ sr });
   } catch (error) {
     console.log(error);
@@ -95,10 +98,12 @@ export const allEmployeeSR = async (req, res) => {
 export const allHotelSR = async (req, res) => {
   const { id } = req.params;
   try {
-    const sr = await ServiceRequest.find({ hotel: id }).populate({
-      path: "employee",
-      select: "name department",
-    });
+    const sr = await ServiceRequest.find({ hotel: id })
+      .populate({
+        path: "employee",
+        select: "name department",
+      })
+      .sort("-createdAt");
     res.status(200).json({ sr });
   } catch (error) {
     console.log(error);

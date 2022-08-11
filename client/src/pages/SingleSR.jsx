@@ -20,6 +20,7 @@ const SingleSR = () => {
 
   useEffect(() => {
     dispatch(getSingleSR(id));
+    // eslint-disable-next-line
   }, [id]);
 
   const handleChange = (e) => {
@@ -32,6 +33,9 @@ const SingleSR = () => {
     e.preventDefault();
     if (singleSR.status === "Close") {
       return toast.error("SR is already closed");
+    }
+    if (formValue.status === "Close") {
+      formValue.comment = "All Job Done";
     }
     if (!formValue.comment || !formValue.status) {
       return toast.error("Please provide all values");
@@ -47,7 +51,7 @@ const SingleSR = () => {
     );
     setTimeout(() => {
       navigate(-1);
-    }, 3000);
+    }, 2000);
   };
 
   return (
@@ -73,16 +77,6 @@ const SingleSR = () => {
       {(user.role === "Admin" || user.role === "Epcorn") && (
         <form onSubmit={handleSubmit}>
           <div className="row g-3">
-            <div className="col-md-4">
-              <textarea
-                className="form-control"
-                placeholder="Please provide some comment of the service"
-                name="comment"
-                value={formValue.comment}
-                onChange={handleChange}
-                style={{ height: 70 }}
-              ></textarea>
-            </div>
             <div className="col-md-2">
               <select
                 className="form-select"
@@ -100,6 +94,18 @@ const SingleSR = () => {
                 })}
               </select>
             </div>
+            {formValue.status === "Pending" && (
+              <div className="col-md-4">
+                <textarea
+                  className="form-control"
+                  placeholder="Please provide some comment of the service"
+                  name="comment"
+                  value={formValue.comment}
+                  onChange={handleChange}
+                  style={{ height: 70 }}
+                ></textarea>
+              </div>
+            )}
             <div className="col-md-2">
               <button
                 type="submit"

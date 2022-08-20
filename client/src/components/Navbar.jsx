@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../redux/userSlice";
-import epcorn from "../images/eppl1.png";
+import epcorn from "../utilis/eppl1.png"
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.user);

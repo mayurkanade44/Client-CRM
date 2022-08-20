@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { authFetch } from "../utilis/axios";
 
 const initialState = {
   loading: false,
@@ -13,7 +13,7 @@ export const hotelRegistration = createAsyncThunk(
   "hotel/registration",
   async (hotel, thunkAPI) => {
     try {
-      const res = await axios.post("/api/hotel/hotelRegistration", hotel);
+      const res = await authFetch.post("/hotel/hotelRegistration", hotel);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -26,7 +26,7 @@ export const getAllHotelNames = createAsyncThunk(
   "hotel/allHotelsNames",
   async (_, thunkAPI) => {
     try {
-      const res = await axios.get("/api/hotel/allHotels");
+      const res = await authFetch.get("/hotel/allHotels");
       return res.data;
     } catch (error) {
       console.log(error);
@@ -39,7 +39,7 @@ export const getAllHotels = createAsyncThunk(
   "hotel/allHotels",
   async (_, thunkAPI) => {
     try {
-      const res = await axios.get("/api/hotel/allHotels");
+      const res = await authFetch.get("/hotel/allHotels");
       return res.data;
     } catch (error) {
       console.log(error);
@@ -52,7 +52,7 @@ export const hotelDetails = createAsyncThunk(
   "hotel/singleHotel",
   async (id, thunkAPI) => {
     try {
-      const res = await axios.get(`/api/hotel/${id}`);
+      const res = await authFetch.get(`/hotel/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -64,6 +64,9 @@ export const hotelDetails = createAsyncThunk(
 const hotelSlice = createSlice({
   name: "hotel",
   initialState,
+  reducers: {
+    clearHotel: (state) => initialState,
+  },
   extraReducers: {
     [hotelRegistration.pending]: (state) => {
       state.loading = true;
@@ -111,5 +114,7 @@ const hotelSlice = createSlice({
     },
   },
 });
+
+export const { clearHotel } = hotelSlice.actions;
 
 export default hotelSlice.reducer;

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { logout } from "../redux/userSlice";
-import epcorn from "../utilis/eppl1.png"
+import { clearStore, logout } from "../redux/userSlice";
+import epcorn from "../utilis/eppl1.png";
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.user);
@@ -26,7 +26,7 @@ const Navbar = () => {
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             {user && (
               <li className="nav-item">
-                <button className="btn" onClick={() => dispatch(logout())}>
+                <button className="btn" onClick={() => dispatch(clearStore())}>
                   <h4>Logout</h4>
                 </button>
               </li>

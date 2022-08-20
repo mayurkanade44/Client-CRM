@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { authFetch, unauthorizedResponse } from "../utilis/axios";
+import { clearHotel } from "./hotelSlice";
+import { clearSR } from "./serviceReqSlice";
 
 const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,
@@ -13,7 +15,7 @@ export const epcornLogin = createAsyncThunk(
   "epcorn/login",
   async (user, thunkAPI) => {
     try {
-      const res = await axios.post("/api/epcorn/login", user);
+      const res = await authFetch.post("/epcorn/login", user);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -26,11 +28,11 @@ export const epcornRegister = createAsyncThunk(
   "epcorn/register",
   async (user, thunkAPI) => {
     try {
-      const res = await axios.post("/api/epcorn/register", user);
+      const res = await authFetch.post("/epcorn/register", user);
       return res.data;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return unauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -39,11 +41,11 @@ export const allEpcornUsers = createAsyncThunk(
   "epcorn/allUsers",
   async (_, thunkAPI) => {
     try {
-      const res = await axios.get("/api/epcorn/allUSers");
+      const res = await authFetch.get("/epcorn/allUSers");
       return res.data;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return unauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -52,11 +54,11 @@ export const epcornDelete = createAsyncThunk(
   "epcorn/delete",
   async (id, thunkAPI) => {
     try {
-      const res = await axios.delete(`/api/epcorn/delete/${id}`);
+      const res = await authFetch.delete(`/epcorn/delete/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return unauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -65,7 +67,7 @@ export const hotelLogin = createAsyncThunk(
   "hotel/login",
   async (user, thunkAPI) => {
     try {
-      const res = await axios.post("/api/hotel/hotelLogin", user);
+      const res = await authFetch.post("/hotel/hotelLogin", user);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -78,11 +80,11 @@ export const hotelEmployeeRegistration = createAsyncThunk(
   "hotel/employeeRegistration",
   async (user, thunkAPI) => {
     try {
-      const res = await axios.post("/api/hotel/employee/register", user);
+      const res = await authFetch.post("/hotel/employee/register", user);
       return res.data;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return unauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -91,7 +93,7 @@ export const hotelEmployeeLogin = createAsyncThunk(
   "hotel/employeeLogin",
   async (user, thunkAPI) => {
     try {
-      const res = await axios.post("/api/hotel/employee/login", user);
+      const res = await authFetch.post("/hotel/employee/login", user);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -104,11 +106,11 @@ export const allHotelEmployees = createAsyncThunk(
   "hotel/allEmployees",
   async (id, thunkAPI) => {
     try {
-      const res = await axios.get(`/api/hotel/employee/allEmployees/${id}`);
+      const res = await authFetch.get(`/hotel/employee/allEmployees/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return unauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -117,11 +119,26 @@ export const employeeDeletion = createAsyncThunk(
   "hotel/employeeDeletion",
   async (id, thunkAPI) => {
     try {
-      const res = await axios.delete(`/api/hotel/employee/${id}`);
+      const res = await authFetch.delete(`/hotel/employee/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return unauthorizedResponse(error, thunkAPI);
+    }
+  }
+);
+
+export const clearStore = createAsyncThunk(
+  "users/clearStore",
+  async (_, thunkAPI) => {
+    try {
+      thunkAPI.dispatch(logout());
+      thunkAPI.dispatch(clearHotel());
+      thunkAPI.dispatch(clearSR());
+      thunkAPI.dispatch(clearUsers());
+      return Promise.resolve();
+    } catch (error) {
+      return Promise.reject();
     }
   }
 );
@@ -134,6 +151,7 @@ const userSlice = createSlice({
       state.user = null;
       localStorage.removeItem("user");
     },
+    clearUsers: (state) => initialState,
   },
   extraReducers: {
     [epcornLogin.pending]: (state) => {
@@ -243,8 +261,11 @@ const userSlice = createSlice({
       state.loading = false;
       toast.error(payload);
     },
+    [clearStore.rejected]: () => {
+      toast.error("There was an error..");
+    },
   },
 });
 
 export default userSlice.reducer;
-export const { logout } = userSlice.actions;
+export const { logout, clearUsers } = userSlice.actions;

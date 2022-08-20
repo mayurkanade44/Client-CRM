@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { authFetch } from "../utilis/axios";
 
 const initialState = {
   loading: false,
@@ -15,7 +15,7 @@ export const createServiceRequest = createAsyncThunk(
   "hotel/newSR",
   async (SR, thunkAPI) => {
     try {
-      const res = await axios.post("/api/hotel/request/createSR", SR);
+      const res = await authFetch.post("/hotel/request/createSR", SR);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -28,7 +28,7 @@ export const employeeSR = createAsyncThunk(
   "hotel/employeeSR",
   async (id, thunkAPI) => {
     try {
-      const res = await axios.get(`/api/hotel/request/employeeSR/${id}`);
+      const res = await authFetch.get(`/hotel/request/employeeSR/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -39,7 +39,7 @@ export const employeeSR = createAsyncThunk(
 
 export const hotelSR = createAsyncThunk("hotel/SR", async (id, thunkAPI) => {
   try {
-    const res = await axios.get(`/api/hotel/request/hotelSR/${id}`);
+    const res = await authFetch.get(`/hotel/request/hotelSR/${id}`);
     return res.data;
   } catch (error) {
     console.log(error);
@@ -51,7 +51,7 @@ export const getSingleSR = createAsyncThunk(
   "hotel/singleSR",
   async (id, thunkAPI) => {
     try {
-      const res = await axios.get(`/api/hotel/request/singleSR/${id}`);
+      const res = await authFetch.get(`/hotel/request/singleSR/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -64,7 +64,7 @@ export const updateSR = createAsyncThunk(
   "hotel/updateSR",
   async ({ id, sr }, thunkAPI) => {
     try {
-      const res = await axios.put(`/api/hotel/request/singleSR/${id}`, sr);
+      const res = await authFetch.put(`/hotel/request/singleSR/${id}`, sr);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -77,7 +77,7 @@ export const serviceStats = createAsyncThunk(
   "hotel/SRstats",
   async (id, thunkAPI) => {
     try {
-      const res = await axios.get(`/api/hotel/request/srStats/${id}`);
+      const res = await authFetch.get(`/hotel/request/srStats/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -89,6 +89,9 @@ export const serviceStats = createAsyncThunk(
 const serviceRequestSlice = createSlice({
   name: "serviceRequest",
   initialState,
+  reducers: {
+    clearSR: (state) => initialState,
+  },
   extraReducers: {
     [createServiceRequest.pending]: (state) => {
       state.loading = true;
@@ -161,4 +164,5 @@ const serviceRequestSlice = createSlice({
   },
 });
 
+export const { clearSR } = serviceRequestSlice.actions;
 export default serviceRequestSlice.reducer;

@@ -41,8 +41,12 @@ export const login = async (req, res) => {
     const token = await user.createJWT();
 
     res.status(201).json({
-      user: { name: user.name, role: user.role, userId: user._id },
-      token,
+      user: {
+        name: user.name,
+        role: user.role,
+        userId: user._id,
+        token: token,
+      },
     });
   } catch (error) {
     console.log(error);

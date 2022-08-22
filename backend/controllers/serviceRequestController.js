@@ -97,13 +97,27 @@ export const allEmployeeSR = async (req, res) => {
 
 export const allHotelSR = async (req, res) => {
   const { id } = req.params;
+  const { search } = req.query;
   try {
-    const sr = await ServiceRequest.find({ hotel: id })
+    let sr = await ServiceRequest.find({ hotel: id })
       .populate({
         path: "employee",
         select: "name department",
       })
       .sort("-createdAt");
+
+    if (search) {
+      sr = await ServiceRequest.find({
+        hotel: id,
+        SRNumber: { $regex: search, $options: "i" },
+      })
+        .populate({
+          path: "employee",
+          select: "name department",
+        })
+        .sort("-createdAt");
+    }
+
     res.status(200).json({ sr });
   } catch (error) {
     console.log(error);

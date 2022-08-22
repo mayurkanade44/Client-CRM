@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { SRtable, NewSR, UserRegister, PieCharts } from "../components";
+import {
+  SRtable,
+  NewSR,
+  UserRegister,
+  PieCharts,
+  InputRow,
+} from "../components";
 import { employeeSR, hotelSR, serviceStats } from "../redux/serviceReqSlice";
 
 const AllSR = () => {
@@ -12,18 +18,21 @@ const AllSR = () => {
   const dispatch = useDispatch();
   const [showSR, setShowSR] = useState(false);
   const [showStats, setShowStats] = useState(false);
+  const [find, setFind] = useState(false);
+  const [search, setSearch] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
     if (id) {
-      dispatch(hotelSR(id));
+      dispatch(hotelSR({ id, search }));
     } else if (user.role === "Hotel Admin") {
-      dispatch(hotelSR(user.hotel));
+      const id = user.hotel;
+      dispatch(hotelSR({ id, search }));
     } else if (user.role === "Hotel Employee") {
       dispatch(employeeSR(user.empId));
     }
     // eslint-disable-next-line
-  }, [showSR, id]);
+  }, [showSR, id, find]);
 
   useEffect(() => {
     if (user && user.role === "Hotel Admin") {
@@ -64,16 +73,40 @@ const AllSR = () => {
         </>
       )}
       {!showSR && (
-        <SRtable
-          role={user.role}
-          data={
-            user.role === "Hotel Admin" ||
-            user.role === "Admin" ||
-            user.role === "Epcorn"
-              ? allHotelSR
-              : allEmployeeSR
-          }
-        />
+        <>
+          <div
+            className="input-group input-group-sm my-3"
+            style={{ width: 300 }}
+          >
+            <input
+              type="text"
+              className="form-control"
+              name="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-default"
+            />
+            <button
+              className="input-group-text"
+              id="inputGroup-sizing-default"
+              onClick={() => setFind(!find)}
+            >
+              Search
+            </button>
+          </div>
+
+          <SRtable
+            role={user.role}
+            data={
+              user.role === "Hotel Admin" ||
+              user.role === "Admin" ||
+              user.role === "Epcorn"
+                ? allHotelSR
+                : allEmployeeSR
+            }
+          />
+        </>
       )}
     </div>
   );

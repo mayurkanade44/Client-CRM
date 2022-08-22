@@ -37,15 +37,22 @@ export const employeeSR = createAsyncThunk(
   }
 );
 
-export const hotelSR = createAsyncThunk("hotel/SR", async (id, thunkAPI) => {
-  try {
-    const res = await authFetch.get(`/hotel/request/hotelSR/${id}`);
-    return res.data;
-  } catch (error) {
-    console.log(error);
-    return thunkAPI.rejectWithValue(error.response.data.msg);
+export const hotelSR = createAsyncThunk(
+  "hotel/SR",
+  async ({ id, search }, thunkAPI) => {
+    try {
+      let url = `/hotel/request/hotelSR/${id}`;
+      if (search) {
+        url += `?search=${search}`;
+      }
+      const res = await authFetch.get(url);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
   }
-});
+);
 
 export const getSingleSR = createAsyncThunk(
   "hotel/singleSR",

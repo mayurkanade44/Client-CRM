@@ -42,10 +42,10 @@ export const employeeSR = createAsyncThunk(
 
 export const hotelSR = createAsyncThunk(
   "hotel/SR",
-  async ({ id, search }, thunkAPI) => {
+  async ({ id, search, status }, thunkAPI) => {
     const { page } = thunkAPI.getState().serviceRequest;
     try {
-      let url = `/hotel/request/hotelSR/${id}?page=${page}`;
+      let url = `/hotel/request/hotelSR/${id}?page=${page}&&status=${status}`;
       if (search) {
         url += `&search=${search}`;
       }

@@ -8,19 +8,26 @@ import {
   PieCharts,
   Loading,
 } from "../components";
-import { changePage, employeeSR, hotelSR, serviceStats } from "../redux/serviceReqSlice";
+import {
+  changePage,
+  employeeSR,
+  hotelSR,
+  serviceStats,
+} from "../redux/serviceReqSlice";
 
 const AllSR = () => {
   const { user } = useSelector((store) => store.user);
-  const { allEmployeeSR, allHotelSR, stats, loading, numOfPages, page } = useSelector(
-    (store) => store.serviceRequest
-  );
+  const { allEmployeeSR, allHotelSR, stats, loading, numOfPages, page } =
+    useSelector((store) => store.serviceRequest);
   const dispatch = useDispatch();
   const [showSR, setShowSR] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [find, setFind] = useState(false);
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("All Requests");
   const { id } = useParams();
+
+  const statusOption = ["All Requests", "Open", "Pending", "Close"];
 
   const pages = Array.from({ length: numOfPages }, (_, index) => {
     return index + 1;
@@ -28,14 +35,14 @@ const AllSR = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(hotelSR({ id, search }));
+      dispatch(hotelSR({ id, search, status }));
     } else if (user.role === "Hotel Admin") {
-      dispatch(hotelSR({ id: user.hotel, search }));
+      dispatch(hotelSR({ id: user.hotel, search, status }));
     } else if (user.role === "Hotel Employee") {
       dispatch(employeeSR(user.empId));
     }
     // eslint-disable-next-line
-  }, [showSR, id, find, page]);
+  }, [showSR, id, find, page, status]);
 
   useEffect(() => {
     if (user && user.role === "Hotel Admin") {
@@ -50,41 +57,38 @@ const AllSR = () => {
 
   return (
     <div className="container my-2">
-      {user.role === "Hotel Admin" && (
-        <>
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowSR(!showSR)}
-          >
-            {!showSR ? "Add Employee" : "Back"}
-          </button>
-          <button
-            className="btn btn-info ms-3"
-            onClick={() => setShowStats(!showStats)}
-          >
-            {!showStats ? "Show Stats" : "Back"}
-          </button>
-          {showSR && <UserRegister />}
-          {showStats && <PieCharts data={stats} />}
-        </>
-      )}
-      {user.role === "Hotel Employee" && (
-        <>
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowSR(!showSR)}
-          >
-            {!showSR ? "New SR" : "Back"}
-          </button>
-          {showSR && <NewSR />}
-        </>
-      )}
-      {!showSR && (
-        <>
-          <div
-            className="input-group input-group-sm my-3"
-            style={{ width: 300 }}
-          >
+      <div className="row gy-2">
+        {user.role === "Hotel Admin" && (
+          <div className="col-lg-3">
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowSR(!showSR)}
+            >
+              {!showSR ? "Add Employee" : "Back"}
+            </button>
+            <button
+              className="btn btn-info ms-3"
+              onClick={() => setShowStats(!showStats)}
+            >
+              {!showStats ? "Show Stats" : "Back"}
+            </button>
+            {showSR && <UserRegister />}
+            {showStats && <PieCharts data={stats} />}
+          </div>
+        )}
+        {user.role === "Hotel Employee" && (
+          <div className="col-12 col-lg-3">
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowSR(!showSR)}
+            >
+              {!showSR ? "New SR" : "Back"}
+            </button>
+            {showSR && <NewSR />}
+          </div>
+        )}
+        <div className="col-7 col-lg-3">
+          <div className="input-group  ">
             <input
               type="text"
               className="form-control"
@@ -102,6 +106,27 @@ const AllSR = () => {
               Search
             </button>
           </div>
+        </div>
+        <div className="col-5 col-lg-2">
+          <select
+            className="form-select"
+            aria-label="Default select example"
+            name="status"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            {statusOption.map((data) => {
+              return (
+                <option value={data} key={data}>
+                  {data}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      </div>
+      {!showSR && (
+        <>
           <SRtable
             role={user.role}
             data={
@@ -114,7 +139,7 @@ const AllSR = () => {
           />
           <nav aria-label="Page navigation example">
             <ul className="pagination">
-              {pages.map((pageNum)=>{
+              {pages.map((pageNum) => {
                 return (
                   <li
                     className={
@@ -122,11 +147,15 @@ const AllSR = () => {
                     }
                     key={pageNum}
                   >
-                    <button className="page-link" onClick={()=> dispatch(changePage(pageNum))}>{pageNum}</button>
+                    <button
+                      className="page-link"
+                      onClick={() => dispatch(changePage(pageNum))}
+                    >
+                      {pageNum}
+                    </button>
                   </li>
                 );
               })}
-              
             </ul>
           </nav>
         </>

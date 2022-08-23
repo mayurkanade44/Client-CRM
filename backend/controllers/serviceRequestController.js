@@ -97,7 +97,7 @@ export const allEmployeeSR = async (req, res) => {
 
 export const allHotelSR = async (req, res) => {
   const { id } = req.params;
-  const { search } = req.query;
+  const { search, status } = req.query;
 
   try {
     const queryObject = {
@@ -106,6 +106,9 @@ export const allHotelSR = async (req, res) => {
 
     if (search) {
       queryObject.SRNumber = { $regex: search, $options: "i" };
+    }
+    if (status && status !== "All Requests") {
+      queryObject.status = status;
     }
 
     let requests = ServiceRequest.find(queryObject)
@@ -120,8 +123,8 @@ export const allHotelSR = async (req, res) => {
     requests = requests.skip(skip).limit(5);
 
     const sr = await requests;
-    const totalSR = await ServiceRequest.countDocuments(queryObject)
-    const numPages = Math.ceil(totalSR/5)
+    const totalSR = await ServiceRequest.countDocuments(queryObject);
+    const numPages = Math.ceil(totalSR / 5);
 
     res.status(200).json({ sr, totalSR, numPages });
   } catch (error) {

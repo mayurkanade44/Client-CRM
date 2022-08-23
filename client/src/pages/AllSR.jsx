@@ -6,13 +6,13 @@ import {
   NewSR,
   UserRegister,
   PieCharts,
-  InputRow,
+  Loading,
 } from "../components";
-import { employeeSR, hotelSR, serviceStats } from "../redux/serviceReqSlice";
+import { changePage, employeeSR, hotelSR, serviceStats } from "../redux/serviceReqSlice";
 
 const AllSR = () => {
-  const { loading, user } = useSelector((store) => store.user);
-  const { allEmployeeSR, allHotelSR, stats } = useSelector(
+  const { user } = useSelector((store) => store.user);
+  const { allEmployeeSR, allHotelSR, stats, loading, numOfPages, page } = useSelector(
     (store) => store.serviceRequest
   );
   const dispatch = useDispatch();
@@ -22,17 +22,20 @@ const AllSR = () => {
   const [search, setSearch] = useState("");
   const { id } = useParams();
 
+  const pages = Array.from({ length: numOfPages }, (_, index) => {
+    return index + 1;
+  });
+
   useEffect(() => {
     if (id) {
       dispatch(hotelSR({ id, search }));
     } else if (user.role === "Hotel Admin") {
-      const id = user.hotel;
-      dispatch(hotelSR({ id, search }));
+      dispatch(hotelSR({ id: user.hotel, search }));
     } else if (user.role === "Hotel Employee") {
       dispatch(employeeSR(user.empId));
     }
     // eslint-disable-next-line
-  }, [showSR, id, find]);
+  }, [showSR, id, find, page]);
 
   useEffect(() => {
     if (user && user.role === "Hotel Admin") {
@@ -40,6 +43,10 @@ const AllSR = () => {
     }
     // eslint-disable-next-line
   }, [showStats]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="container my-2">
@@ -95,7 +102,6 @@ const AllSR = () => {
               Search
             </button>
           </div>
-
           <SRtable
             role={user.role}
             data={
@@ -106,6 +112,23 @@ const AllSR = () => {
                 : allEmployeeSR
             }
           />
+          <nav aria-label="Page navigation example">
+            <ul className="pagination">
+              {pages.map((pageNum)=>{
+                return (
+                  <li
+                    className={
+                      pageNum === page ? "page-item active" : "page-item"
+                    }
+                    key={pageNum}
+                  >
+                    <button className="page-link" onClick={()=> dispatch(changePage(pageNum))}>{pageNum}</button>
+                  </li>
+                );
+              })}
+              
+            </ul>
+          </nav>
         </>
       )}
     </div>

@@ -9,6 +9,9 @@ const initialState = {
   singleSR: {},
   allSR: [],
   stats: [],
+  numOfPages: 1,
+  page: 1,
+  totalSR: 0,
 };
 
 export const createServiceRequest = createAsyncThunk(
@@ -40,10 +43,11 @@ export const employeeSR = createAsyncThunk(
 export const hotelSR = createAsyncThunk(
   "hotel/SR",
   async ({ id, search }, thunkAPI) => {
+    const { page } = thunkAPI.getState().serviceRequest;
     try {
-      let url = `/hotel/request/hotelSR/${id}`;
+      let url = `/hotel/request/hotelSR/${id}?page=${page}`;
       if (search) {
-        url += `?search=${search}`;
+        url += `&search=${search}`;
       }
       const res = await authFetch.get(url);
       return res.data;
@@ -98,6 +102,9 @@ const serviceRequestSlice = createSlice({
   initialState,
   reducers: {
     clearSR: (state) => initialState,
+    changePage: (state, { payload }) => {
+      state.page = payload;
+    },
   },
   extraReducers: {
     [createServiceRequest.pending]: (state) => {
@@ -129,7 +136,11 @@ const serviceRequestSlice = createSlice({
     [hotelSR.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.allHotelSR = payload.sr;
-      toast.success(payload.msg);
+      state.numOfPages = payload.numPages;
+      state.totalSR = payload.totalSR;
+      if (state.allHotelSR.length === 0) {
+        toast.error("service request not found");
+      }
     },
     [hotelSR.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -171,5 +182,5 @@ const serviceRequestSlice = createSlice({
   },
 });
 
-export const { clearSR } = serviceRequestSlice.actions;
+export const { clearSR, changePage } = serviceRequestSlice.actions;
 export default serviceRequestSlice.reducer;

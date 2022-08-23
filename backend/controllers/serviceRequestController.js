@@ -98,27 +98,32 @@ export const allEmployeeSR = async (req, res) => {
 export const allHotelSR = async (req, res) => {
   const { id } = req.params;
   const { search } = req.query;
+
   try {
-    let sr = await ServiceRequest.find({ hotel: id })
+    const queryObject = {
+      hotel: id,
+    };
+
+    if (search) {
+      queryObject.SRNumber = { $regex: search, $options: "i" };
+    }
+
+    let requests = ServiceRequest.find(queryObject)
       .populate({
         path: "employee",
         select: "name department",
       })
       .sort("-createdAt");
 
-    if (search) {
-      sr = await ServiceRequest.find({
-        hotel: id,
-        SRNumber: { $regex: search, $options: "i" },
-      })
-        .populate({
-          path: "employee",
-          select: "name department",
-        })
-        .sort("-createdAt");
-    }
+    const page = Number(req.query.page) || 1;
+    const skip = (page - 1) * 5;
+    requests = requests.skip(skip).limit(5);
 
-    res.status(200).json({ sr });
+    const sr = await requests;
+    const totalSR = await ServiceRequest.countDocuments(queryObject)
+    const numPages = Math.ceil(totalSR/5)
+
+    res.status(200).json({ sr, totalSR, numPages });
   } catch (error) {
     console.log(error);
     return res

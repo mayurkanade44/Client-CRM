@@ -37,7 +37,11 @@ code {
   .mobile-sr h4 {
     font-size: 17px !important;
   }
-  /* .mobile-search {
-    height: 35px !important;
-  } */
+
+  .mobile-pagination button {
+    padding: 3px 7px;
+    font-size: 0.85rem;
+    border-radius: 0.2rem;
+    font-weight: 200;
+  }
 }

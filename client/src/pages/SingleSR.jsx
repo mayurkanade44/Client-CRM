@@ -75,7 +75,7 @@ const SingleSR = () => {
               }`}
             >
               {singleSR.status}
-            </span>{" "}
+            </span> &amp;
             created by {singleSR.employee && singleSR.employee.name}
           </h4>
         </div>

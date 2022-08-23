@@ -59,7 +59,7 @@ const AllSR = () => {
     <div className="container my-2">
       <div className="row gy-2">
         {user.role === "Hotel Admin" && (
-          <div className="col-lg-3">
+          <div className={!showSR ? "col-lg-3" : "col-lg-12"}>
             <button
               className="btn btn-primary"
               onClick={() => setShowSR(!showSR)}
@@ -87,45 +87,49 @@ const AllSR = () => {
             {showSR && <NewSR />}
           </div>
         )}
-        <div className="col-7 col-lg-3">
-          <div className="input-group  ">
-            <input
-              type="text"
-              className="form-control"
-              name="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              aria-label="Sizing example input"
-              aria-describedby="inputGroup-sizing-default"
-            />
-            <button
-              className="input-group-text"
-              id="inputGroup-sizing-default"
-              onClick={() => setFind(!find)}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-        <div className="col-5 col-lg-2">
-          <select
-            className="form-select"
-            aria-label="Default select example"
-            name="status"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            {statusOption.map((data) => {
-              return (
-                <option value={data} key={data}>
-                  {data}
-                </option>
-              );
-            })}
-          </select>
-        </div>
+        {!showSR && !showStats && (
+          <>
+            <div className="col-7 col-lg-3">
+              <div className="input-group  ">
+                <input
+                  type="text"
+                  className="form-control"
+                  name="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-default"
+                />
+                <button
+                  className="input-group-text"
+                  id="inputGroup-sizing-default"
+                  onClick={() => setFind(!find)}
+                >
+                  Search
+                </button>
+              </div>
+            </div>
+            <div className="col-5 col-lg-2">
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                name="status"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                {statusOption.map((data) => {
+                  return (
+                    <option value={data} key={data}>
+                      {data}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          </>
+        )}
       </div>
-      {!showSR && (
+      {!showSR && !showStats && (
         <>
           <SRtable
             role={user.role}
@@ -138,7 +142,7 @@ const AllSR = () => {
             }
           />
           <nav aria-label="Page navigation example">
-            <ul className="pagination">
+            <ul className="pagination mobile-pagination">
               {pages.map((pageNum) => {
                 return (
                   <li

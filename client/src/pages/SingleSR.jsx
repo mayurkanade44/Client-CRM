@@ -43,7 +43,7 @@ const SingleSR = () => {
     }
     const comment = `${moment(new Date()).format("L")} - ${
       formValue.comment
-    } by ${user.name}`;
+    } updated by ${user.name}`;
     dispatch(
       updateSR({
         id,

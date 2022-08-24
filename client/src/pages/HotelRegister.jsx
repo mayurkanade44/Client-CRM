@@ -25,7 +25,6 @@ const HotelRegister = () => {
   const [tempFloor, setTempFloor] = useState("");
   const [tempLocations, setTempLocations] = useState("");
   const [value, setValue] = useState("");
-
   const {
     hotelName,
     hotelAddress,

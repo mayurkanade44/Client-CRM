@@ -77,7 +77,7 @@ const AllSR = () => {
           </div>
         )}
         {user.role === "Hotel Employee" && (
-          <div className="col-12 col-lg-2">
+          <div className={!showSR ? "col-lg-3" : "col-lg-12"}>
             <button
               className="btn btn-primary"
               onClick={() => setShowSR(!showSR)}

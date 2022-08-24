@@ -41,7 +41,7 @@ const SingleSR = () => {
     if (!formValue.comment || !formValue.status) {
       return toast.error("Please provide all values");
     }
-    const comment = `${moment(new Date()).format("L")} - ${
+    const comment = `${moment(new Date()).format("D/MM/yy")} - ${
       formValue.comment
     } updated by ${user.name}`;
     dispatch(

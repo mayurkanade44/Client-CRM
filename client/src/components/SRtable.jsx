@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const SRtable = ({ data, role }) => {
   return (
@@ -6,6 +7,7 @@ const SRtable = ({ data, role }) => {
       <thead>
         <tr>
           <th style={{ width: 160 }}>SR Number</th>
+          <th style={{ width: 100 }}>Created At</th>
           <th style={{ width: 200 }}>Floor</th>
           <th style={{ width: 250 }}>Location</th>
           <th style={{ width: 450 }}>Services</th>
@@ -23,6 +25,7 @@ const SRtable = ({ data, role }) => {
             return (
               <tr key={item._id}>
                 <th>{item.SRNumber}</th>
+                <td>{moment(item.createdAt).format("D/MM/yy")}</td>
                 <td>{item.floor}</td>
                 <td>{item.locations}</td>
                 <td>{item.pestService}</td>

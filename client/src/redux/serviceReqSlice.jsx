@@ -30,8 +30,9 @@ export const createServiceRequest = createAsyncThunk(
 export const employeeSR = createAsyncThunk(
   "hotel/employeeSR",
   async ({ id, search, status }, thunkAPI) => {
+    const { page } = thunkAPI.getState().serviceRequest;
     try {
-      let url = `/hotel/request/employeeSR/${id}?status=${status}`
+      let url = `/hotel/request/employeeSR/${id}?page=${page}&&status=${status}`;
       if(search){
         url += `&search=${search}`
       }
@@ -128,6 +129,8 @@ const serviceRequestSlice = createSlice({
     [employeeSR.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.allEmployeeSR = payload.sr;
+      state.numOfPages = payload.numPages;
+      state.totalSR = payload.totalSR;
       toast.success(payload.msg);
     },
     [employeeSR.rejected]: (state, { payload }) => {

@@ -97,8 +97,17 @@ export const allEmployeeSR = async (req, res) => {
   }
 
   try {
-    const sr = await ServiceRequest.find(queryObject).sort("-createdAt");
-    res.status(200).json({ sr });
+    let requests = ServiceRequest.find(queryObject).sort("-createdAt");
+
+    const page = Number(req.query.page) || 1;
+    const skip = (page - 1) * 5;
+    requests = requests.skip(skip).limit(5);
+
+    const sr = await requests;
+    const totalSR = await ServiceRequest.countDocuments(queryObject);
+    const numPages = Math.ceil(totalSR / 5);
+
+    res.status(200).json({ sr, totalSR, numPages });
   } catch (error) {
     console.log(error);
     return res

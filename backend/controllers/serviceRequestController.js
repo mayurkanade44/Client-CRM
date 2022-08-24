@@ -84,8 +84,20 @@ export const updateSingleSR = async (req, res) => {
 
 export const allEmployeeSR = async (req, res) => {
   const { id } = req.params;
+  const { search, status } = req.query;
+
+  const queryObject = {
+    employee: id,
+  };
+  if (search) {
+    queryObject.SRNumber = { $regex: search, $options: "i" };
+  }
+  if (status && status !== "All Requests") {
+    queryObject.status = status;
+  }
+
   try {
-    const sr = await ServiceRequest.find({ employee: id }).sort("-createdAt");
+    const sr = await ServiceRequest.find(queryObject).sort("-createdAt");
     res.status(200).json({ sr });
   } catch (error) {
     console.log(error);

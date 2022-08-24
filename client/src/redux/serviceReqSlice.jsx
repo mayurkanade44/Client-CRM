@@ -29,9 +29,13 @@ export const createServiceRequest = createAsyncThunk(
 
 export const employeeSR = createAsyncThunk(
   "hotel/employeeSR",
-  async (id, thunkAPI) => {
+  async ({ id, search, status }, thunkAPI) => {
     try {
-      const res = await authFetch.get(`/hotel/request/employeeSR/${id}`);
+      let url = `/hotel/request/employeeSR/${id}?status=${status}`
+      if(search){
+        url += `&search=${search}`
+      }
+      const res = await authFetch.get(url);
       return res.data;
     } catch (error) {
       console.log(error);

@@ -39,7 +39,7 @@ const AllSR = () => {
     } else if (user.role === "Hotel Admin") {
       dispatch(hotelSR({ id: user.hotel, search, status }));
     } else if (user.role === "Hotel Employee") {
-      dispatch(employeeSR(user.empId));
+      dispatch(employeeSR({ id: user.empId, search, status }));
     }
     // eslint-disable-next-line
   }, [showSR, id, find, page, status]);

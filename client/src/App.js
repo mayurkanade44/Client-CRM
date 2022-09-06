@@ -23,8 +23,22 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/allHotels" element={<AllHotels />} />
-        <Route path="/hotelRegistration" element={<HotelRegister />} />
+        <Route
+          path="/allHotels"
+          element={
+            <ProtectedRoute>
+              <AllHotels />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/hotelRegistration"
+          element={
+            <ProtectedRoute>
+              <HotelRegister />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/allServiceRequests"
           element={
@@ -33,9 +47,30 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/allServiceRequests/:id" element={<AllSR />} />
-        <Route path="/singleSR/:id" element={<SingleSR />} />
-        <Route path="/hotelDetails/:id" element={<SingleHotel />} />
+        <Route
+          path="/allServiceRequests/:id"
+          element={
+            <ProtectedRoute>
+              <AllSR />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/singleSR/:id"
+          element={
+            <ProtectedRoute>
+              <SingleSR />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/hotelDetails/:id"
+          element={
+            <ProtectedRoute>
+              <SingleHotel />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

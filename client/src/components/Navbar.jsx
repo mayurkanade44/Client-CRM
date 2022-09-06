@@ -20,14 +20,19 @@ const Navbar = () => {
           aria-current="page"
           style={{ paddingBottom: 0 }}
         >
-          <img src={epcorn} alt="epcorn" style={{ width: 60 }} />
+          <img
+            src={epcorn}
+            alt="epcorn"
+            className="mobile-logo"
+            style={{ width: 60 }}
+          />
         </Link>
         <div id="navbarSupportedContent">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             {user && (
               <li className="nav-item">
                 <button className="btn" onClick={() => dispatch(clearStore())}>
-                  <h4>Logout</h4>
+                  <h4 className="mobile-h4">Logout</h4>
                 </button>
               </li>
             )}

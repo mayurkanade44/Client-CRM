@@ -13,6 +13,16 @@ code {
 }
 
 @media (max-width: 767px) {
+  .mobile-logo {
+    width: 45px !important;
+  }
+  .mobile-h4 {
+    margin-bottom: 0 !important;
+    padding-top: 7px;
+  }
+  .navbar {
+    padding-top: 0;
+  }
   .mobile-table {
     display: none;
   }

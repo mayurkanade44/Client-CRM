@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { authFetch } from "../utilis/axios";
+import { authFetch, unauthorizedResponse } from "../utilis/axios";
 
 const initialState = {
   loading: false,
@@ -22,7 +22,7 @@ export const createServiceRequest = createAsyncThunk(
       return res.data;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return unauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -33,14 +33,14 @@ export const employeeSR = createAsyncThunk(
     const { page } = thunkAPI.getState().serviceRequest;
     try {
       let url = `/hotel/request/employeeSR/${id}?page=${page}&&status=${status}`;
-      if(search){
-        url += `&search=${search}`
+      if (search) {
+        url += `&search=${search}`;
       }
       const res = await authFetch.get(url);
       return res.data;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return unauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -58,7 +58,7 @@ export const hotelSR = createAsyncThunk(
       return res.data;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return unauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -71,7 +71,7 @@ export const getSingleSR = createAsyncThunk(
       return res.data;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return unauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -84,7 +84,7 @@ export const updateSR = createAsyncThunk(
       return res.data;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return unauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -97,7 +97,7 @@ export const serviceStats = createAsyncThunk(
       return res.data;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return unauthorizedResponse(error, thunkAPI);
     }
   }
 );
@@ -114,6 +114,9 @@ const serviceRequestSlice = createSlice({
   extraReducers: {
     [createServiceRequest.pending]: (state) => {
       state.loading = true;
+      toast.info("Service request being generated", {
+        autoClose: 2000,
+      });
     },
     [createServiceRequest.fulfilled]: (state, { payload }) => {
       state.loading = false;

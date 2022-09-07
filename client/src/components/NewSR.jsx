@@ -19,6 +19,7 @@ const NewSR = () => {
   const [loc, setLoc] = useState([]);
   const [value, setValue] = useState([]);
   const [pest, setPest] = useState([]);
+  const [img, setImg] = useState([]);
 
   useEffect(() => {
     if (user && user.hotelId) {
@@ -54,11 +55,29 @@ const NewSR = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    formValue.hotel = user.hotelId;
-    formValue.employee = user.empId;
-    formValue.pestService = value;
-    dispatch(createServiceRequest(formValue));
+
+    const myForm = new FormData();
+
+    myForm.set("floor", formValue.floor);
+    myForm.set("locations", formValue.locations);
+    myForm.set("otherDetails", formValue.otherDetails);
+    myForm.set("pestService", formValue.pestService);
+    myForm.set("hotel", user.hotelId);
+    myForm.set("employee", user.empId);
+    myForm.set("pestService", value);
+
+    if (img.length > 0) {
+      img.forEach((image) => {
+        myForm.append("images", image);
+      });
+    }
+    dispatch(createServiceRequest(myForm));
     setFormValue(initialState);
+  };
+
+  const handleImage = async (e) => {
+    setImg([]);
+    setImg(Array.from(e.target.files));
   };
 
   return (
@@ -131,6 +150,14 @@ const NewSR = () => {
               </div>
             </div>
           </div>
+          <div className="col-md-4 mt-3">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImage}
+              multiple
+            />
+          </div>
           <div className="col-md-6 mt-3">
             <div className="row">
               <div className="col-md-4">
@@ -149,7 +176,7 @@ const NewSR = () => {
               </div>
             </div>
           </div>
-          <div className="col-md-6 mt-3">
+          <div className="col-md-2 mt-3">
             <button className="btn btn-success" type="submit">
               Submit
             </button>

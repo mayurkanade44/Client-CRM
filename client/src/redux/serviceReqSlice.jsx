@@ -50,9 +50,9 @@ export const hotelSR = createAsyncThunk(
   async ({ id, search, status }, thunkAPI) => {
     const { page } = thunkAPI.getState().serviceRequest;
     try {
-      let url = `/hotel/request/hotelSR/${id}?page=${page}&&status=${status}`;
+      let url = `/hotel/request/hotelSR/${id}?status=${status}&page=${page}`;
       if (search) {
-        url += `&search=${search}`;
+        url = url + `&search=${search}`;
       }
       const res = await authFetch.get(url);
       return res.data;

@@ -48,8 +48,6 @@ export const createServiceRequest = async (req, res) => {
       req.body.images = imagesLinks;
     }
 
-    console.log(req.body);
-
     const serviceReq = await ServiceRequest.create(req.body);
     res.status(201).json({
       msg: `Your service request number is ${serviceReq.SRNumber}`,
@@ -62,27 +60,27 @@ export const createServiceRequest = async (req, res) => {
   }
 };
 
-export const uploadImages = async (req, res) => {
-  let images = [];
+// export const uploadImages = async (req, res) => {
+//   let images = [];
 
-  if (req.files.image.length > 0) {
-    images = req.files.image;
-  } else {
-    images.push(req.files.image);
-  }
+//   if (req.files.image.length > 0) {
+//     images = req.files.image;
+//   } else {
+//     images.push(req.files.image);
+//   }
 
-  const imagesLinks = [];
-  for (let i = 0; i < images.length; i++) {
-    const result = await cloudinary.uploader.upload(images[i].tempFilePath, {
-      use_filename: true,
-      folder: "service-request",
-      quality: 30,
-    });
-    fs.unlinkSync(images[i].tempFilePath);
-    imagesLinks.push(result.secure_url);
-  }
-  return res.status(200).json({ image: imagesLinks });
-};
+//   const imagesLinks = [];
+//   for (let i = 0; i < images.length; i++) {
+//     const result = await cloudinary.uploader.upload(images[i].tempFilePath, {
+//       use_filename: true,
+//       folder: "service-request",
+//       quality: 30,
+//     });
+//     fs.unlinkSync(images[i].tempFilePath);
+//     imagesLinks.push(result.secure_url);
+//   }
+//   return res.status(200).json({ image: imagesLinks });
+// };
 
 export const getSingleSR = async (req, res) => {
   const { id } = req.params;

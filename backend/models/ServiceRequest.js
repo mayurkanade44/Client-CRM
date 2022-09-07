@@ -9,6 +9,7 @@ const ServiceRequestSchema = new mongoose.Schema(
     otherDetails: { type: String },
     status: { type: String, default: "Open" },
     operatorComment: [String],
+    images: [String],
     hotel: { type: mongoose.Types.ObjectId, ref: "Hotel", required: true },
     employee: {
       type: mongoose.Types.ObjectId,

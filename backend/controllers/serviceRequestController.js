@@ -22,7 +22,33 @@ export const createServiceRequest = async (req, res) => {
       }
     }
 
-    req.body.SRNumber = sr;
+    req.body.SRNumber = sr
+    
+    const imagesLinks = [];
+
+    if (req.files) {
+      let images = [];
+      if (req.files.images.length > 0) {
+        images = req.files.images;
+      } else {
+        images.push(req.files.images);
+      }
+      for (let i = 0; i < images.length; i++) {
+        const result = await cloudinary.uploader.upload(
+          images[i].tempFilePath,
+          {
+            use_filename: true,
+            folder: "service-request",
+            quality: 30,
+          }
+        );
+        fs.unlinkSync(images[i].tempFilePath);
+        imagesLinks.push(result.secure_url);
+      }
+      req.body.images = imagesLinks;
+    }
+
+    console.log(req.body);
 
     const serviceReq = await ServiceRequest.create(req.body);
     res.status(201).json({
@@ -38,8 +64,6 @@ export const createServiceRequest = async (req, res) => {
 
 export const uploadImages = async (req, res) => {
   let images = [];
-
-  
 
   if (req.files.image.length > 0) {
     images = req.files.image;

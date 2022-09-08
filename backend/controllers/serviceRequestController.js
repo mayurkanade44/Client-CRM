@@ -139,21 +139,23 @@ export const allEmployeeSR = async (req, res) => {
   };
   if (search) {
     queryObject.SRNumber = { $regex: search, $options: "i" };
+    req.query.page = 1;
   }
   if (status && status !== "All Requests") {
     queryObject.status = status;
+    req.query.page = 1;
   }
 
   try {
     let requests = ServiceRequest.find(queryObject).sort("-createdAt");
 
     const page = Number(req.query.page) || 1;
-    const skip = (page - 1) * 5;
-    requests = requests.skip(skip).limit(5);
+    const skip = (page - 1) * 10;
+    requests = requests.skip(skip).limit(10);
 
     const sr = await requests;
     const totalSR = await ServiceRequest.countDocuments(queryObject);
-    const numPages = Math.ceil(totalSR / 5);
+    const numPages = Math.ceil(totalSR / 10);
 
     res.status(200).json({ sr, totalSR, numPages });
   } catch (error) {

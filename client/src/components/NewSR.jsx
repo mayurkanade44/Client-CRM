@@ -71,6 +71,7 @@ const NewSR = () => {
         myForm.append("images", image);
       });
     }
+
     dispatch(createServiceRequest(myForm));
     setFormValue(initialState);
   };

@@ -1,8 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import morgan from 'morgan'
-import fileUpload from 'express-fileupload'
+import morgan from "morgan";
+import fileUpload from "express-fileupload";
 import { v2 as cloudinary } from "cloudinary";
 
 const app = express();
@@ -13,7 +13,6 @@ cloudinary.config({
   api_key: process.env.CLOUD_KEY,
   api_secret: process.env.CLOUD_SECRET,
 });
-
 
 import hotelRouter from "./routes/hotelRoute.js";
 import hotelEmpRouter from "./routes/hotelEmpRoute.js";

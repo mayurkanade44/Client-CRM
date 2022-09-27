@@ -66,6 +66,31 @@ export const createServiceRequest = async (req, res) => {
   }
 };
 
+const updateSRMail = async (
+  emails,
+  srNo,
+  location,
+  pestService,
+  comment,
+  status
+) => {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+  const msg = {
+    to:"exteam.epcorn@gmail.com",
+    from: { email: "noreply.epcorn@gmail.com", name: "EPCORN" },
+    dynamic_template_data: {
+      srNo: srNo,
+      comment: comment,
+      location: location,
+      pestService: pestService,
+      status: status,
+    },
+    template_id: "d-0e3fda2afd5c488490f7b6b1efa7f7d6",
+  };
+  await sgMail.send(msg);
+};
+
 const newSRMail = async (
   emails,
   sr,
@@ -115,7 +140,10 @@ export const updateSingleSR = async (req, res) => {
   const { id } = req.params;
   const { comment, status } = req.body;
   try {
-    const sr = await ServiceRequest.findOne({ _id: id });
+    const sr = await ServiceRequest.findOne({ _id: id }).populate({
+      path: "hotel",
+      select: "hotelAdminEmail",
+    });
     if (!sr) {
       return res
         .status(404)
@@ -126,9 +154,15 @@ export const updateSingleSR = async (req, res) => {
       return res.status(400).json({ msg: "SR already closed" });
     }
 
+    const location = `${sr.floor} floor, ${sr.locations}`;
+    const pestService = sr.pestService;
+    const srNo = sr.SRNumber;
+    const emails = sr.hotel.hotelAdminEmail;
+
     sr.operatorComment.push(comment);
     sr.status = status;
 
+    await updateSRMail(emails, srNo, location, pestService, comment, status);
     await sr.save();
     res.status(200).json({ msg: "SR has been updated" });
   } catch (error) {

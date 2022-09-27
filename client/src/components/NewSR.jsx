@@ -82,12 +82,12 @@ const NewSR = () => {
   };
 
   return (
-    <div className="container">
+    <div >
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-md-4">
             <div className="row mt-2">
-              <div className="col-md-4">
+              <div className="col-md-3">
                 <h4>Floor</h4>
               </div>
               <div className="col-md-7">

@@ -1,6 +1,8 @@
 import ServiceRequest from "../models/ServiceRequest.js";
+import Hotel from "../models/Hotels.js";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
+import sgMail from "@sendgrid/mail";
 
 export const createServiceRequest = async (req, res) => {
   const { floor, locations, pestService, hotel, employee } = req.body;
@@ -47,7 +49,11 @@ export const createServiceRequest = async (req, res) => {
       }
       req.body.images = imagesLinks;
     }
+    const hotelDetails = await Hotel.findById(hotel);
+    const emails = [hotelDetails.hotelAdminEmail, "exteam.epcorn@gmail.com"];
+    const hotelName = hotelDetails.hotelName;
 
+    await newSRMail(emails, sr, locations, hotelName, pestService, floor);
     const serviceReq = await ServiceRequest.create(req.body);
     res.status(201).json({
       msg: `Your service request number is ${serviceReq.SRNumber}`,
@@ -58,6 +64,31 @@ export const createServiceRequest = async (req, res) => {
       .status(500)
       .json({ msg: "Something went wrong, please try again later" });
   }
+};
+
+const newSRMail = async (
+  emails,
+  sr,
+  locations,
+  hotelName,
+  pestService,
+  floor
+) => {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+  const msg = {
+    to: emails,
+    from: { email: "noreply.epcorn@gmail.com", name: "EPCORN" },
+    dynamic_template_data: {
+      sr: sr,
+      hotelName: hotelName,
+      locations: locations,
+      pestService: pestService,
+      floor: floor,
+    },
+    template_id: "d-f68723bb4c6247fcb1ebf576601889d3",
+  };
+  await sgMail.send(msg);
 };
 
 export const getSingleSR = async (req, res) => {

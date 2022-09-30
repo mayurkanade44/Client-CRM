@@ -29,11 +29,11 @@ const NewSR = () => {
 
   useEffect(() => {
     if (singleHotel && singleHotel.floor) {
-      setLoc(
-        singleHotel.locations.filter(
-          (item, index) => index === singleHotel.floor.indexOf(floor)
-        )
+      const locations = singleHotel.locations.filter(
+        (item, index) => index === singleHotel.floor.indexOf(floor)
       );
+
+      setLoc(locations);
       setPest(singleHotel.pestService.toString().split(","));
     }
   }, [floor]);
@@ -82,7 +82,7 @@ const NewSR = () => {
   };
 
   return (
-    <div >
+    <div>
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-md-4">
@@ -100,7 +100,7 @@ const NewSR = () => {
                 >
                   {singleHotel &&
                     singleHotel.floor &&
-                    singleHotel.floor.map((data, index) => {
+                    ["Select", ...singleHotel.floor].map((data, index) => {
                       return (
                         <option value={data} key={index}>
                           {data}
@@ -125,16 +125,15 @@ const NewSR = () => {
                   onChange={handleChange}
                 >
                   {loc &&
-                    loc
-                      .toString()
-                      .split(",")
-                      .map((data, index) => {
+                    ["Select", ...loc.toString().split(",")].map(
+                      (data, index) => {
                         return (
                           <option value={data} key={index}>
                             {data}
                           </option>
                         );
-                      })}
+                      }
+                    )}
                 </select>
               </div>
             </div>

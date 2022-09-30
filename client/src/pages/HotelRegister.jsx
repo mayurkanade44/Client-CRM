@@ -13,8 +13,8 @@ const initialState = {
   hotelAdminName: "",
   hotelAdminEmail: "",
   hotelAdminContact: "",
-  floor: ["Select Floor"],
-  locations: ["Select Location"],
+  floor: [],
+  locations: [],
 };
 
 const HotelRegister = () => {
@@ -61,7 +61,7 @@ const HotelRegister = () => {
     setFormValue({
       ...formValue,
       floor: [...formValue.floor, tempFloor],
-      locations: [...formValue.locations, `Select,${tempLocations}`],
+      locations: [...formValue.locations, tempLocations],
     });
     setTempFloor("");
     setTempLocations([]);

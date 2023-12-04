@@ -1,31 +1,28 @@
 const InputRow = ({
   label,
-  type,
-  value,
-  name,
-  handleChange,
+  register,
+  id,
   placeholder,
-  required,
-  labelW,
+  required = true,
+  type = "text",
 }) => {
   return (
-    <div className="row align-items-center">
-      <div className={`col-${labelW}`}>
-        <label className="col-form-label mobile-sr">
-          <h4>{label}</h4>
-        </label>
-      </div>
-      <div className="col">
-        <input
-          className="form-control"
-          type={type}
-          placeholder={placeholder}
-          name={name}
-          value={value}
-          onChange={handleChange}
-          required={required}
-        />
-      </div>
+    <div className="relative mt-2">
+      <label
+        htmlFor={id}
+        className="block text-md font-medium leading-6 text-gray-900"
+      >
+        {label}
+        {required && (
+          <span className="text-red-500 required-dot ml-0.5">*</span>
+        )}
+      </label>
+      <input
+        type={type}
+        className="mt-0.5 w-full py-0.5 px-2 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
+        placeholder={placeholder}
+        // {...register(id, { required: required })}
+      />
     </div>
   );
 };

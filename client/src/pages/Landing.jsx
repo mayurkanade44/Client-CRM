@@ -1,164 +1,77 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { InputRow } from "../components";
-import {
-  hotelEmployeeLogin,
-  hotelLogin,
-  epcornLogin,
-} from "../redux/userSlice";
-import { getAllHotelNames } from "../redux/hotelSlice";
-import { useNavigate } from "react-router-dom";
-
-const initialState = {
-  email: "",
-  password: "",
-  hotel: "Hotel Admin",
-};
+import { useState } from "react";
+import { Button } from "../components";
 
 const Landing = () => {
-  const [hotelUser, setHotelUser] = useState(false);
-  const [epcornUser, setEpcornUser] = useState(false);
-  const { user } = useSelector((store) => store.user);
-  const { allHotelsNames } = useSelector((store) => store.hotel);
-  const dispatch = useDispatch();
-
-  const [formValue, setFormValue] = useState(initialState);
-  const { email, password, hotel } = formValue;
-
-  const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormValue({ ...formValue, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!email || !password) {
-      return toast.error("provide all values");
-    }
-    if (hotelUser) {
-      if (hotel === "Hotel Admin" || hotel === "62e248cb62037f5644078a95") {
-        dispatch(
-          hotelLogin({
-            hotelEmail: email,
-            password: password,
-            hotel: hotel,
-          })
-        );
-      } else {
-        dispatch(hotelEmployeeLogin(formValue));
-      }
-    }
-    if (epcornUser) {
-      dispatch(epcornLogin({ email, password }));
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-      setTimeout(() => {
-        if (user.role === "Hotel Employee" || user.role === "Hotel Admin") {
-          navigate("/allServiceRequests");
-        }
-        if (user.role === "Epcorn" || user.role === "Admin") {
-          navigate("/allHotels");
-        }
-      }, 3000);
-    }
-
-    dispatch(getAllHotelNames());
-    // eslint-disable-next-line
-  }, [user]);
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
 
   return (
-    <div className="container">
-      <div className="position-absolute top-50 start-50 translate-middle border border-info p-4 mt-4">
-        <div className="row">
-          {!hotelUser && !epcornUser && (
-            <>
-              <button
-                className="btn btn-primary mb-4"
-                onClick={() => setHotelUser(true)}
-              >
-                Hotel Login
-              </button>
-              <button
-                className="btn btn-info"
-                onClick={() => setEpcornUser(true)}
-              >
-                Epcorn Login
-              </button>{" "}
-            </>
-          )}
-          {(hotelUser || epcornUser) && (
-            <div className="d-flex justify-content-center">
-              <form onSubmit={handleSubmit}>
-                <div className="mb-2">
-                  <InputRow
-                    label="Email Id"
-                    type="email"
-                    placeholder="abc@xyz.com"
-                    name="email"
-                    value={email}
-                    handleChange={handleChange}
-                    required={true}
-                    labelW="md-4"
-                  
-                  />
-                </div>
-                <div className="mb-2">
-                  <InputRow
-                    label="Password"
-                    type="password"
-                    name="password"
-                    placeholder="Must be 5 characters"
-                    value={password}
-                    handleChange={handleChange}
-                    required={true}
-                    labelW="md-4"
-                
-                  />
-                </div>
-                {hotelUser && (
-                  <div className="row mt-3">
-                    <div className="col-md-4">
-                      <h4>Hotel</h4>
-                    </div>
-                    <div className="col-md-7">
-                      <select
-                        className="form-select"
-                        aria-label="Default select example"
-                        name="hotel"
-                        value={hotel}
-                        onChange={handleChange}
-                      >
-                        {allHotelsNames.map((data) => {
-                          return (
-                            <option value={data.id} key={data.id}>
-                              {data.hotelName}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    </div>
-                  </div>
-                )}
-                <button
-                  type="submit"
-                  className="btn btn-primary mt-2"
-                  disabled={user ? true : false}
+    <section className="bg-gray-700 bg-opacity-60 bg-[url('https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/background.jpg')] bg-cover bg-center bg-no-repeat bg-blend-multiply">
+      <div className="pt:mt-0 mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen">
+        <div className="mb-6 flex items-center text-2xl font-semibold text-white">
+          <img
+            className="mr-2 h-8 w-8"
+            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+            alt="logo"
+          />
+          Hotel CRM
+        </div>
+        <div className="w-full rounded-lg bg-white shadow dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
+          <div className="space-y-4 p-6 sm:p-8 md:space-y-6 lg:space-y-8">
+            <h1 className="text-center text-xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
+              Sign in to your account
+            </h1>
+            <form className="space-y-4 md:space-y-6" action="#">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="mb-1 block dark:text-white font-medium"
                 >
-                  Login
-                </button>
-              </form>
-            </div>
-          )}
+                  Email Id
+                </label>
+                <input
+                  className="w-full py-0.5 px-2 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
+                  placeholder="jon@doe.com"
+                  required
+                  type="email"
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, email: e.target.value }))
+                  }
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="mb-1 block dark:text-white font-medium"
+                >
+                  Password
+                </label>
+                <input
+                  className="w-full py-0.5 px-2 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
+                  placeholder="••••••••"
+                  required
+                  type="password"
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, email: e.target.value }))
+                  }
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <Button type="submit" label="Log in" />
+                <a
+                  href="#"
+                  className="text-sm font-medium text-white hover:underline"
+                >
+                  Forgot password?
+                </a>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 export default Landing;

@@ -1,3 +1,6 @@
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import {
   Route,
   createBrowserRouter,
@@ -11,8 +14,7 @@ function App() {
   const Layout = () => {
     return (
       <>
-        {/* <ToastContainer position="top-center" autoClose={2000} />
-        <Navbar /> */}
+        <ToastContainer position="top-center" autoClose={2000} />
         <div>
           <Outlet />
         </div>

@@ -1,5 +1,5 @@
 import User from "../models/UserModel.js";
-import { capitalLetter } from "../utils/helperFunction.js";
+import { capitalLetter, generateToken } from "../utils/helperFunction.js";
 
 export const registerUser = async (req, res) => {
   const { name, password, role, email, department, type } = req.body;
@@ -41,12 +41,19 @@ export const loginUser = async (req, res) => {
         _id: user._id,
         name: user.name,
         role: user.role,
-        hotel: user.hotel,
         type: user.type,
       });
     } else res.status(400).json({ msg: "Invalid credentials" });
   } catch (error) {
     console.log(error);
-    res.send(500).json({ msg: "Server error, try again later" });
+    res.status(500).json({ msg: "Server error, try again later" });
   }
+};
+
+export const logoutUser = async (req, res) => {
+  res.cookie("token", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({ msg: "Logged out successfully" });
 };

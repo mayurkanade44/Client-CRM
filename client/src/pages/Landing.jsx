@@ -4,9 +4,10 @@ import hotel from "../assets/hotel.png";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useLoginMutation } from "../redux/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -20,6 +21,7 @@ const Landing = () => {
       const res = await login(form).unwrap();
       toast.success(`Welcome ${res.name}`);
       setForm({ email: "", password: "" });
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);

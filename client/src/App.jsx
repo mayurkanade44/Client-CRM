@@ -8,7 +8,7 @@ import {
   RouterProvider,
   Outlet,
 } from "react-router-dom";
-import { Landing } from "./pages";
+import { Dashboard, Landing } from "./pages";
 
 function App() {
   const Layout = () => {
@@ -26,6 +26,7 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
         <Route index={true} path="/" element={<Landing />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Route>
     )
   );

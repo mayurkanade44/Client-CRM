@@ -1,3 +1,5 @@
+import LoadingSpinner from "./LoadingSpinner";
+
 const Button = ({
   label,
   onClick,
@@ -6,6 +8,7 @@ const Button = ({
   small,
   color,
   height,
+  isLoading
 }) => {
   return (
     <button
@@ -20,14 +23,14 @@ const Button = ({
         transition
         m-1
         text-white
-        ${height ? height : 'h-8'}
+        ${height ? height : "h-8"}
         ${color ? color : "bg-blue-500"}
         ${small ? "text-sm" : "text-md"}
         ${small ? "px-2" : "px-4"}
         ${small ? "font-medium" : "font-semibold"}
       `}
     >
-      {label}
+      {label} {isLoading && <LoadingSpinner />}
     </button>
   );
 };

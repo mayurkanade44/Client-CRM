@@ -159,7 +159,7 @@ const Sidebar = () => {
                 {!show && <MdOutlineMenu className="w-7 h-7" />}
               </div>
             </nav>
-            <div className="container p-5">
+            <div className="p-5">
               <Outlet />
             </div>
           </div>

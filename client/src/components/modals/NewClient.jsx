@@ -1,12 +1,10 @@
-import { useForm, Controller } from "react-hook-form";
-import InputRow from "../InputRow";
-import Button from "../Button";
-import { useState } from "react";
-import Modal from "./Modal";
-import { useRegisterClientMutation } from "../../redux/clientSlice";
-import { toast } from "react-toastify";
-import { toggleModal } from "../../redux/helperSlice";
+import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { Button, InputRow } from "..";
+import { useRegisterClientMutation } from "../../redux/clientSlice";
+import { toggleModal } from "../../redux/helperSlice";
+import Modal from "./Modal";
 
 const NewClient = () => {
   const { openModal } = useSelector((store) => store.helper);
@@ -36,8 +34,10 @@ const NewClient = () => {
     try {
       const res = await addClient(data).unwrap();
       toast.success(res.msg);
-      dispatch(toggleModal());
       reset();
+      setTimeout(() => {
+        dispatch(toggleModal());
+      }, 300);
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);
@@ -115,6 +115,7 @@ const NewClient = () => {
           submitLabel="Add Client"
           handleClose={() => dispatch(toggleModal())}
           disabled={isLoading}
+          isLoading={isLoading}
         />
       )}
     </div>

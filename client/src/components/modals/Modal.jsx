@@ -1,7 +1,14 @@
 import Button from "../Button";
 
-
-const Modal = ({ title, formBody, submitLabel, onSubmit, handleClose, disabled }) => {
+const Modal = ({
+  title,
+  formBody,
+  submitLabel,
+  onSubmit,
+  handleClose,
+  disabled,
+  isLoading,
+}) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center visible bg-black/20">
       <div className="bg-white rounded-xl shadow p-5">
@@ -11,8 +18,19 @@ const Modal = ({ title, formBody, submitLabel, onSubmit, handleClose, disabled }
         <form onSubmit={onSubmit}>
           <div>{formBody}</div>
           <div className="grid grid-cols-2">
-            <Button type="submit" label={submitLabel} disabled={disabled} color="bg-green-500" />
-            <Button label="Cancel" disabled={disabled} color="bg-red-500" onClick={handleClose} />
+            <Button
+              type="submit"
+              label={submitLabel}
+              disabled={disabled}
+              color="bg-green-500"
+              isLoading={isLoading}
+            />
+            <Button
+              label="Cancel"
+              disabled={disabled}
+              color="bg-red-500"
+              onClick={handleClose}
+            />
           </div>
         </form>
       </div>

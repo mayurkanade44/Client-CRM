@@ -4,8 +4,10 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import { notFound } from "./middleware/notFound.js";
+
 import userRoute from "./routes/userRoute.js";
+import clientRoute from "./routes/clientRoute.js";
+import { notFound } from "./middleware/notFound.js";
 
 dotenv.config();
 const app = express();
@@ -15,6 +17,7 @@ app.use(cookieParser());
 if (process.env.NODE_ENV !== "production") app.use(morgan("dev"));
 
 app.use("/api/user", userRoute);
+app.use("/api/client", clientRoute);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();

@@ -1,4 +1,4 @@
-import User from "../models/UserModel.js";
+import User from "../models/userModel.js";
 import { capitalLetter, generateToken } from "../utils/helperFunction.js";
 
 export const registerUser = async (req, res) => {
@@ -29,7 +29,7 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  
+
   try {
     if (!email || !password)
       return res.status(400).json({ msg: "Please provide required values" });

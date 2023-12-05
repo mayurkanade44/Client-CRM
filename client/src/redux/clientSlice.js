@@ -9,7 +9,14 @@ export const clientSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    allClients: builder.query({
+      query: () => ({
+        url: "/api/client",
+      }),
+      providesTags: ["Client"],
+      keepUnusedDataFor: 60,
+    }),
   }),
 });
 
-export const { useRegisterClientMutation } = clientSlice;
+export const { useRegisterClientMutation, useAllClientsQuery } = clientSlice;

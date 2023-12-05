@@ -8,7 +8,7 @@ import {
   RouterProvider,
   Outlet,
 } from "react-router-dom";
-import { Client, Dashboard, Landing } from "./pages";
+import { Client, Dashboard, Landing, SingleClient } from "./pages";
 import { Sidebar } from "./components";
 
 function App() {
@@ -29,6 +29,7 @@ function App() {
         <Route index={true} path="/" element={<Landing />} />
         <Route path="/dashboard" element={<Sidebar />}>
           <Route path="client" element={<Client />} />
+          <Route path="client/:id" element={<SingleClient />} />
         </Route>
       </Route>
     )

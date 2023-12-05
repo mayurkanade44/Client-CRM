@@ -39,3 +39,14 @@ export const registerClient = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+export const getAllClient = async (req, res) => {
+  try {
+    const clients = await Client.find();
+
+    return res.json(clients);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};

@@ -5,6 +5,7 @@ import { Button, InputRow } from "..";
 import { useRegisterClientMutation } from "../../redux/clientSlice";
 import { toggleModal } from "../../redux/helperSlice";
 import Modal from "./Modal";
+import { MdAddCircle } from "react-icons/md";
 
 const NewClient = () => {
   const { openModal } = useSelector((store) => store.helper);
@@ -19,7 +20,6 @@ const NewClient = () => {
     reset,
     getValues,
     setValue,
-    control,
   } = useForm({
     defaultValues: {
       name: "",
@@ -106,7 +106,16 @@ const NewClient = () => {
 
   return (
     <div>
-      <Button label="New Client" onClick={() => dispatch(toggleModal())} />
+      <Button
+        height="h-10"
+        color="bg-green-600"
+        label={
+          <div className="flex items-center">
+            <MdAddCircle className="w-6 h-6 pr-1" /> New Client
+          </div>
+        }
+        onClick={() => dispatch(toggleModal())}
+      />
       {openModal && (
         <Modal
           onSubmit={handleSubmit(submit)}

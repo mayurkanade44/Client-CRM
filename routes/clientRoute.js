@@ -1,7 +1,11 @@
 import express from "express";
-import { registerClient } from "../controllers/clientController.js";
+import {
+  getAllClient,
+  registerClient,
+} from "../controllers/clientController.js";
 const router = express.Router();
 
+router.get("/", getAllClient);
 router.post("/register", registerClient);
 
 export default router;

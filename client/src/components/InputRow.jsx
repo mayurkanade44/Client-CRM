@@ -21,7 +21,7 @@ const InputRow = ({
         type={type}
         className="mt-0.5 w-full py-0.5 px-2 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
         placeholder={placeholder}
-        // {...register(id, { required: required })}
+        {...register(id, { required: required })}
       />
     </div>
   );

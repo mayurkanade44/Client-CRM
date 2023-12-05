@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.dashboard-page {
+
+  margin: 0 auto;
+ 
+  background-color: white;
+}

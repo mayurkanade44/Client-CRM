@@ -8,7 +8,8 @@ import {
   RouterProvider,
   Outlet,
 } from "react-router-dom";
-import { Dashboard, Landing } from "./pages";
+import { Client, Dashboard, Landing } from "./pages";
+import { Sidebar } from "./components";
 
 function App() {
   const Layout = () => {
@@ -26,7 +27,9 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
         <Route index={true} path="/" element={<Landing />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Sidebar />}>
+          <Route path="client" element={<Client />} />
+        </Route>
       </Route>
     )
   );

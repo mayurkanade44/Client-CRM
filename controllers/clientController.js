@@ -1,5 +1,6 @@
 import Client from "../models/clientModel.js";
 import User from "../models/userModel.js";
+import { capitalLetter } from "../utils/helperFunction.js";
 
 export const registerClient = async (req, res) => {
   const { name, address, contractNo, email, password } = req.body;
@@ -7,12 +8,17 @@ export const registerClient = async (req, res) => {
     if (!name || !address || !contractNo || !email || !password)
       return res.status(400).json({ msg: "Please provide required values" });
 
-    const clientExists = await Client.findOne({ name, email });
+    let capitalName = capitalLetter(name);
+
+    const clientExists = await Client.findOne({
+      $or: [{ name: capitalName }, { email }],
+    });
+
     if (clientExists)
       return res.status(400).json({ msg: "Client already exists" });
 
     const client = await Client.create({
-      name,
+      name: capitalLetter(name),
       address,
       contractNo,
       email,

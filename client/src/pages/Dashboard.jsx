@@ -1,12 +1,4 @@
-import { Sidebar } from "../components";
-import { Outlet } from "react-router-dom";
-
 const Dashboard = () => {
-  return (
-    <main className="dashboard">
-      
-    </main>
-  );
+  return <div>Dashboard</div>;
 };
-
 export default Dashboard;

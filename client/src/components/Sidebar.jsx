@@ -5,29 +5,34 @@ import { FaFileAlt, FaUser, FaBuilding } from "react-icons/fa";
 import { MdLogout, MdOutlineMenu } from "react-icons/md";
 import { useLogoutMutation } from "../redux/userSlice";
 import { toast } from "react-toastify";
-import { useNavigate, Outlet } from "react-router-dom";
-import logo from '../assets/logo1.png'
+import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo12.png";
 
 const navList = [
   {
-    icon: <BsBarChartFill className="w-6 h-6 text-indigo-600" />,
+    icon: <BsBarChartFill className="w-6 h-6 " />,
     name: "Dashboard",
+    to: "",
   },
   {
-    icon: <FaBuilding className="w-6 h-6 text-indigo-600" />,
-    name: "Client",
+    icon: <FaBuilding className="w-6 h-6" />,
+    name: "Clients",
+    to: "/clients",
   },
   {
-    icon: <MdOutlineDashboard className="w-6 h-6 text-indigo-600" />,
+    icon: <MdOutlineDashboard className="w-6 h-6" />,
     name: "Service Request",
+    to: "/request",
   },
   {
-    icon: <FaUser className="w-6 h-6 text-indigo-600" />,
+    icon: <FaUser className="w-6 h-6" />,
     name: "Users",
+    to: "/users",
   },
   {
-    icon: <FaFileAlt className="w-6 h-6 text-indigo-600" />,
+    icon: <FaFileAlt className="w-6 h-6" />,
     name: "Reports",
+    to: "/reports",
   },
 ];
 
@@ -49,114 +54,51 @@ const Sidebar = () => {
     }
   };
 
+  const handleNavigate = (to) => {
+    setShow(!show);
+    navigate(`/dashboard${to}`);
+  };
+
   return (
-    <main>
-      <div className="w-full h-full bg-gray-200">
-        <div className="flex flex-no-wrap">
-          {/* Sidebar starts */}
-          <div className="absolute lg:relative w-64 h-screen shadow bg-gray-100 hidden lg:block">
-            <div className="h-20 w-full flex justify-center items-center px-8">
-              <img src={logo} alt="logo" className="w-20 h-16" />
-            </div>
-            <ul aria-orientation="vertical" className="pt-2">
-              {navList.map((item) => (
-                <li
-                  key={item.name}
-                  className="pl-6 cursor-pointer leading-3 tracking-normal py-4 text-black"
-                >
-                  <div className="flex items-center">
-                    {item.icon}
-                    <span className="ml-2 text-lg">{item.name}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          {/*Mobile responsive sidebar*/}
-          <div
-            className={
-              show
-                ? "w-full h-full absolute z-40  transform  translate-x-0 "
-                : "   w-full h-full absolute z-40  transform -translate-x-full"
-            }
-          >
-            <div
-              className="bg-gray-800 opacity-50 absolute h-full w-full lg:hidden"
-              onClick={() => setShow(!show)}
-            />
-            <div className="absolute z-40 sm:relative w-64 shadow pb-4 bg-gray-100 lg:hidden transition duration-150 ease-in-out h-full">
-              <div className="flex flex-col justify-between h-full w-full">
-                <div>
-                  <div className="flex items-center justify-between px-8">
-                    <div className="h-16 w-full flex items-center">Pestxz</div>
-                    <div
-                      id="closeSideBar"
-                      className="flex items-center justify-center h-10 w-10"
-                      onClick={() => setShow(!show)}
-                    >
-                      <MdClose className="h-6 w-6" />
-                    </div>
-                  </div>
-                  <ul aria-orientation="vertical" className="py-6">
-                    {navList.map((item) => (
-                      <li
-                        key={item.name}
-                        className="pl-6 cursor-pointer text-sm leading-3 tracking-normal py-4 text-black"
-                      >
-                        <div className="flex items-center">
-                          {item.icon}
-                          <span className="ml-2 xl:text-base md:text-xl text-base">
-                            {item.name}
-                          </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="w-full">
-                  <div className="border-t border-gray-400">
-                    <div className="w-full flex items-center justify-between px-5 pt-1">
-                      <p className="md:text-xl font-medium text-gray-800 text-base leading-4 ">
-                        Jane Doe
-                      </p>
-                      <button
-                        onClick={handleLogout}
-                        className="flex items-center text-red-500"
-                      >
-                        <MdLogout />
-                        <span className="ml-2">Sign out</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/*Mobile responsive sidebar*/}
-          {/* Sidebar ends */}
-          <div className="w-full">
-            {/* Navigation starts */}
-            <nav className="h-16 lg:hidden flex items-center justify-between lg:justify-end  bg-white shadow relative z-10">
-              <div
-                className="text-gray-600 ml-8 visible lg:hidden"
-                onClick={() => setShow(!show)}
-              >
-                {!show && <h1 className="text-lg font-semibold">Pestxz</h1>}
-              </div>
-              <div
-                className="text-gray-600 mr-8 visible lg:hidden"
-                onClick={() => setShow(!show)}
-              >
-                {!show && <MdOutlineMenu className="w-7 h-7" />}
-              </div>
-            </nav>
-            <div className="p-5">
-              <Outlet />
-            </div>
+    <aside className="antialiased bg-gray-50">
+      <nav className="bg-white border-b-2 border-gray-200 pr-10 pl-4 py-2 lg:py-2.5 dark:bg-gray-800 dark:border-gray-600 fixed top-0 left-0 right-0">
+        <div className="flex flex-wrap justify-center items-center">
+          <div className="flex justify-start items-center">
+            <button onClick={() => setShow(!show)}>
+              <MdOutlineMenu className="lg:hidden w-12 h-12 mr-5" />
+            </button>
+            <img src={logo} className="mr-3 h-10" alt="Logo" />
+            <span className="text-center  text-2xl font-semibold whitespace-nowrap dark:text-white">
+              PestXZ
+            </span>
           </div>
         </div>
-      </div>
-    </main>
+      </nav>
+      <aside
+        className={`fixed top-0 left-0 w-64 h-screen transition-transform -translate-x-full bg-white border-r-2 border-gray-200 dark:bg-gray-800 dark:border-gray-600 ${
+          show ? "translate-x-0" : "lg:translate-x-0"
+        }`}
+      >
+        <div className="overflow-y-auto py-5 px-3 pt-12 h-full bg-white dark:bg-gray-800">
+          <ul className="space-y-4 mt-5">
+            {navList.map((item) => (
+              <li
+                key={item.name}
+                className="hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <button
+                  onClick={() => handleNavigate(item.to)}
+                  className="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white  group"
+                >
+                  {item.icon}
+                  <span className="ml-3 text-xl">{item.name}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    </aside>
   );
 };
 export default Sidebar;

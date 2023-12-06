@@ -3,7 +3,7 @@ import { AlertMessage, Button, Loading } from "../components";
 import NewClient from "../components/modals/NewClient";
 import { useAllClientsQuery } from "../redux/clientSlice";
 
-const Client = () => {
+const Clients = () => {
   const { data, isLoading, isFetching, error } = useAllClientsQuery();
   return (
     <>
@@ -15,19 +15,19 @@ const Client = () => {
       <div>
         <NewClient />
         <div className="overflow-y-auto my-4">
-          <table className="w-full border whitespace-nowrap border-neutral-500  bg-white">
+          <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">
             <thead>
-              <tr className="h-12 w-full text-md leading-none text-gray-600">
-                <th className="font-bold text-left  border-neutral-800 border-2 px-3">
+              <tr className="h-12 w-full text-md leading-none">
+                <th className="font-bold text-center border-neutral-500 border-2 px-3">
                   Client Name
                 </th>
-                <th className="font-bold text-left  border-neutral-800 border-2 px-3">
+                <th className="font-bold text-center border-neutral-500 border-2 px-3">
                   Address
                 </th>
-                <th className="font-bold text-center  border-neutral-800 border-2 w-32 px-3">
+                <th className="font-bold text-center border-neutral-500 border-2 w-32 px-3">
                   Contract No
                 </th>
-                <th className="font-bold max-w-[100px] text-center  border-neutral-800 border-2 w-40 px-3">
+                <th className="font-bold max-w-[100px] text-center border-neutral-500 border-2 w-40 px-3">
                   Action
                 </th>
               </tr>
@@ -36,7 +36,7 @@ const Client = () => {
               {data?.map((client) => (
                 <tr
                   key={client._id}
-                  className="h-12 text-sm leading-none text-gray-700 border-b border-neutral-500 bg-white hover:bg-gray-100"
+                  className="h-12 text-sm leading-none bg-text border-b border-neutral-500 hover:bg-slate-600"
                 >
                   <td className="px-3 border-r font-normal border-neutral-500">
                     {client.name}
@@ -61,4 +61,4 @@ const Client = () => {
     </>
   );
 };
-export default Client;
+export default Clients;

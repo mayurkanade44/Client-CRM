@@ -17,7 +17,7 @@ const Clients = () => {
         <div className="overflow-y-auto my-4">
           <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">
             <thead>
-              <tr className="h-12 w-full text-md leading-none">
+              <tr className="h-12 w-full text-md md:text-lg leading-none">
                 <th className="font-bold text-center border-neutral-500 border-2 px-3">
                   Client Name
                 </th>
@@ -36,7 +36,7 @@ const Clients = () => {
               {data?.map((client) => (
                 <tr
                   key={client._id}
-                  className="h-12 text-sm leading-none bg-text border-b border-neutral-500 hover:bg-slate-600"
+                  className="h-12 text-sm leading-none bg-text border-b border-neutral-500 hover:bg-slate-200"
                 >
                   <td className="px-3 border-r font-normal border-neutral-500">
                     {client.name}

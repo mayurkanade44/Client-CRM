@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  .bg-text {
-    @apply text-black dark:text-white;
-  }
+:root {
+  background-color: rgb(241 245 249);
 }
+
+

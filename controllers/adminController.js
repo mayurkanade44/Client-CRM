@@ -40,3 +40,38 @@ export const getAllService = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+export const editService = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const service = await Admin.findById(id);
+    if (!service)
+      return res.status(404).json({ msg: "Service/Product not found" });
+
+    service.serviceType = req.body.serviceType;
+    service.serviceName = capitalLetter(req.body.serviceName);
+
+    await service.save();
+
+    return res.json({ msg: "Successfully updated" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const deleteService = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const service = await Admin.findById(id);
+    if (!service)
+      return res.status(404).json({ msg: "Service/Product not found" });
+
+    await Admin.findByIdAndDelete(id);
+
+    return res.json({ msg: "Successfully deleted" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};

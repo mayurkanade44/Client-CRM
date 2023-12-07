@@ -13,8 +13,29 @@ export const adminSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: "/api/admin/service",
       }),
+      providesTags: ["Admin"],
+    }),
+    updateService: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/api/admin/singleService/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Admin"],
+    }),
+    deleteService: builder.mutation({
+      query: (id) => ({
+        url: `/api/admin/singleService/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Admin"],
     }),
   }),
 });
 
-export const { useAddServiceMutation, useAllServiceQuery } = adminSlice;
+export const {
+  useAddServiceMutation,
+  useAllServiceQuery,
+  useUpdateServiceMutation,
+  useDeleteServiceMutation,
+} = adminSlice;

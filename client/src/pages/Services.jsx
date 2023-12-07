@@ -8,13 +8,28 @@ import {
   Loading,
 } from "../components";
 import { types } from "../utils/constData";
-import { useAddServiceMutation, useAllServiceQuery } from "../redux/adminSlice";
-import { FaEdit, } from "react-icons/fa";
+import {
+  useAddServiceMutation,
+  useAllServiceQuery,
+  useDeleteServiceMutation,
+  useUpdateServiceMutation,
+} from "../redux/adminSlice";
+import { FaEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
+import { useState } from "react";
 
 const Services = () => {
-  const [addService, { isLoading: addLoading }] = useAddServiceMutation();
+  const [update, setUpdate] = useState({
+    status: false,
+    id: "",
+  });
+
   const { data, isLoading, isFetching, error } = useAllServiceQuery();
+  const [addService, { isLoading: addLoading }] = useAddServiceMutation();
+  const [updateService, { isLoading: updateLoading }] =
+    useUpdateServiceMutation();
+  const [deleteService, { isLoading: deleteLoading }] =
+    useDeleteServiceMutation();
 
   const {
     register,
@@ -23,9 +38,10 @@ const Services = () => {
     reset,
     control,
     watch,
+    setValue,
   } = useForm({
     defaultValues: {
-      serviceType: "",
+      serviceType: { label: "Service", value: "Service" },
       serviceName: "",
     },
   });
@@ -33,8 +49,14 @@ const Services = () => {
   const watchType = watch("serviceType");
 
   const submit = async (data) => {
+    let res;
     try {
-      const res = await addService(data).unwrap();
+      if (update.status) {
+        res = await updateService({ id: update.id, data }).unwrap();
+      } else {
+        res = await addService(data).unwrap();
+      }
+      setUpdate({ status: false, id: "" });
       toast.success(res.msg);
       reset();
     } catch (error) {
@@ -43,9 +65,25 @@ const Services = () => {
     }
   };
 
+  const copyData = (data) => {
+    setValue("serviceName", data.serviceName);
+    setValue("serviceType", data.serviceType);
+    setUpdate({ status: true, id: data._id });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteService(id).unwrap();
+      toast.success("Deleted successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.data?.msg || error.error);
+    }
+  };
+
   return (
     <div>
-      {isLoading || isFetching ? (
+      {isLoading || isFetching || updateLoading || deleteLoading ? (
         <Loading />
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
@@ -89,7 +127,7 @@ const Services = () => {
               <Button
                 type="submit"
                 color="bg-green-500"
-                label={`Add ${watchType.label}`}
+                label={`${update.status ? "Update" : "Add"} ${watchType.label}`}
                 disabled={addLoading}
                 height="h-10"
               />
@@ -124,8 +162,12 @@ const Services = () => {
                       {service.serviceName}
                     </td>
                     <td className="px-3 flex justify-center items-center space-x-3 border-r text-center border-neutral-500">
-                      <FaEdit className="h-5 w-5 text-indigo-600" />
-                      <MdDeleteForever className="h-6 w-6 text-red-600" />
+                      <button type="button" onClick={() => copyData(service)}>
+                        <FaEdit className="h-5 w-5 text-indigo-600" />
+                      </button>
+                      <button onClick={() => handleDelete(service._id)}>
+                        <MdDeleteForever className="h-6 w-6 text-red-600" />
+                      </button>
                     </td>
                   </tr>
                 ))}

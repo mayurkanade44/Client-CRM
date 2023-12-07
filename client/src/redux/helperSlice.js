@@ -4,7 +4,10 @@ const initialState = {
   user: localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
     : null,
-  openModal: false,
+  isModalOpen: {
+    newClient: false,
+    delete: false,
+  },
 };
 
 const helperSlice = createSlice({
@@ -15,12 +18,12 @@ const helperSlice = createSlice({
       state.user = action.payload;
       localStorage.setItem("user", JSON.stringify(action.payload));
     },
-    removeCredentials: (state, action) => {
+    removeCredentials: (state) => {
       state.user = null;
       localStorage.clear();
     },
-    toggleModal: (state) => {
-      state.openModal = !state.openModal;
+    toggleModal: (state, { payload }) => {
+      state.isModalOpen[payload.name] = payload.status;
     },
   },
 });

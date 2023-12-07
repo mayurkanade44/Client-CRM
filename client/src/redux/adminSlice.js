@@ -8,6 +8,7 @@ export const adminSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Admin"],
     }),
     allService: builder.query({
       query: () => ({

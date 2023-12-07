@@ -1,14 +1,14 @@
 import { useForm } from "react-hook-form";
+import { MdAddCircle } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { Button, InputRow } from "..";
 import { useRegisterClientMutation } from "../../redux/clientSlice";
 import { toggleModal } from "../../redux/helperSlice";
-import Modal from "./Modal";
-import { MdAddCircle } from "react-icons/md";
+import FormModal from "./FormModal";
 
 const NewClient = () => {
-  const { openModal } = useSelector((store) => store.helper);
+  const { isModalOpen } = useSelector((store) => store.helper);
   const dispatch = useDispatch();
 
   const [addClient, { isLoading }] = useRegisterClientMutation();
@@ -18,8 +18,6 @@ const NewClient = () => {
     formState: { errors, isValid },
     handleSubmit,
     reset,
-    getValues,
-    setValue,
   } = useForm({
     defaultValues: {
       name: "",
@@ -36,7 +34,7 @@ const NewClient = () => {
       toast.success(res.msg);
       reset();
       setTimeout(() => {
-        dispatch(toggleModal());
+        dispatch(toggleModal({ name: "newClient", status: false }));
       }, 300);
     } catch (error) {
       console.log(error);
@@ -85,6 +83,7 @@ const NewClient = () => {
           id="email"
           errors={errors}
           register={register}
+          type="email"
         />
         <p className="text-xs text-red-500 -bottom-4 pl-1">
           {errors.email && "Email is required"}
@@ -96,6 +95,7 @@ const NewClient = () => {
           id="password"
           errors={errors}
           register={register}
+          type="password"
         />
         <p className="text-xs text-red-500 -bottom-4 pl-1">
           {errors.password && "Password is required"}
@@ -114,19 +114,22 @@ const NewClient = () => {
             <MdAddCircle className="w-6 h-6 pr-1" /> New Client
           </div>
         }
-        onClick={() => dispatch(toggleModal())}
+        onClick={() =>
+          dispatch(toggleModal({ name: "newClient", status: true }))
+        }
       />
-      {openModal && (
-        <Modal
-          onSubmit={handleSubmit(submit)}
-          title="New Client"
-          formBody={formBody}
-          submitLabel="Add Client"
-          handleClose={() => dispatch(toggleModal())}
-          disabled={isLoading}
-          isLoading={isLoading}
-        />
-      )}
+      <FormModal
+        onSubmit={handleSubmit(submit)}
+        title="New Client"
+        formBody={formBody}
+        submitLabel="Add Client"
+        handleClose={() =>
+          dispatch(toggleModal({ name: "newClient", status: false }))
+        }
+        disabled={isLoading}
+        isLoading={isLoading}
+        open={isModalOpen.newClient}
+      />
     </div>
   );
 };

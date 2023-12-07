@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { AlertMessage, Button, Loading } from "../components";
-import NewClient from "../components/modals/NewClient";
+import { NewClientModal } from "../components/modals";
 import { useAllClientsQuery } from "../redux/clientSlice";
 
 const Clients = () => {
@@ -13,7 +13,7 @@ const Clients = () => {
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
       )}
       <div>
-        <NewClient />
+        <NewClientModal />
         <div className="overflow-y-auto my-4">
           <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">
             <thead>

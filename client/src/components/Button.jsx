@@ -8,6 +8,8 @@ const Button = ({
   small,
   color,
   height,
+  isLoading,
+  width
 }) => {
   return (
     <button
@@ -22,6 +24,7 @@ const Button = ({
         transition
         m-1
         text-white
+        ${width && width}
         ${height ? height : "h-8"}
         ${color ? color : "bg-blue-500"}
         ${small ? "text-sm" : "text-md"}
@@ -29,7 +32,7 @@ const Button = ({
         ${small ? "font-medium" : "font-semibold"}
       `}
     >
-      {label} {disabled && <LoadingSpinner />}
+      {label} {isLoading && <LoadingSpinner />}
     </button>
   );
 };

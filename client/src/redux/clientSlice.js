@@ -8,6 +8,7 @@ export const clientSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Client"],
     }),
     allClients: builder.query({
       query: () => ({

@@ -17,12 +17,14 @@ import {
 import { FaEdit } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import { useState } from "react";
+import { DeleteModal } from "../components/modals";
 
 const Services = () => {
   const [update, setUpdate] = useState({
     status: false,
     id: "",
   });
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const { data, isLoading, isFetching, error } = useAllServiceQuery();
   const [addService, { isLoading: addLoading }] = useAddServiceMutation();
@@ -75,6 +77,7 @@ const Services = () => {
     try {
       await deleteService(id).unwrap();
       toast.success("Deleted successfully");
+      setModalOpen(false);
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);
@@ -83,7 +86,7 @@ const Services = () => {
 
   return (
     <div>
-      {isLoading || isFetching || updateLoading || deleteLoading ? (
+      {isLoading || isFetching || updateLoading ? (
         <Loading />
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
@@ -165,9 +168,20 @@ const Services = () => {
                       <button type="button" onClick={() => copyData(service)}>
                         <FaEdit className="h-5 w-5 text-indigo-600" />
                       </button>
-                      <button onClick={() => handleDelete(service._id)}>
+                      {/* <button onClick={() => handleDelete(service._id)}>
                         <MdDeleteForever className="h-6 w-6 text-red-600" />
+                      </button> */}
+                      <button onClick={() => setModalOpen(true)}>
+                        <MdDeleteForever className="w-7 h-7 text-red-600" />
                       </button>
+                      <DeleteModal
+                        title="Delete Service"
+                        description="Are you sure do you want to delete?"
+                        open={isModalOpen}
+                        close={() => setModalOpen(false)}
+                        handleDelete={() => handleDelete(service._id)}
+                        isLoading={deleteLoading}
+                      />
                     </td>
                   </tr>
                 ))}

@@ -8,7 +8,16 @@ import {
   RouterProvider,
   Outlet,
 } from "react-router-dom";
-import { Clients, Dashboard, Landing, MainLayout, Reports, SingleClient, Users } from "./pages";
+import {
+  Clients,
+  Dashboard,
+  Landing,
+  MainLayout,
+  Reports,
+  Services,
+  SingleClient,
+  Users,
+} from "./pages";
 
 function App() {
   const Layout = () => {
@@ -31,6 +40,7 @@ function App() {
           <Route path="clients" element={<Clients />} />
           <Route path="users" element={<Users />} />
           <Route path="reports" element={<Reports />} />
+          <Route path="services" element={<Services />} />
           <Route path="client/:id" element={<SingleClient />} />
         </Route>
       </Route>

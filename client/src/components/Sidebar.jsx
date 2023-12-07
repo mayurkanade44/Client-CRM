@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { MdClose, MdOutlineDashboard } from "react-icons/md";
-import { BsBarChartFill } from "react-icons/bs";
+import { BsBarChartFill, BsDatabaseFillAdd } from "react-icons/bs";
 import { FaFileAlt, FaUser, FaBuilding } from "react-icons/fa";
 import { MdLogout, MdOutlineMenu } from "react-icons/md";
 import { AiOutlineMenuUnfold, AiOutlineMenuFold } from "react-icons/ai";
@@ -21,8 +21,13 @@ const navList = [
     to: "/clients",
   },
   {
+    icon: <BsDatabaseFillAdd className="w-6 h-6" />,
+    name: "Services",
+    to: "/services",
+  },
+  {
     icon: <MdOutlineDashboard className="w-6 h-6" />,
-    name: "Service Request",
+    name: "Complaints",
     to: "/request",
   },
   {

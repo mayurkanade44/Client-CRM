@@ -8,7 +8,6 @@ const Button = ({
   small,
   color,
   height,
-  isLoading
 }) => {
   return (
     <button
@@ -30,7 +29,7 @@ const Button = ({
         ${small ? "font-medium" : "font-semibold"}
       `}
     >
-      {label} {isLoading && <LoadingSpinner />}
+      {label} {disabled && <LoadingSpinner />}
     </button>
   );
 };

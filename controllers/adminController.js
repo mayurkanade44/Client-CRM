@@ -22,3 +22,21 @@ export const addService = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+export const getAllService = async (req, res) => {
+  try {
+    const allServices = await Admin.find();
+
+    const service = allServices.filter(
+      (item) => item.serviceType.label === "Service"
+    );
+    const product = allServices.filter(
+      (item) => item.serviceType.label === "Product"
+    );
+
+    return res.json({ allServices, service, product });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};

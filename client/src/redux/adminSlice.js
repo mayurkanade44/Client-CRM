@@ -9,7 +9,12 @@ export const adminSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    allService: builder.query({
+      query: () => ({
+        url: "/api/admin/service",
+      }),
+    }),
   }),
 });
 
-export const { useAddServiceMutation } = adminSlice;
+export const { useAddServiceMutation, useAllServiceQuery } = adminSlice;

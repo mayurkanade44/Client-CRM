@@ -1,7 +1,7 @@
 import express from "express";
-import { addService } from "../controllers/adminController.js";
+import { addService, getAllService } from "../controllers/adminController.js";
 const router = express.Router();
 
-router.route("/service").post(addService);
+router.route("/service").post(addService).get(getAllService);
 
 export default router;

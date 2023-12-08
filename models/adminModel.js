@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const AdminSchema = new mongoose.Schema(
   {
     serviceType: { type: Object, required: true },
-    serviceName: { type: String, required: true },
+    serviceName: { type: Object, required: true },
   },
   { timestamps: true }
 );

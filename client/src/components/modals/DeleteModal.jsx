@@ -26,7 +26,9 @@ const DeleteModal = ({
           <AiOutlineDelete className="text-red-500 mx-auto w-10 h-10" />
           <div className="mx-auto my-1">
             <h3 className="text-lg font-black text-gray-800">{title}</h3>
-            <p className="text-sm text-gray-500">{description}</p>
+            <p className="text-sm text-gray-700 pt-1">
+              Are you sure do you want to delete <b>{description}?</b>
+            </p>
           </div>
           <div className="flex pt-2">
             <Button

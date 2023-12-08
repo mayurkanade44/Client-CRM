@@ -11,9 +11,11 @@ export const addService = async (req, res) => {
     if (service)
       return res.status(400).json({ msg: `${serviceName} already exists` });
 
+    const servName = capitalLetter(serviceName);
+
     await Admin.create({
       serviceType,
-      serviceName: capitalLetter(serviceName),
+      serviceName: { label: servName, value: servName },
     });
 
     res.status(201).json({ msg: `${serviceName} successfully added` });
@@ -48,8 +50,10 @@ export const editService = async (req, res) => {
     if (!service)
       return res.status(404).json({ msg: "Service/Product not found" });
 
+    const serviceName = capitalLetter(req.body.serviceName);
+
     service.serviceType = req.body.serviceType;
-    service.serviceName = capitalLetter(req.body.serviceName);
+    service.serviceName = { label: serviceName, value: serviceName };
 
     await service.save();
 

@@ -68,7 +68,7 @@ const Services = () => {
   };
 
   const copyData = (data) => {
-    setValue("serviceName", data.serviceName);
+    setValue("serviceName", data.serviceName.label);
     setValue("serviceType", data.serviceType);
     setUpdate({ status: true, id: data._id });
   };
@@ -132,6 +132,7 @@ const Services = () => {
                 color="bg-green-500"
                 label={`${update.status ? "Update" : "Add"} ${watchType.label}`}
                 disabled={addLoading}
+                isLoading={addLoading}
                 height="h-10"
               />
             </div>
@@ -162,21 +163,18 @@ const Services = () => {
                       {service.serviceType.label}
                     </td>
                     <td className="px-3 border-r  border-neutral-500">
-                      {service.serviceName}
+                      {service.serviceName.label}
                     </td>
                     <td className="px-3 flex justify-center items-center space-x-3 border-r text-center border-neutral-500">
                       <button type="button" onClick={() => copyData(service)}>
                         <FaEdit className="h-5 w-5 text-indigo-600" />
                       </button>
-                      {/* <button onClick={() => handleDelete(service._id)}>
-                        <MdDeleteForever className="h-6 w-6 text-red-600" />
-                      </button> */}
                       <button onClick={() => setModalOpen(true)}>
                         <MdDeleteForever className="w-7 h-7 text-red-600" />
                       </button>
                       <DeleteModal
-                        title="Delete Service"
-                        description="Are you sure do you want to delete?"
+                        title={`Delete ${service.serviceType.label}`}
+                        description={service.serviceName.label}
                         open={isModalOpen}
                         close={() => setModalOpen(false)}
                         handleDelete={() => handleDelete(service._id)}

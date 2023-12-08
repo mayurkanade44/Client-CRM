@@ -8,7 +8,7 @@ const FormModal = ({
   handleClose,
   disabled,
   isLoading,
-  open
+  open,
 }) => {
   return (
     <div

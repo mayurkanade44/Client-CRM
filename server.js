@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 import userRoute from "./routes/userRoute.js";
 import clientRoute from "./routes/clientRoute.js";
 import adminRoute from "./routes/adminRoute.js";
+import locationRoute from "./routes/locationRoute.js";
 import { notFound } from "./middleware/notFound.js";
 
 dotenv.config();
@@ -20,6 +21,7 @@ if (process.env.NODE_ENV !== "production") app.use(morgan("dev"));
 app.use("/api/user", userRoute);
 app.use("/api/client", clientRoute);
 app.use("/api/admin", adminRoute);
+app.use("/api/location", locationRoute);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();

@@ -8,8 +8,15 @@ export const locationSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Location"],
+    }),
+    allLocations: builder.query({
+      query: ({ id }) => ({
+        url: `/api/location/${id}`,
+      }),
+      providesTags: ["Location"],
     }),
   }),
 });
 
-export const { useAddLocationMutation } = locationSlice;
+export const { useAddLocationMutation, useAllLocationsQuery } = locationSlice;

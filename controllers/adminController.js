@@ -29,14 +29,18 @@ export const getAllService = async (req, res) => {
   try {
     const allServices = await Admin.find();
 
-    const service = allServices.filter(
-      (item) => item.serviceType.label === "Service"
-    );
-    const product = allServices.filter(
-      (item) => item.serviceType.label === "Product"
+    const services = [];
+    const products = [];
+
+    allServices.map(
+      (item) =>
+        (item.serviceType.label === "Product" &&
+          products.push(item.serviceName)) ||
+        (item.serviceType.label === "Service" &&
+          services.push(item.serviceName))
     );
 
-    return res.json({ allServices, service, product });
+    return res.json({ allServices, services, products });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

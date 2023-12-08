@@ -1,22 +1,20 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { MdAddCircle } from "react-icons/md";
 import { toast } from "react-toastify";
 import { useAllServiceQuery } from "../../redux/adminSlice";
 import { useAddLocationMutation } from "../../redux/locationSlice";
-import { types } from "../../utils/constData";
-import Button from "../Button";
-import InputRow from "../InputRow";
-import InputSelect from "../InputSelect";
+import { Button, InputRow, InputSelect } from "..";
 import FormModal from "./FormModal";
 
 const Location = ({ clientId }) => {
   const [open, setOpen] = useState(false);
-  const [allServices, setServices] = useState([]);
-  const [allProducts, setProducts] = useState([]);
 
   const [add, { isLoading: addLoading }] = useAddLocationMutation();
-  const { data, isLoading, isFetching, error } = useAllServiceQuery();
+  const { data, isLoading, isFetching, error } = useAllServiceQuery(
+    {},
+    { skip: !open }
+  );
 
   const {
     register,
@@ -35,18 +33,18 @@ const Location = ({ clientId }) => {
     },
   });
 
-  useEffect(() => {
-    if (data) {
-      setServices(data.service);
-      setProducts(data.product);
-    }
-  }, [data]);
-
   const submit = async (data) => {
+    if (data.service.length < 1 && data.product.length < 1) {
+      toast.error("Please choose Service/Product");
+      return;
+    }
+
     data.clientId = clientId;
     try {
       const res = await add(data).unwrap();
       toast.success(res.msg);
+      reset();
+      setOpen(false);
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);
@@ -54,7 +52,7 @@ const Location = ({ clientId }) => {
   };
 
   const formBody = (
-    <div className="grid grid-cols-2 gap-x-4 mb-4">
+    <div className="grid md:grid-cols-2 gap-x-4 mb-4">
       <div>
         <InputRow
           label="Floor"
@@ -77,7 +75,7 @@ const Location = ({ clientId }) => {
           {errors.subLocation && "Sub location is required"}
         </p>
       </div>
-      <div className="col-span-2">
+      <div className="md:col-span-2">
         <InputRow
           label="Location"
           id="location"
@@ -92,10 +90,9 @@ const Location = ({ clientId }) => {
         <Controller
           name="service"
           control={control}
-          rules={{ required: "Select service" }}
           render={({ field: { onChange, value, ref } }) => (
             <InputSelect
-              options={allServices}
+              options={data?.services}
               onChange={onChange}
               value={value}
               label="Services"
@@ -111,10 +108,9 @@ const Location = ({ clientId }) => {
         <Controller
           name="product"
           control={control}
-          rules={{ required: "Select product" }}
           render={({ field: { onChange, value, ref } }) => (
             <InputSelect
-              options={allProducts}
+              options={data?.products}
               onChange={onChange}
               value={value}
               label="Products"
@@ -148,8 +144,8 @@ const Location = ({ clientId }) => {
           formBody={formBody}
           submitLabel="Add Location"
           handleClose={() => setOpen(false)}
-          //   disabled={isLoading}
-          //   isLoading={isLoading}
+          disabled={addLoading}
+          isLoading={addLoading}
           open={open}
         />
       </div>

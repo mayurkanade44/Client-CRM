@@ -47,3 +47,23 @@ export const getAllLocations = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+export const updateLocation = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const location = await Location.findById(id);
+    if (!location) return res.status(404).json({ msg: "Location not found" });
+
+    location.floor = req.body.floor;
+    location.subLocation = req.body.subLocation;
+    location.location = req.body.location;
+    location.service = req.body.service;
+    location.product = req.body.product;
+
+    await location.save();
+    return res.json({ msg: "Updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};

@@ -16,7 +16,19 @@ export const locationSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ["Location"],
     }),
+    updateLocation: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/api/location/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Location"],
+    }),
   }),
 });
 
-export const { useAddLocationMutation, useAllLocationsQuery } = locationSlice;
+export const {
+  useAddLocationMutation,
+  useAllLocationsQuery,
+  useUpdateLocationMutation,
+} = locationSlice;

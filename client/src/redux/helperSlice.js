@@ -7,6 +7,7 @@ const initialState = {
   isModalOpen: {
     newClient: false,
     delete: false,
+    location: false,
   },
 };
 

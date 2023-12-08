@@ -1,13 +1,29 @@
 import { useParams } from "react-router-dom";
 import { LocationModal } from "../components/modals";
 import { useAllLocationsQuery } from "../redux/locationSlice";
-import { AlertMessage, Loading } from "../components";
+import { AlertMessage, Button, Loading } from "../components";
+import { FaEdit } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleModal } from "../redux/helperSlice";
+import { useState } from "react";
+import { MdAddCircle } from "react-icons/md";
 
 const SingleClient = () => {
+  const { isModalOpen } = useSelector((store) => store.helper);
+  const [locationDetails, setLocationDetails] = useState({});
+  const dispatch = useDispatch();
   const { id } = useParams();
   const { data, isLoading, isFetching, error } = useAllLocationsQuery({ id });
 
-  console.log(data);
+  const handleEditModal = (location) => {
+    setLocationDetails(location);
+    dispatch(toggleModal({ name: "location", status: true }));
+  };
+
+  const handleNewModal = () => {
+    setLocationDetails(null);
+    dispatch(toggleModal({ name: "location", status: true }));
+  };
 
   return (
     <>
@@ -30,8 +46,20 @@ const SingleClient = () => {
               <h6 className="text-center">Email: {data.client.email}</h6>
             </div>
           </div>
+          <Button
+            height="h-10"
+            color="bg-green-600"
+            label={
+              <div className="flex items-center">
+                <MdAddCircle className="w-6 h-6 pr-1" /> New Location
+              </div>
+            }
+            onClick={handleNewModal}
+          />
+          {isModalOpen.location && (
+            <LocationModal clientId={id} locationDetails={locationDetails} />
+          )}
 
-          <LocationModal clientId={id} />
           <div className="overflow-y-auto my-4">
             <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">
               <thead>
@@ -71,7 +99,14 @@ const SingleClient = () => {
                     <td className="px-3 border-r font-normal text-center border-neutral-500">
                       {location.product.map((item) => item.label + ", ")}
                     </td>
-                    <td className="px-3 border-r font-normal text-center border-neutral-500"></td>
+                    <td className="px-3 border-r font-normal text-center border-neutral-500">
+                      <button
+                        type="button"
+                        onClick={() => handleEditModal(location)}
+                      >
+                        <FaEdit className="h-5 w-5 text-indigo-600" />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

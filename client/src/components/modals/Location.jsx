@@ -1,20 +1,21 @@
-import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { MdAddCircle } from "react-icons/md";
 import { toast } from "react-toastify";
 import { useAllServiceQuery } from "../../redux/adminSlice";
-import { useAddLocationMutation } from "../../redux/locationSlice";
-import { Button, InputRow, InputSelect } from "..";
+import {
+  useAddLocationMutation,
+  useUpdateLocationMutation,
+} from "../../redux/locationSlice";
+import { InputRow, InputSelect, Loading } from "..";
+import { useDispatch, useSelector } from "react-redux";
 import FormModal from "./FormModal";
+import { toggleModal } from "../../redux/helperSlice";
 
-const Location = ({ clientId }) => {
-  const [open, setOpen] = useState(false);
-
+const Location = ({ clientId, locationDetails }) => {
+  const dispatch = useDispatch();
+  const { isModalOpen } = useSelector((store) => store.helper);
   const [add, { isLoading: addLoading }] = useAddLocationMutation();
-  const { data, isLoading, isFetching, error } = useAllServiceQuery(
-    {},
-    { skip: !open }
-  );
+  const [update, { isLoading: updateLoading }] = useUpdateLocationMutation();
+  const { data, isLoading, isFetching } = useAllServiceQuery();
 
   const {
     register,
@@ -22,9 +23,8 @@ const Location = ({ clientId }) => {
     handleSubmit,
     reset,
     control,
-    setValue,
   } = useForm({
-    defaultValues: {
+    defaultValues: locationDetails || {
       floor: "",
       subLocation: "",
       location: "",
@@ -34,17 +34,22 @@ const Location = ({ clientId }) => {
   });
 
   const submit = async (data) => {
+    console.log(data);
     if (data.service.length < 1 && data.product.length < 1) {
       toast.error("Please choose Service/Product");
       return;
     }
-
     data.clientId = clientId;
+    let res;
     try {
-      const res = await add(data).unwrap();
-      toast.success(res.msg);
+      if (locationDetails) {
+        res = await update({ id: locationDetails._id, data }).unwrap();
+      } else {
+        res = await add(data).unwrap();
+      }
       reset();
-      setOpen(false);
+      toast.success(res.msg);
+      dispatch(toggleModal({ name: "location", status: false }));
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);
@@ -100,9 +105,6 @@ const Location = ({ clientId }) => {
             />
           )}
         />
-        <p className="text-xs text-red-500 -bottom-4 pl-1">
-          {errors.serviceType?.message}
-        </p>
       </div>
       <div>
         <Controller
@@ -118,37 +120,25 @@ const Location = ({ clientId }) => {
             />
           )}
         />
-        <p className="text-xs text-red-500 -bottom-4 pl-1">
-          {errors.serviceType?.message}
-        </p>
       </div>
     </div>
   );
 
   return (
     <div>
-      <div>
-        <Button
-          height="h-10"
-          color="bg-green-600"
-          label={
-            <div className="flex items-center">
-              <MdAddCircle className="w-6 h-6 pr-1" /> New Location
-            </div>
-          }
-          onClick={() => setOpen(true)}
-        />
-        <FormModal
-          onSubmit={handleSubmit(submit)}
-          title="New Location"
-          formBody={formBody}
-          submitLabel="Add Location"
-          handleClose={() => setOpen(false)}
-          disabled={addLoading}
-          isLoading={addLoading}
-          open={open}
-        />
-      </div>
+      {(isLoading || isFetching) && <Loading />}
+      <FormModal
+        onSubmit={handleSubmit(submit)}
+        title={`${locationDetails ? "Update" : "New"} Location`}
+        formBody={formBody}
+        submitLabel={`${locationDetails ? "Update" : "Add"} Location`}
+        handleClose={() =>
+          dispatch(toggleModal({ name: "location", status: false }))
+        }
+        disabled={addLoading || updateLoading}
+        isLoading={addLoading || updateLoading}
+        open={isModalOpen.location}
+      />
     </div>
   );
 };

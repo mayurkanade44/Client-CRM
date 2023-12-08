@@ -15,16 +15,18 @@ import {
   useUpdateServiceMutation,
 } from "../redux/adminSlice";
 import { FaEdit } from "react-icons/fa";
-import { MdDeleteForever } from "react-icons/md";
 import { useState } from "react";
 import { DeleteModal } from "../components/modals";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleModal } from "../redux/helperSlice";
 
 const Services = () => {
   const [update, setUpdate] = useState({
     status: false,
     id: "",
   });
-  const [isModalOpen, setModalOpen] = useState(false);
+  const { isModalOpen } = useSelector((store) => store.helper);
+  const dispatch = useDispatch();
 
   const { data, isLoading, isFetching, error } = useAllServiceQuery();
   const [addService, { isLoading: addLoading }] = useAddServiceMutation();
@@ -73,11 +75,11 @@ const Services = () => {
     setUpdate({ status: true, id: data._id });
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      await deleteService(id).unwrap();
+      await deleteService(isModalOpen.delete).unwrap();
       toast.success("Deleted successfully");
-      setModalOpen(false);
+      dispatch(toggleModal({ name: "delete", status: false }));
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);
@@ -169,16 +171,12 @@ const Services = () => {
                       <button type="button" onClick={() => copyData(service)}>
                         <FaEdit className="h-5 w-5 text-indigo-600" />
                       </button>
-                      <button onClick={() => setModalOpen(true)}>
-                        <MdDeleteForever className="w-7 h-7 text-red-600" />
-                      </button>
                       <DeleteModal
                         title={`Delete ${service.serviceType.label}`}
                         description={service.serviceName.label}
-                        open={isModalOpen}
-                        close={() => setModalOpen(false)}
-                        handleDelete={() => handleDelete(service._id)}
+                        handleDelete={handleDelete}
                         isLoading={deleteLoading}
+                        id={service._id}
                       />
                     </td>
                   </tr>

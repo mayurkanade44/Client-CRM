@@ -24,6 +24,13 @@ export const locationSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Location"],
     }),
+    deleteLocation: builder.mutation({
+      query: (id) => ({
+        url: `/api/location/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Location"],
+    }),
   }),
 });
 
@@ -31,4 +38,5 @@ export const {
   useAddLocationMutation,
   useAllLocationsQuery,
   useUpdateLocationMutation,
+  useDeleteLocationMutation,
 } = locationSlice;

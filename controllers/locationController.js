@@ -67,3 +67,17 @@ export const updateLocation = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+export const deleteLocation = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const location = await Location.findById(id);
+    if (!location) return res.status(404).json({ msg: "Location not found" });
+
+    await Location.findByIdAndDelete(id)
+    return res.json({msg:"Location & all its records deleted"})
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};

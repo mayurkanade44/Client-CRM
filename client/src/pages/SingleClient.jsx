@@ -1,12 +1,16 @@
 import { useParams } from "react-router-dom";
-import { LocationModal } from "../components/modals";
-import { useAllLocationsQuery } from "../redux/locationSlice";
+import { DeleteModal, LocationModal } from "../components/modals";
+import {
+  useAllLocationsQuery,
+  useDeleteLocationMutation,
+} from "../redux/locationSlice";
 import { AlertMessage, Button, Loading } from "../components";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleModal } from "../redux/helperSlice";
 import { useState } from "react";
 import { MdAddCircle } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const SingleClient = () => {
   const { isModalOpen } = useSelector((store) => store.helper);
@@ -14,6 +18,8 @@ const SingleClient = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { data, isLoading, isFetching, error } = useAllLocationsQuery({ id });
+  const [deleteLocation, { isLoading: deleteLoading }] =
+    useDeleteLocationMutation();
 
   const handleEditModal = (location) => {
     setLocationDetails(location);
@@ -23,6 +29,17 @@ const SingleClient = () => {
   const handleNewModal = () => {
     setLocationDetails(null);
     dispatch(toggleModal({ name: "location", status: true }));
+  };
+
+  const handleDelete = async () => {
+    try {
+      const res = await deleteLocation(isModalOpen.delete).unwrap();
+      toast.success(res.msg);
+      dispatch(toggleModal({ name: "delete", status: false }));
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.data?.msg || error.error);
+    }
   };
 
   return (
@@ -59,7 +76,6 @@ const SingleClient = () => {
           {isModalOpen.location && (
             <LocationModal clientId={id} locationDetails={locationDetails} />
           )}
-
           <div className="overflow-y-auto my-4">
             <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">
               <thead>
@@ -99,13 +115,20 @@ const SingleClient = () => {
                     <td className="px-3 border-r font-normal text-center border-neutral-500">
                       {location.product.map((item) => item.label + ", ")}
                     </td>
-                    <td className="px-3 border-r font-normal text-center border-neutral-500">
+                    <td className="px-3 flex justify-center items-center font-normal text-center border-neutral-500">
                       <button
                         type="button"
                         onClick={() => handleEditModal(location)}
                       >
                         <FaEdit className="h-5 w-5 text-indigo-600" />
                       </button>
+                      <DeleteModal
+                        title="Delete Location"
+                        description="this location"
+                        handleDelete={handleDelete}
+                        isLoading={deleteLoading}
+                        id={location._id}
+                      />
                     </td>
                   </tr>
                 ))}

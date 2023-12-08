@@ -2,25 +2,27 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { MdDeleteForever } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../Button";
+import { toggleModal } from "../../redux/helperSlice";
 
-const DeleteModal = ({
-  title,
-  description,
-  handleDelete,
-  open,
-  close,
-  isLoading,
-}) => {
+const DeleteModal = ({ title, description, handleDelete, isLoading, id }) => {
+  const { isModalOpen } = useSelector((store) => store.helper);
+  const dispatch = useDispatch();
+
   return (
     <>
+      <button
+        onClick={() => dispatch(toggleModal({ name: "delete", status: id }))}
+      >
+        <MdDeleteForever className="w-7 h-7 text-red-600" />
+      </button>
       <div
         className={`fixed inset-0 flex justify-center items-center  transition-colors ${
-          open ? "visible bg-black/20" : "invisible"
+          isModalOpen.delete ? "visible bg-black/20" : "invisible"
         }`}
       >
         <div
           className={`bg-white rounded-xl shadow p-5 transition-all ${
-            open ? "scale-100 opacity-100" : "scale-125 opacity-0"
+            isModalOpen.delete ? "scale-100 opacity-100" : "scale-125 opacity-0"
           }`}
         >
           <AiOutlineDelete className="text-red-500 mx-auto w-10 h-10" />
@@ -39,11 +41,12 @@ const DeleteModal = ({
               isLoading={isLoading}
               width="w-full"
             />
-
             <Button
               label="Cancel"
               color="bg-slate-500"
-              onClick={close}
+              onClick={() =>
+                dispatch(toggleModal({ name: "delete", status: false }))
+              }
               disabled={isLoading}
               width="w-full"
             />

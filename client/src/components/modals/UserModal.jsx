@@ -28,6 +28,7 @@ const UserModal = ({ userDetails }) => {
 
   const submit = async (data) => {
     let res;
+    if(user.role === "Admin") data.department = "Pest Control"
     try {
       res = await addUser(data).unwrap();
       toast.success(res.msg);

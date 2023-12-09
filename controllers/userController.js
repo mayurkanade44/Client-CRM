@@ -19,7 +19,7 @@ export const registerUser = async (req, res) => {
       email,
       password,
       role: req.user.role === "Admin" ? "PestEmployee" : "ClientEmployee",
-      department: department || "Pest Control",
+      department,
       type,
       client,
     });
@@ -61,4 +61,14 @@ export const logoutUser = async (req, res) => {
     expires: new Date(0),
   });
   res.status(200).json({ msg: "Logged out successfully" });
+};
+
+export const getAllUser = async (req, res) => {
+  try {
+    const users = await User.find({ client: req.user.client });
+    return res.json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
 };

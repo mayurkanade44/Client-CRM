@@ -33,11 +33,17 @@ export const adminSlice = apiSlice.injectEndpoints({
     }),
     registerUser: builder.mutation({
       query: (data) => ({
-        url: `/api/admin/registerUser`,
+        url: `/api/admin/user`,
         method: "POST",
         body: data,
       }),
       invalidatesTags: ["User"],
+    }),
+    allUser: builder.query({
+      query: () => ({
+        url: "/api/admin/user",
+      }),
+      providesTags: ["User"],
     }),
   }),
 });
@@ -48,4 +54,5 @@ export const {
   useUpdateServiceMutation,
   useDeleteServiceMutation,
   useRegisterUserMutation,
+  useAllUserQuery,
 } = adminSlice;

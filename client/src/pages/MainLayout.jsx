@@ -5,7 +5,7 @@ const Dashboard = () => {
   return (
     <main>
       <Sidebar />
-      <main className="p-4 pt-20 lg:ml-64 h-auto">
+      <main className="p-4 pt-20 lg:ml-60 h-auto">
         <Outlet />
       </main>
     </main>

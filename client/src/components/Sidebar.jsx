@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { MdClose, MdOutlineDashboard } from "react-icons/md";
+import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { BsBarChartFill, BsDatabaseFillAdd } from "react-icons/bs";
-import { FaFileAlt, FaUser, FaBuilding, FaPowerOff } from "react-icons/fa";
-import { MdLogout, MdOutlineMenu } from "react-icons/md";
-import { AiOutlineMenuUnfold, AiOutlineMenuFold } from "react-icons/ai";
-import { useLogoutMutation } from "../redux/userSlice";
-import { toast } from "react-toastify";
+import { FaBuilding, FaFileAlt, FaPowerOff, FaUser } from "react-icons/fa";
+import { MdOutlineDashboard } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import logo from "../assets/logo12.png";
-import { FaSignOutAlt } from "react-icons/fa";
+import { useLogoutMutation } from "../redux/userSlice";
 
 const navList = [
   {
@@ -45,6 +43,8 @@ const navList = [
 
 const Sidebar = () => {
   const [show, setShow] = useState(false);
+  const [active, setActive] = useState("");
+
   const navigate = useNavigate();
 
   const [logout, { isLoading }] = useLogoutMutation();
@@ -63,6 +63,7 @@ const Sidebar = () => {
   const handleNavigate = (to) => {
     setShow(!show);
     navigate(`/dashboard${to}`);
+    setActive(to);
   };
 
   return (
@@ -83,7 +84,7 @@ const Sidebar = () => {
         </div>
       </nav>
       <aside
-        className={`fixed top-0 left-0 w-64 h-screen transition-transform -translate-x-full border-r-2 bg-slate-700 border-gray-500 ${
+        className={`fixed top-0 left-0 w-60 h-screen transition-transform -translate-x-full border-r-2 bg-slate-700 border-gray-500 ${
           show ? "translate-x-0" : "lg:translate-x-0"
         }`}
       >
@@ -98,7 +99,12 @@ const Sidebar = () => {
         <div className="overflow-y-auto h-full">
           <ul className="space-y-4 mt-5 lg:mt-20">
             {navList.map((item) => (
-              <li key={item.name} className="hover:bg-gray-800 px-3">
+              <li
+                key={item.name}
+                className={`hover:bg-gray-800 px-3 ${
+                  active === item.to && "bg-gray-800"
+                }`}
+              >
                 <button
                   onClick={() => handleNavigate(item.to)}
                   className="flex items-center p-2 text-base font-medium text-white rounded-lg "
@@ -111,7 +117,7 @@ const Sidebar = () => {
           </ul>
           <div className="absolute bottom-0 left-0 flex justify-center py-5 w-full">
             <button onClick={handleLogout}>
-              <div className="flex justify-center items-center font-medium text-xl text-white hover:text-red-500">
+              <div className="flex justify-center items-center font-medium text-xl tracking-wider text-sky-400 hover:text-red-500">
                 <FaPowerOff className="mr-2" />
                 Logout
               </div>

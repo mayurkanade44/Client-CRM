@@ -64,6 +64,7 @@ const Location = ({ clientId, locationDetails }) => {
           id="floor"
           errors={errors}
           register={register}
+          disabled={addLoading || updateLoading}
         />
         <p className="text-xs text-red-500 -bottom-4 pl-1">
           {errors.floor && "Floor is required"}
@@ -75,6 +76,7 @@ const Location = ({ clientId, locationDetails }) => {
           id="subLocation"
           errors={errors}
           register={register}
+          disabled={addLoading || updateLoading}
         />
         <p className="text-xs text-red-500 -bottom-4 pl-1">
           {errors.subLocation && "Sub location is required"}
@@ -86,6 +88,7 @@ const Location = ({ clientId, locationDetails }) => {
           id="location"
           errors={errors}
           register={register}
+          disabled={addLoading || updateLoading}
         />
         <p className="text-xs text-red-500 -bottom-4 pl-1">
           {errors.location && "Location is required"}

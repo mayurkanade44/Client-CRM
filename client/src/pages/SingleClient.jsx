@@ -11,6 +11,7 @@ import { toggleModal } from "../redux/helperSlice";
 import { useState } from "react";
 import { MdAddCircle } from "react-icons/md";
 import { toast } from "react-toastify";
+import { saveAs } from "file-saver";
 
 const SingleClient = () => {
   const { isModalOpen } = useSelector((store) => store.helper);
@@ -56,7 +57,7 @@ const SingleClient = () => {
           </h2>
           <div className="grid md:grid-cols-2 my-5 mx-2">
             <h6 className="">Address: {data.client.address}</h6>
-            <div className="flex justify-center space-x-4">
+            <div className="flex md:justify-center space-x-4">
               <h6 className="text-center">
                 Contract No: {data.client.contractNo}
               </h6>
@@ -92,7 +93,10 @@ const SingleClient = () => {
                   <th className="font-bold text-center border-neutral-500 border-2 w-32 px-3">
                     Products
                   </th>
-                  <th className="font-bold max-w-[100px] text-center border-neutral-500 border-2 w-40 px-3">
+                  <th className="font-bold text-center border-neutral-500 border-2 w-28">
+                    QR Codes
+                  </th>
+                  <th className="font-bold max-w-[100px] text-center border-neutral-500 border-2 px-2">
                     Action
                   </th>
                 </tr>
@@ -115,7 +119,18 @@ const SingleClient = () => {
                     <td className="px-3 border-r font-normal text-center border-neutral-500">
                       {location.product.map((item) => item.label + ", ")}
                     </td>
-                    <td className="px-3 flex justify-center items-center font-normal text-center border-neutral-500">
+                    <td className="border-r font-normal text-center border-neutral-500">
+                      <Button
+                        label="Download"
+                        small
+                        height="h-7"
+                        color="bg-green-600"
+                        onClick={() =>
+                          saveAs(location.qr, `QR-${location.location}`)
+                        }
+                      />
+                    </td>
+                    <td className="flex justify-center items-center font-normal text-center border-neutral-500">
                       <button
                         type="button"
                         onClick={() => handleEditModal(location)}

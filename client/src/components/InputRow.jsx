@@ -5,6 +5,7 @@ const InputRow = ({
   placeholder,
   required = true,
   type = "text",
+  disabled = false,
 }) => {
   return (
     <div className="relative mt-2">
@@ -19,7 +20,8 @@ const InputRow = ({
       </label>
       <input
         type={type}
-        className="mt-0.5 w-full py-0.5 px-2 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black"
+        disabled={disabled}
+        className="mt-0.5 w-full py-0.5 px-2 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black disabled:bg-slate-100"
         placeholder={placeholder}
         {...register(id, { required: required })}
       />

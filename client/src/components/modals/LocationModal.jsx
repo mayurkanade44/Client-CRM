@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import FormModal from "./FormModal";
 import { toggleModal } from "../../redux/helperSlice";
 
-const Location = ({ clientId, locationDetails }) => {
+const LocationModal = ({ clientId, locationDetails }) => {
   const dispatch = useDispatch();
   const { isModalOpen } = useSelector((store) => store.helper);
   const [add, { isLoading: addLoading }] = useAddLocationMutation();
@@ -72,7 +72,7 @@ const Location = ({ clientId, locationDetails }) => {
       </div>
       <div>
         <InputRow
-          label="Sub Location"
+          label="Sub Modal"
           id="subLocation"
           errors={errors}
           register={register}
@@ -145,4 +145,4 @@ const Location = ({ clientId, locationDetails }) => {
     </div>
   );
 };
-export default Location;
+export default LocationModal;

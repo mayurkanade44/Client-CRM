@@ -5,9 +5,12 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useLoginMutation } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
+import { setCredentials } from "../redux/helperSlice";
 
 const Landing = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -19,6 +22,7 @@ const Landing = () => {
     e.preventDefault();
     try {
       const res = await login(form).unwrap();
+      dispatch(setCredentials({ ...res }));
       toast.success(`Welcome ${res.name}`);
       setForm({ email: "", password: "" });
       navigate("/dashboard");
@@ -76,7 +80,12 @@ const Landing = () => {
                 />
               </div>
               <div className="flex items-center justify-between">
-                <Button type="submit" label="Log in" />
+                <Button
+                  type="submit"
+                  label="Log in"
+                  isLoading={isLoading}
+                  disabled={isLoading}
+                />
                 <a
                   href="#"
                   className="text-sm font-medium text-white hover:underline"

@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo12.png";
 import { FaSignOutAlt } from "react-icons/fa";
 
-
 const navList = [
   {
     icon: <BsBarChartFill className="w-6 h-6 " />,
@@ -111,7 +110,7 @@ const Sidebar = () => {
             ))}
           </ul>
           <div className="absolute bottom-0 left-0 flex justify-center py-5 w-full">
-            <button onClick={handleLogout} >
+            <button onClick={handleLogout}>
               <div className="flex justify-center items-center font-medium text-xl text-white hover:text-red-500">
                 <FaPowerOff className="mr-2" />
                 Logout

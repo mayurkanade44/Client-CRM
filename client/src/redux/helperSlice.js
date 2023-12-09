@@ -8,6 +8,7 @@ const initialState = {
     newClient: false,
     delete: false,
     location: false,
+    user: false,
   },
 };
 

@@ -5,7 +5,7 @@ const locationSchema = new mongoose.Schema(
     floor: { type: String, required: true },
     subLocation: { type: String, required: true },
     location: { type: String, required: true },
-    qr: { type: String, required: true },
+    qr: { type: String },
     service: [Object],
     product: [Object],
     client: {

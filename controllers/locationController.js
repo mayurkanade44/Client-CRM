@@ -1,6 +1,9 @@
 import Client from "../models/clientModel.js";
 import Location from "../models/locationModel.js";
+import { qrCodeGenerator, uploadFile } from "../utils/helperFunction.js";
+import fs from "fs";
 
+let locationId = null;
 export const addLocation = async (req, res) => {
   const { floor, subLocation, location, clientId } = req.body;
   try {
@@ -16,18 +19,48 @@ export const addLocation = async (req, res) => {
     if (locationExist)
       return res.status(400).json({ msg: "Location already exist" });
 
-    await Location.create({
+    const newLocation = await Location.create({
       floor,
       subLocation,
       location,
       service: req.body.service.length > 0 ? req.body.service : [],
       product: req.body.product.length > 0 ? req.body.product : [],
       client: client._id,
-      qr: "qr",
     });
+    locationId = newLocation._id;
+
+    const qrData = await qrCodeGenerator({
+      link: `https://www.pestXz/location/${locationId}`,
+      floor,
+      location: `${subLocation}, ${location}`,
+    });
+    if (!qrData) {
+      await Location.findByIdAndDelete(locationId);
+      locationId = null;
+      return res
+        .status(400)
+        .json({ msg: "QR generation error. Try again later" });
+    }
+
+    fs.writeFileSync("./tmp/qr.jpeg", qrData);
+
+    const qrLink = await uploadFile({ filePath: "./tmp/qr.jpeg" });
+    if (!qrLink) {
+      await Location.findByIdAndDelete(locationId);
+      locationId = null;
+      return res.status(400).json({ msg: "QR upload error. Try again later" });
+    }
+
+    newLocation.qr = qrLink;
+    await newLocation.save();
+    locationId = null;
 
     return res.status(201).json({ msg: "Location added successfully" });
   } catch (error) {
+    if (locationId) {
+      await Location.findByIdAndDelete(locationId);
+      locationId = null;
+    }
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });
   }
@@ -74,8 +107,8 @@ export const deleteLocation = async (req, res) => {
     const location = await Location.findById(id);
     if (!location) return res.status(404).json({ msg: "Location not found" });
 
-    await Location.findByIdAndDelete(id)
-    return res.json({msg:"Location & all its records deleted"})
+    await Location.findByIdAndDelete(id);
+    return res.json({ msg: "Location & all its records deleted" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

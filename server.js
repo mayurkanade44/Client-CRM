@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import { v2 as cloudinary } from "cloudinary";
 
 import userRoute from "./routes/userRoute.js";
 import clientRoute from "./routes/clientRoute.js";
@@ -12,8 +13,14 @@ import locationRoute from "./routes/locationRoute.js";
 import { notFound } from "./middleware/notFound.js";
 
 dotenv.config();
-const app = express();
 
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_KEY,
+  api_secret: process.env.CLOUD_SECRET,
+});
+
+const app = express();
 app.use(express.json());
 app.use(cookieParser());
 if (process.env.NODE_ENV !== "production") app.use(morgan("dev"));

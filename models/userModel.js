@@ -9,9 +9,10 @@ const userSchema = new mongoose.Schema(
     role: { type: String, required: true },
     type: { type: String, required: true },
     department: { type: String },
-    hotel: {
+    client: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Hotel",
+      ref: "Client",
+      required: true,
     },
   },
   { timestamps: true }

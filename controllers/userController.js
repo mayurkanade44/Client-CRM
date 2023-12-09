@@ -2,22 +2,26 @@ import User from "../models/userModel.js";
 import { capitalLetter, generateToken } from "../utils/helperFunction.js";
 
 export const registerUser = async (req, res) => {
-  const { name, password, role, email, department, type } = req.body;
+  const { name, password, email, department } = req.body;
   try {
-    if (!name || !password || !email || !role || !department || !type)
+    if (!name || !password || !email)
       return res.status(400).json({ msg: "Please provide required values" });
 
-    const userExists = await User.findOne({ email });
+    const type = req.user.type;
+    const client = req.user.client;
+
+    const userExists = await User.findOne({ email, client, type });
     if (userExists)
-      return res.status(400).json({ msg: "Email id already exists" });
+      return res.status(400).json({ msg: "User details already exists" });
 
     const user = await User.create({
       name: capitalLetter(name),
       email,
       password,
-      role,
-      department,
+      role: req.user.role === "Admin" ? "PestEmployee" : "ClientEmployee",
+      department: department || "Pest Control",
       type,
+      client,
     });
 
     return res.status(201).json({ msg: `${user.name} is created` });

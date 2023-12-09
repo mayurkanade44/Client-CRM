@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "../models/UserModel.js";
+import User from "../models/userModel.js";
 
 export const authenticateUser = async (req, res, next) => {
   const token = req.cookies.token;
@@ -23,7 +23,7 @@ export const authenticateUser = async (req, res, next) => {
 };
 
 export const authorizeUser = (...roles) => {
-  return (res, req, next) => {
+  return (req, res, next) => {
     if (!req.user.role || !roles.includes(req.user.role)) {
       return res
         .status(403)

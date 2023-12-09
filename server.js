@@ -11,6 +11,10 @@ import clientRoute from "./routes/clientRoute.js";
 import adminRoute from "./routes/adminRoute.js";
 import locationRoute from "./routes/locationRoute.js";
 import { notFound } from "./middleware/notFound.js";
+import {
+  authenticateUser,
+  authorizeUser,
+} from "./middleware/authMiddleware.js";
 
 dotenv.config();
 
@@ -27,7 +31,12 @@ if (process.env.NODE_ENV !== "production") app.use(morgan("dev"));
 
 app.use("/api/user", userRoute);
 app.use("/api/client", clientRoute);
-app.use("/api/admin", adminRoute);
+app.use(
+  "/api/admin",
+  authenticateUser,
+  authorizeUser("Admin", "ClientAdmin"),
+  adminRoute
+);
 app.use("/api/location", locationRoute);
 
 if (process.env.NODE_ENV === "production") {

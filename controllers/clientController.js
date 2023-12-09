@@ -28,9 +28,9 @@ export const registerClient = async (req, res) => {
       email,
       password,
       name,
-      role: "Client Admin",
-      type: "Client Employee",
-      hotel: client._id,
+      role: "ClientAdmin",
+      type: "ClientEmployee",
+      client: client._id,
     });
 
     res.status(201).json({ msg: `${user.name} has been created` });

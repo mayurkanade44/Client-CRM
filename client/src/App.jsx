@@ -12,8 +12,8 @@ import {
   Clients,
   Complaints,
   Dashboard,
-  DashboardLayout,
   Landing,
+  MainLayout,
   Reports,
   Services,
   SingleClient,
@@ -27,7 +27,6 @@ function App() {
     return (
       <>
         <ToastContainer position="top-center" autoClose={2000} />
-        <Sidebar />
         <div>
           <Outlet />
         </div>
@@ -39,17 +38,16 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
         <Route index={true} path="/" element={<Landing />} />
-        <Route path="dashboard" element={<DashboardLayout />}>
-          <Route index={true} element={<Dashboard />} />
-          <Route path="clients" element={<Clients />} />
-          <Route path="users" element={<Users />} />
-          <Route path="reports" element={<Reports />} />
-          <Route path="services" element={<Services />} />
-          <Route path="complaints" element={<Complaints />} />
-          <Route path="client/:id" element={<SingleClient />} />
+        <Route path="" element={<MainLayout />}>
+          <Route index={true} path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard/clients" element={<Clients />} />
+          <Route path="dashboard/users" element={<Users />} />
+          <Route path="dashboard/reports" element={<Reports />} />
+          <Route path="dashboard/services" element={<Services />} />
+          <Route path="dashboard/complaints" element={<Complaints />} />
+          <Route path="dashboard/client/:id" element={<SingleClient />} />
+          <Route path="/location/:id" element={<SingleLocation />} />
         </Route>
-
-        <Route path="/location/:id" element={<SingleLocation />} />
       </Route>
     )
   );

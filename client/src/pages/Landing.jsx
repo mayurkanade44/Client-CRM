@@ -37,9 +37,9 @@ const Landing = () => {
       <div className="pt:mt-0 mx-auto flex flex-col items-center justify-center px-6 py-8 h-screen">
         <div className="mb-6 flex items-center text-3xl font-semibold text-white">
           <img className="mr-5 h-10 w-10" src={hotel} alt="logo" />
-          Hotel CRM
+          Client CRM
         </div>
-        <div className="w-full rounded-lg bg-white shadow dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
+        <div className="w-[350px] rounded-lg bg-white shadow dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
           <div className="space-y-4 p-6 sm:p-8 md:space-y-6 lg:space-y-8">
             <h1 className="text-center text-xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
               Sign in to your account
@@ -85,13 +85,8 @@ const Landing = () => {
                   label="Log in"
                   isLoading={isLoading}
                   disabled={isLoading}
+                  width="w-full"
                 />
-                <a
-                  href="#"
-                  className="text-sm font-medium text-white hover:underline"
-                >
-                  Forgot password?
-                </a>
               </div>
             </form>
           </div>

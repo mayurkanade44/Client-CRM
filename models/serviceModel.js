@@ -7,16 +7,17 @@ const serviceSchema = new mongoose.Schema(
       number: { type: String, required: true },
       service: { type: Array, required: true },
       status: { type: String, default: "Open" },
-      employeeName: { type: String, required: true },
+      userName: { type: String, required: true },
       image: [String],
       comment: { type: String },
     },
     complaintUpdate: [
       {
         image: [String],
-        employeeName: { type: Object, required: true },
-        date: { type: Date },
         comment: { type: String, required: true },
+        userName: { type: String, required: true },
+        status: { type: String, required: true },
+        date: { type: Date },
       },
     ],
     client: {

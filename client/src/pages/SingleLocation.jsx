@@ -57,7 +57,7 @@ const SingleLocation = () => {
   };
 
   return (
-    <div className="p-4 pt-20 lg:ml-60 h-auto">
+    <>
       {isLoading ? (
         <Loading />
       ) : (
@@ -78,7 +78,7 @@ const SingleLocation = () => {
           <ComplaintModal locationId={id} />
         </div>
       )}
-    </div>
+    </>
   );
 };
 export default SingleLocation;

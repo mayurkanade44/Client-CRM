@@ -24,6 +24,14 @@ export const serviceSlice = apiSlice.injectEndpoints({
       providesTags: ["Complaint"],
       keepUnusedDataFor: 30,
     }),
+    updateComplaint: builder.mutation({
+      query: ({ id, form }) => ({
+        url: `/api/service/singleComplaint/${id}`,
+        method: "PUT",
+        body: form,
+      }),
+      invalidatesTags: ["Complaint"],
+    }),
   }),
 });
 
@@ -31,4 +39,5 @@ export const {
   useNewComplaintMutation,
   useAllClientComplaintsQuery,
   useSingleComplaintQuery,
+  useUpdateComplaintMutation
 } = serviceSlice;

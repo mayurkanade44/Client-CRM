@@ -6,15 +6,21 @@ import { useDispatch, useSelector } from "react-redux";
 import FormModal from "./FormModal";
 import { toggleModal } from "../../redux/helperSlice";
 import { useState } from "react";
-import { useNewComplaintMutation } from "../../redux/serviceSlice";
+import {
+  useNewComplaintMutation,
+  useUpdateComplaintMutation,
+} from "../../redux/serviceSlice";
+import { jobStatus, operatorComment } from "../../utils/constData";
 
 const ComplaintModal = ({ complaintDetails, locationId }) => {
   const [images, setImages] = useState([]);
   const dispatch = useDispatch();
-  const { isModalOpen } = useSelector((store) => store.helper);
+  const { isModalOpen, user } = useSelector((store) => store.helper);
 
   const { data, isLoading, isFetching } = useAllServiceQuery();
   const [addComplaint, { isLoading: addLoading }] = useNewComplaintMutation();
+  const [updateComplaint, { isLoading: updateLoading }] =
+    useUpdateComplaintMutation();
 
   const {
     register,
@@ -26,20 +32,31 @@ const ComplaintModal = ({ complaintDetails, locationId }) => {
     defaultValues: {
       service: "",
       comment: "",
+      status: "",
     },
   });
 
   const submit = async (data) => {
-    const form = new FormData();
+    if (images.length < 1) return toast.error("Atleast one image is required");
+    if (images.length > 2) return toast.error("Maximum 2 images are required");
 
-    form.set("comment", data.comment);
-    data.service.map((service) =>
-      form.append("service", service.label)
-    );
+    const form = new FormData();
     images.map((image) => form.append("images", image));
+    if (user.type === "ClientEmployee") {
+      form.set("comment", data.comment);
+      data.service.map((service) => form.append("service", service.label));
+    } else {
+      form.set("status", data.status.label);
+      form.set("comment", data.comment.label);
+    }
 
     try {
-      const res = await addComplaint({ id: locationId, form }).unwrap();
+      let res;
+      if (user.type === "ClientEmployee") {
+        res = await addComplaint({ id: locationId, form }).unwrap();
+      } else if (user.type === "PestEmployee") {
+        res = await updateComplaint({ id: locationId, form }).unwrap();
+      }
       toast.success(res.msg);
       dispatch(toggleModal({ name: "complaint", status: false }));
       reset();
@@ -49,7 +66,7 @@ const ComplaintModal = ({ complaintDetails, locationId }) => {
     }
   };
 
-  const formBody = (
+  const clientFormBody = (
     <div className="grid gap-y-3 mb-4">
       <Controller
         name="service"
@@ -64,13 +81,13 @@ const ComplaintModal = ({ complaintDetails, locationId }) => {
           />
         )}
       />
-      <div className="">
+      <div>
         <label
           htmlFor="images"
           className="text-md font-medium leading-6 mr-2 text-gray-900"
         >
           Images*{" "}
-          <span className="text-sm font-normal">(max 3 images allowed)</span>
+          <span className="text-sm font-normal">(max 2 images allowed)</span>
         </label>
         <input
           type="file"
@@ -87,7 +104,54 @@ const ComplaintModal = ({ complaintDetails, locationId }) => {
           errors={errors}
           register={register}
           disabled={isLoading}
-          required={false}
+        />
+        <p className="text-xs text-red-500 -bottom-4 pl-1">
+          {errors.comment && "Comment is required"}
+        </p>
+      </div>
+    </div>
+  );
+
+  const operatorFormBody = (
+    <div className="grid gap-y-3 mb-4">
+      <Controller
+        name="comment"
+        control={control}
+        render={({ field: { onChange, value, ref } }) => (
+          <InputSelect
+            options={operatorComment}
+            onChange={onChange}
+            value={value}
+            label="Job Comment"
+          />
+        )}
+      />
+      <Controller
+        name="status"
+        control={control}
+        render={({ field: { onChange, value, ref } }) => (
+          <InputSelect
+            options={jobStatus}
+            onChange={onChange}
+            value={value}
+            label="Complaint Status"
+          />
+        )}
+      />
+      <div>
+        <label
+          htmlFor="images"
+          className="text-md font-medium leading-6 mr-2 text-gray-900"
+        >
+          Images*{" "}
+          <span className="text-sm font-normal">(max 2 images allowed)</span>
+        </label>
+        <input
+          type="file"
+          onChange={(e) => setImages(Array.from(e.target.files))}
+          multiple
+          className="mt-0.5"
+          accept="image/*"
         />
       </div>
     </div>
@@ -97,9 +161,13 @@ const ComplaintModal = ({ complaintDetails, locationId }) => {
     <div>
       <FormModal
         onSubmit={handleSubmit(submit)}
-        title={`${complaintDetails ? "Update" : "New"} Complaint`}
-        formBody={formBody}
-        submitLabel={`${complaintDetails ? "Update" : "Add"} Complaint`}
+        title={`${user.type === "PestEmployee" ? "Update" : "New"} Complaint`}
+        formBody={
+          user.type === "ClientEmployee" ? clientFormBody : operatorFormBody
+        }
+        submitLabel={`${
+          user.type === "PestEmployee" ? "Update" : "Add"
+        } Complaint`}
         handleClose={() =>
           dispatch(toggleModal({ name: "complaint", status: false }))
         }

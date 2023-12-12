@@ -47,13 +47,23 @@ export const newComplaint = async (req, res) => {
       complaintDetails: {
         number: sr,
         service: req.body.service,
-        employeeName: req.user.name,
+        userName: req.user.name,
         image: imageLinks,
         comment: req.body.comment,
       },
+      complaintUpdate: [
+        {
+          image: imageLinks,
+          comment: req.body.comment,
+          userName: req.user.name,
+          status: "Open",
+          date: new Date(),
+        },
+      ],
       client: req.user.client,
       location: req.params.id,
     });
+
     return res.status(201).json({
       msg: `Your service request is ${complaint.complaintDetails.number}`,
     });
@@ -83,11 +93,58 @@ export const getAllClientComplaints = async (req, res) => {
 export const getSingleComplaint = async (req, res) => {
   const { id } = req.params;
   try {
-    
     const complaint = await Service.findById(id);
     if (!complaint) return res.status(404).json({ msg: "Complaint not found" });
 
     return res.json(complaint);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const updateComplaint = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    if (req.user.type === "ClientEmployee")
+      return res
+        .status(400)
+        .json({ msg: "Yoe are not allowed to raise a complaint" });
+
+    const complaint = await Service.findById(id);
+    if (!complaint) return res.status(404).json({ msg: "Complaint not found" });
+
+    const imageLinks = [];
+    if (req.files) {
+      let images = [];
+      if (req.files.images.length > 0) {
+        images = req.files.images;
+      } else {
+        images.push(req.files.images);
+      }
+
+      for (let i = 0; i < images.length; i++) {
+        const link = await uploadFile({ filePath: images[i].tempFilePath });
+        if (!link)
+          return res
+            .status(400)
+            .json({ msg: "Image upload error. Try again later" });
+        imageLinks.push(link);
+      }
+    }
+
+    complaint.complaintUpdate.push({
+      image: imageLinks,
+      comment: req.body.comment,
+      userName: req.user.name,
+      status: req.body.status,
+      date: new Date(),
+    });
+    complaint.complaintDetails.status = req.body.status;
+    await complaint.save();
+
+    return res.json({ msg: "Updated successfully" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

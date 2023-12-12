@@ -1,17 +1,10 @@
 import { Link } from "react-router-dom";
 import { AlertMessage, Loading } from "../components";
 import { useAllClientComplaintsQuery } from "../redux/serviceSlice";
+import { dateFormat, progress } from "../utils/helperFunctions";
 
 const Complaints = () => {
   const { data, isLoading, isFetching, error } = useAllClientComplaintsQuery();
-
-  const progress = (status) => {
-    let text = "text-blue-700 bg-blue-100";
-    if (status === "Completed") text = "text-green-700 bg-green-100";
-    else if (status === "In Progress") text = "text-gary-700 bg-gray-100";
-
-    return text;
-  };
 
   return (
     <>
@@ -29,12 +22,15 @@ const Complaints = () => {
                   Complaint Number
                 </th>
                 <th className="font-bold text-center border-neutral-500 border-2 px-3">
+                  Date
+                </th>
+                <th className="font-bold text-center border-neutral-500 border-2 px-3">
                   Location
                 </th>
                 <th className="font-bold text-center border-neutral-500 border-2 px-3">
                   Pest
                 </th>
-                <th className="font-bold text-center border-neutral-500 border-2 w-32 px-3">
+                <th className="font-bold text-center border-neutral-500 border-2 w-24 px-3">
                   Status
                 </th>
               </tr>
@@ -46,9 +42,15 @@ const Complaints = () => {
                   className="h-8 text-[14px] border-b border-neutral-500 hover:bg-slate-200"
                 >
                   <td className="px-3 border-r text-center border-neutral-500">
-                    <Link to={`/complaint/${complaint._id}`} className="hover:text-blue-700 hover:font-medium">
+                    <Link
+                      to={`/complaint/${complaint._id}`}
+                      className="hover:text-blue-700 hover:font-medium"
+                    >
                       {complaint.complaintDetails.number}
                     </Link>
+                  </td>
+                  <td className="px-3 border-r text-center border-neutral-500">
+                    {dateFormat(complaint.createdAt)}
                   </td>
                   <td className="px-3 border-r text-center border-neutral-500">
                     {`${complaint.location.floor}, ${complaint.location.subLocation}, ${complaint.location.location}`}

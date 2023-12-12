@@ -17,6 +17,7 @@ import {
   Reports,
   Services,
   SingleClient,
+  SingleComplaint,
   SingleLocation,
   Users,
 } from "./pages";
@@ -47,6 +48,7 @@ function App() {
           <Route path="dashboard/complaints" element={<Complaints />} />
           <Route path="dashboard/client/:id" element={<SingleClient />} />
           <Route path="/location/:id" element={<SingleLocation />} />
+          <Route path="/complaint/:id" element={<SingleComplaint />} />
         </Route>
       </Route>
     )

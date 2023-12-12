@@ -79,3 +79,17 @@ export const getAllClientComplaints = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+export const getSingleComplaint = async (req, res) => {
+  const { id } = req.params;
+  try {
+    
+    const complaint = await Service.findById(id);
+    if (!complaint) return res.status(404).json({ msg: "Complaint not found" });
+
+    return res.json(complaint);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};

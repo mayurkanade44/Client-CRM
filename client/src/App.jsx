@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import {
   Clients,
+  Complaints,
   Dashboard,
   DashboardLayout,
   Landing,
@@ -44,6 +45,7 @@ function App() {
           <Route path="users" element={<Users />} />
           <Route path="reports" element={<Reports />} />
           <Route path="services" element={<Services />} />
+          <Route path="complaints" element={<Complaints />} />
           <Route path="client/:id" element={<SingleClient />} />
         </Route>
 

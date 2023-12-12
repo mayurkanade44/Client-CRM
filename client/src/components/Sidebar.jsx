@@ -31,7 +31,7 @@ const navList = [
   {
     icon: <MdOutlineDashboard className="w-6 h-6" />,
     name: "Complaints",
-    to: "/request",
+    to: "/complaints",
     role: ["Admin", "ClientAdmin", "ClientEmployee", "PestEmployee"],
   },
   {
@@ -107,21 +107,23 @@ const Sidebar = () => {
         <div className="overflow-y-auto h-full">
           <ul className="space-y-4 mt-5 lg:mt-20">
             {navList.map((item) => {
-              return item.role.includes(user.role) && (
-                <li
-                  key={item.name}
-                  className={`hover:bg-gray-800 px-3 ${
-                    active === item.to && "bg-gray-800"
-                  }`}
-                >
-                  <button
-                    onClick={() => handleNavigate(item.to)}
-                    className="flex items-center p-2 text-base font-medium text-white rounded-lg "
+              return (
+                item.role.includes(user.role) && (
+                  <li
+                    key={item.name}
+                    className={`hover:bg-gray-800 px-3 ${
+                      active === item.to && "bg-gray-800"
+                    }`}
                   >
-                    {item.icon}
-                    <span className="ml-3 text-xl">{item.name}</span>
-                  </button>
-                </li>
+                    <button
+                      onClick={() => handleNavigate(item.to)}
+                      className="flex items-center p-2 text-base font-medium text-white rounded-lg "
+                    >
+                      {item.icon}
+                      <span className="ml-3 text-xl">{item.name}</span>
+                    </button>
+                  </li>
+                )
               );
             })}
           </ul>

@@ -54,11 +54,26 @@ export const newComplaint = async (req, res) => {
       client: req.user.client,
       location: req.params.id,
     });
-    return res
-      .status(201)
-      .json({
-        msg: `Your service request is ${complaint.complaintDetails.number}`,
-      });
+    return res.status(201).json({
+      msg: `Your service request is ${complaint.complaintDetails.number}`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const getAllClientComplaints = async (req, res) => {
+  try {
+    const complaints = await Service.find({
+      client: req.user.client,
+      type: "Complaint",
+    }).populate({
+      path: "location",
+      select: "floor subLocation location",
+    });
+
+    return res.json(complaints);
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

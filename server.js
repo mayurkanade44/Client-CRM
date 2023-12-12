@@ -5,11 +5,13 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import { v2 as cloudinary } from "cloudinary";
+import fileUpload from "express-fileupload";
 
 import userRoute from "./routes/userRoute.js";
 import clientRoute from "./routes/clientRoute.js";
 import adminRoute from "./routes/adminRoute.js";
 import locationRoute from "./routes/locationRoute.js";
+import complaintRoute from "./routes/complaintRoute.js";
 import { notFound } from "./middleware/notFound.js";
 import {
   authenticateUser,
@@ -27,6 +29,7 @@ cloudinary.config({
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(fileUpload({ useTempFiles: true }));
 if (process.env.NODE_ENV !== "production") app.use(morgan("dev"));
 
 app.use("/api/user", userRoute);
@@ -38,6 +41,7 @@ app.use(
   adminRoute
 );
 app.use("/api/location", locationRoute);
+app.use("/api/complaint", authenticateUser, complaintRoute);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();

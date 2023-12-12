@@ -19,7 +19,7 @@ export const registerUser = async (req, res) => {
       email,
       password,
       role: req.user.role === "Admin" ? "PestEmployee" : "ClientEmployee",
-      department,
+      department: capitalLetter(department),
       type,
       client,
     });

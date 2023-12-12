@@ -114,3 +114,19 @@ export const deleteLocation = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+export const getClientEmployeeLocation = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const location = await Location.findById(id);
+    if (!location)
+      return res.status(404).json({ msg: "Location not found, contact admin" });
+
+    return res.json(location);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const getPestEmployeeLocation = async (req, res) => {};

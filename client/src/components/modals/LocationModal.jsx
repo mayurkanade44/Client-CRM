@@ -34,7 +34,6 @@ const LocationModal = ({ clientId, locationDetails }) => {
   });
 
   const submit = async (data) => {
-    console.log(data);
     if (data.service.length < 1 && data.product.length < 1) {
       toast.error("Please choose Service/Product");
       return;

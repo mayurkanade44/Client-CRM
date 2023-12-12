@@ -11,19 +11,22 @@ import {
 import {
   Clients,
   Dashboard,
+  DashboardLayout,
   Landing,
-  MainLayout,
   Reports,
   Services,
   SingleClient,
+  SingleLocation,
   Users,
 } from "./pages";
+import { Sidebar } from "./components";
 
 function App() {
   const Layout = () => {
     return (
       <>
         <ToastContainer position="top-center" autoClose={2000} />
+        <Sidebar />
         <div>
           <Outlet />
         </div>
@@ -35,7 +38,7 @@ function App() {
     createRoutesFromElements(
       <Route path="/" element={<Layout />}>
         <Route index={true} path="/" element={<Landing />} />
-        <Route path="dashboard" element={<MainLayout />}>
+        <Route path="dashboard" element={<DashboardLayout />}>
           <Route index={true} element={<Dashboard />} />
           <Route path="clients" element={<Clients />} />
           <Route path="users" element={<Users />} />
@@ -43,6 +46,8 @@ function App() {
           <Route path="services" element={<Services />} />
           <Route path="client/:id" element={<SingleClient />} />
         </Route>
+
+        <Route path="/location/:id" element={<SingleLocation />} />
       </Route>
     )
   );

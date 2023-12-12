@@ -7,37 +7,44 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../assets/logo12.png";
 import { useLogoutMutation } from "../redux/userSlice";
+import { useSelector } from "react-redux";
 
 const navList = [
   {
     icon: <BsBarChartFill className="w-6 h-6 " />,
     name: "Dashboard",
     to: "",
+    role: ["Admin", "ClientAdmin"],
   },
   {
     icon: <FaBuilding className="w-6 h-6" />,
     name: "Clients",
     to: "/clients",
+    role: ["Admin"],
   },
   {
     icon: <BsDatabaseFillAdd className="w-6 h-6" />,
     name: "Services",
     to: "/services",
+    role: ["Admin"],
   },
   {
     icon: <MdOutlineDashboard className="w-6 h-6" />,
     name: "Complaints",
     to: "/request",
+    role: ["Admin", "ClientAdmin", "ClientEmployee", "PestEmployee"],
   },
   {
     icon: <FaUser className="w-6 h-6" />,
     name: "Users",
     to: "/users",
+    role: ["Admin", "ClientAdmin"],
   },
   {
     icon: <FaFileAlt className="w-6 h-6" />,
     name: "Reports",
     to: "/reports",
+    role: ["Admin", "ClientAdmin"],
   },
 ];
 
@@ -45,6 +52,7 @@ const Sidebar = () => {
   const [show, setShow] = useState(false);
   const [active, setActive] = useState("");
 
+  const { user } = useSelector((store) => store.helper);
   const navigate = useNavigate();
 
   const [logout, { isLoading }] = useLogoutMutation();
@@ -98,22 +106,24 @@ const Sidebar = () => {
         )}
         <div className="overflow-y-auto h-full">
           <ul className="space-y-4 mt-5 lg:mt-20">
-            {navList.map((item) => (
-              <li
-                key={item.name}
-                className={`hover:bg-gray-800 px-3 ${
-                  active === item.to && "bg-gray-800"
-                }`}
-              >
-                <button
-                  onClick={() => handleNavigate(item.to)}
-                  className="flex items-center p-2 text-base font-medium text-white rounded-lg "
+            {navList.map((item) => {
+              return item.role.includes(user.role) && (
+                <li
+                  key={item.name}
+                  className={`hover:bg-gray-800 px-3 ${
+                    active === item.to && "bg-gray-800"
+                  }`}
                 >
-                  {item.icon}
-                  <span className="ml-3 text-xl">{item.name}</span>
-                </button>
-              </li>
-            ))}
+                  <button
+                    onClick={() => handleNavigate(item.to)}
+                    className="flex items-center p-2 text-base font-medium text-white rounded-lg "
+                  >
+                    {item.icon}
+                    <span className="ml-3 text-xl">{item.name}</span>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
           <div className="absolute bottom-0 left-0 flex justify-center py-5 w-full">
             <button onClick={handleLogout}>

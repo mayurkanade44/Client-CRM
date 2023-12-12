@@ -9,6 +9,7 @@ const initialState = {
     delete: false,
     location: false,
     user: false,
+    complaint: false,
   },
 };
 

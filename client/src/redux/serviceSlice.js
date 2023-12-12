@@ -3,8 +3,8 @@ import { apiSlice } from "./apiSlice";
 export const serviceSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     newComplaint: builder.mutation({
-      query: (form) => ({
-        url: `/api/complaint/65741379f93ccb17fef1af47`,
+      query: ({ id, form }) => ({
+        url: `/api/service/complaint/${id}`,
         method: "POST",
         body: form,
       }),

@@ -1,9 +1,7 @@
-import Complaint from "../models/complaintModal.js";
-import Location from "../models/locationModel.js";
+import Service from "../models/serviceModel.js";
 import { uploadFile } from "../utils/helperFunction.js";
 
 export const newComplaint = async (req, res) => {
-  console.log(req.body);
   try {
     if (req.user.type === "PestEmployee")
       return res
@@ -14,8 +12,8 @@ export const newComplaint = async (req, res) => {
       unique = true;
 
     while (unique) {
-      const alreadySR = await Complaint.findOne({
-        number: sr,
+      const alreadySR = await Service.findOne({
+        "complaintDetails.number": sr,
         client: req.user.client,
       });
       if (alreadySR) {
@@ -44,18 +42,23 @@ export const newComplaint = async (req, res) => {
       }
     }
 
-    const complaint = await Complaint.create({
-      number: sr,
-      service: req.body.service,
-      employeeName: req.user.name,
-      image: imageLinks,
-      comment: req.body.comment,
+    const complaint = await Service.create({
+      type: "Complaint",
+      complaintDetails: {
+        number: sr,
+        service: req.body.service,
+        employeeName: req.user.name,
+        image: imageLinks,
+        comment: req.body.comment,
+      },
       client: req.user.client,
       location: req.params.id,
     });
     return res
       .status(201)
-      .json({ msg: `Your service request is ${complaint.number}` });
+      .json({
+        msg: `Your service request is ${complaint.complaintDetails.number}`,
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

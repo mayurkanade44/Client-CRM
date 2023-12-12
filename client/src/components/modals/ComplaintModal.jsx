@@ -30,17 +30,19 @@ const ComplaintModal = ({ complaintDetails, locationId }) => {
   });
 
   const submit = async (data) => {
-    console.log(data);
+    const form = new FormData();
 
-    const myForm = new FormData();
-    myForm.set("comment", "mayur");
-
-    console.log(myForm);
-   
+    form.set("comment", data.comment);
+    data.service.map((service) =>
+      form.append("service", service.label)
+    );
+    images.map((image) => form.append("images", image));
 
     try {
-      const res = await addComplaint({ id: locationId, form: myForm }).unwrap();
+      const res = await addComplaint({ id: locationId, form }).unwrap();
       toast.success(res.msg);
+      dispatch(toggleModal({ name: "complaint", status: false }));
+      reset();
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);
@@ -101,8 +103,8 @@ const ComplaintModal = ({ complaintDetails, locationId }) => {
         handleClose={() =>
           dispatch(toggleModal({ name: "complaint", status: false }))
         }
-        disabled={isLoading}
-        isLoading={isLoading}
+        disabled={addLoading}
+        isLoading={addLoading}
         open={isModalOpen.complaint}
       />
     </div>

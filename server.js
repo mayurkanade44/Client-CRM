@@ -11,7 +11,7 @@ import userRoute from "./routes/userRoute.js";
 import clientRoute from "./routes/clientRoute.js";
 import adminRoute from "./routes/adminRoute.js";
 import locationRoute from "./routes/locationRoute.js";
-import complaintRoute from "./routes/complaintRoute.js";
+import serviceRoute from "./routes/serviceRoute.js";
 import { notFound } from "./middleware/notFound.js";
 import {
   authenticateUser,
@@ -41,7 +41,7 @@ app.use(
   adminRoute
 );
 app.use("/api/location", locationRoute);
-app.use("/api/complaint", authenticateUser, complaintRoute);
+app.use("/api/service", authenticateUser, serviceRoute);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();

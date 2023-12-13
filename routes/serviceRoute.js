@@ -1,6 +1,7 @@
 import express from "express";
 import {
-  getAllClientComplaints,
+  getAllComplaints,
+  getSingleClientComplaints,
   getSingleComplaint,
   newComplaint,
   updateComplaint,
@@ -8,7 +9,15 @@ import {
 
 const router = express.Router();
 
-router.route("/complaint/:id").post(newComplaint).get(getAllClientComplaints);
-router.route("/singleComplaint/:id").get(getSingleComplaint).put(updateComplaint)
+router.get("/allComplaints", getAllComplaints);
+
+router
+  .route("/clientComplaint/:id")
+  .post(newComplaint)
+  .get(getSingleClientComplaints);
+router
+  .route("/singleComplaint/:id")
+  .get(getSingleComplaint)
+  .put(updateComplaint);
 
 export default router;

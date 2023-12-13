@@ -73,7 +73,7 @@ export const newComplaint = async (req, res) => {
   }
 };
 
-export const getAllClientComplaints = async (req, res) => {
+export const getSingleClientComplaints = async (req, res) => {
   try {
     const complaints = await Service.find({
       client: req.user.client,
@@ -145,6 +145,22 @@ export const updateComplaint = async (req, res) => {
     await complaint.save();
 
     return res.json({ msg: "Updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const getAllComplaints = async (req, res) => {
+  try {
+    const complaints = await Service.find({ type: "Complaint" }).populate({
+      path: "location",
+      select: "floor subLocation location",
+      path: "client",
+      select: "name",
+    });
+
+    return res.status(200).json(complaints);
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

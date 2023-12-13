@@ -37,7 +37,7 @@ const SingleComplaint = () => {
             </div>
           </div>
           <h4>Raised By: {data.complaintDetails.userName}</h4>
-          <h4>Pest: {data.complaintDetails.service}</h4>
+          <h4>Pest: {data.complaintDetails.service?.join(", ")}</h4>
           <h4>Comment: {data.complaintDetails.comment}</h4>
           <div>
             Images:{" "}

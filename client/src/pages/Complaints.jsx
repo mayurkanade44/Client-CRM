@@ -1,14 +1,41 @@
 import { Link } from "react-router-dom";
 import { AlertMessage, Loading } from "../components";
-import { useAllClientComplaintsQuery } from "../redux/serviceSlice";
+import {
+  useAllComplaintsQuery,
+  useSingleClientComplaintsQuery,
+} from "../redux/serviceSlice";
 import { dateFormat, progress } from "../utils/helperFunctions";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 const Complaints = () => {
-  const { data, isLoading, isFetching, error } = useAllClientComplaintsQuery();
+  const [data, setData] = useState([]);
+  const { user } = useSelector((store) => store.helper);
+
+  const {
+    data: clientComplaints,
+    isLoading,
+    isFetching,
+    error,
+  } = useSingleClientComplaintsQuery({}, { skip: user?.role === "Admin" });
+
+  const {
+    data: allComplaints,
+    isLoading: allComplaintsLoading,
+    isFetching: allComplaintsFetching,
+  } = useAllComplaintsQuery({}, { skip: user?.role !== "Admin" });
+
+  useEffect(() => {
+    if (allComplaints) setData(allComplaints);
+    if (clientComplaints) setData(clientComplaints);
+  }, [clientComplaints, allComplaints]);
 
   return (
     <>
-      {isLoading || isFetching ? (
+      {isLoading ||
+      isFetching ||
+      allComplaintsLoading ||
+      allComplaintsFetching ? (
         <Loading />
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
@@ -36,7 +63,7 @@ const Complaints = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((complaint) => (
+              {data?.map((complaint) => (
                 <tr
                   key={complaint._id}
                   className="h-8 text-[14px] border-b border-neutral-500 hover:bg-slate-200"
@@ -53,10 +80,12 @@ const Complaints = () => {
                     {dateFormat(complaint.createdAt)}
                   </td>
                   <td className="px-3 border-r text-center border-neutral-500">
-                    {`${complaint.location.floor}, ${complaint.location.subLocation}, ${complaint.location.location}`}
+                    {user.role === "Admin"
+                      ? complaint.client.name
+                      : `${complaint.location.floor}, ${complaint.location.subLocation}, ${complaint.location.location}`}
                   </td>
                   <td className="px-3 border-r text-center border-neutral-500">
-                    {complaint.complaintDetails.service}
+                    {complaint.complaintDetails.service?.join(", ")}
                   </td>
                   <td className="px-3 border-r text-center border-neutral-500">
                     <p

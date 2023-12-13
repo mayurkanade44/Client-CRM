@@ -4,18 +4,18 @@ export const serviceSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     newComplaint: builder.mutation({
       query: ({ id, form }) => ({
-        url: `/api/service/complaint/${id}`,
+        url: `/api/service/clientComplaint/${id}`,
         method: "POST",
         body: form,
       }),
       invalidatesTags: ["Complaint"],
     }),
-    allClientComplaints: builder.query({
+    singleClientComplaints: builder.query({
       query: () => ({
-        url: "/api/service/complaint/allComplaints",
+        url: "/api/service/clientComplaint/allComplaints",
       }),
       providesTags: ["Complaint"],
-      keepUnusedDataFor: 60,
+      keepUnusedDataFor: 30,
     }),
     singleComplaint: builder.query({
       query: (id) => ({
@@ -32,12 +32,19 @@ export const serviceSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Complaint"],
     }),
+    allComplaints: builder.query({
+      query: () => ({
+        url: "/api/service/allComplaints",
+      }),
+      providesTags: ["Complaint"],
+    }),
   }),
 });
 
 export const {
   useNewComplaintMutation,
-  useAllClientComplaintsQuery,
+  useSingleClientComplaintsQuery,
   useSingleComplaintQuery,
-  useUpdateComplaintMutation
+  useUpdateComplaintMutation,
+  useAllComplaintsQuery,
 } = serviceSlice;

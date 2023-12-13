@@ -5,11 +5,9 @@ import { dateFormat, progress } from "../utils/helperFunctions";
 import { useSelector, useDispatch } from "react-redux";
 import { ComplaintModal } from "../components/modals";
 import { toggleModal } from "../redux/helperSlice";
-import { useState } from "react";
 
 const SingleComplaint = () => {
   const { user } = useSelector((store) => store.helper);
-  const [update, setUpdate] = useState(false);
   const dispatch = useDispatch();
   const { id } = useParams();
 

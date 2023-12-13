@@ -10,13 +10,6 @@ export const serviceSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Complaint"],
     }),
-    singleClientComplaints: builder.query({
-      query: () => ({
-        url: "/api/service/clientComplaint/allComplaints",
-      }),
-      providesTags: ["Complaint"],
-      keepUnusedDataFor: 30,
-    }),
     singleComplaint: builder.query({
       query: (id) => ({
         url: `/api/service/singleComplaint/${id}`,
@@ -43,7 +36,6 @@ export const serviceSlice = apiSlice.injectEndpoints({
 
 export const {
   useNewComplaintMutation,
-  useSingleClientComplaintsQuery,
   useSingleComplaintQuery,
   useUpdateComplaintMutation,
   useAllComplaintsQuery,

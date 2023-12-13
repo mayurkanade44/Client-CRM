@@ -1,41 +1,17 @@
 import { Link } from "react-router-dom";
 import { AlertMessage, Loading } from "../components";
-import {
-  useAllComplaintsQuery,
-  useSingleClientComplaintsQuery,
-} from "../redux/serviceSlice";
+import { useAllComplaintsQuery } from "../redux/serviceSlice";
 import { dateFormat, progress } from "../utils/helperFunctions";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 
 const Complaints = () => {
-  const [data, setData] = useState([]);
   const { user } = useSelector((store) => store.helper);
 
-  const {
-    data: clientComplaints,
-    isLoading,
-    isFetching,
-    error,
-  } = useSingleClientComplaintsQuery({}, { skip: user?.role === "Admin" });
-
-  const {
-    data: allComplaints,
-    isLoading: allComplaintsLoading,
-    isFetching: allComplaintsFetching,
-  } = useAllComplaintsQuery({}, { skip: user?.role !== "Admin" });
-
-  useEffect(() => {
-    if (allComplaints) setData(allComplaints);
-    if (clientComplaints) setData(clientComplaints);
-  }, [clientComplaints, allComplaints]);
+  const { data, isLoading, isFetching, error } = useAllComplaintsQuery();
 
   return (
     <>
-      {isLoading ||
-      isFetching ||
-      allComplaintsLoading ||
-      allComplaintsFetching ? (
+      {isLoading || isFetching ? (
         <Loading />
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
@@ -82,7 +58,7 @@ const Complaints = () => {
                   <td className="px-3 border-r text-center border-neutral-500">
                     {user.role === "Admin"
                       ? complaint.client.name
-                      : `${complaint.location.floor}, ${complaint.location.subLocation}, ${complaint.location.location}`}
+                      : `${complaint.location.floor}, ${complaint.location.location}, ${complaint.location.subLocation}`}
                   </td>
                   <td className="px-3 border-r text-center border-neutral-500">
                     {complaint.complaintDetails.service?.join(", ")}

@@ -11,10 +11,8 @@ const router = express.Router();
 
 router.get("/allComplaints", getAllComplaints);
 
-router
-  .route("/clientComplaint/:id")
-  .post(newComplaint)
-  .get(getSingleClientComplaints);
+router.post("/clientComplaint/:id", newComplaint);
+
 router
   .route("/singleComplaint/:id")
   .get(getSingleComplaint)

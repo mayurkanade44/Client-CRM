@@ -71,8 +71,8 @@ const LocationModal = ({ clientId, locationDetails }) => {
       </div>
       <div>
         <InputRow
-          label="Sub Modal"
-          id="subLocation"
+          label="Location"
+          id="location"
           errors={errors}
           register={register}
           disabled={addLoading || updateLoading}
@@ -83,8 +83,8 @@ const LocationModal = ({ clientId, locationDetails }) => {
       </div>
       <div className="md:col-span-2">
         <InputRow
-          label="Location"
-          id="location"
+          label="Sub Location"
+          id="subLocation"
           errors={errors}
           register={register}
           disabled={addLoading || updateLoading}

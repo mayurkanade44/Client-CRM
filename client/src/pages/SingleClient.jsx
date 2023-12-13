@@ -111,7 +111,7 @@ const SingleClient = () => {
                       {location.floor}
                     </td>
                     <td className="px-3 border-r font-normal border-neutral-500">
-                      {location.subLocation}, {location.location}
+                      {location.location}, {location.subLocation}
                     </td>
                     <td className="px-3 border-r font-normal text-center border-neutral-500">
                       {location.service.map((item) => item.label + ", ")}

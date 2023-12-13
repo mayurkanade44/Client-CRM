@@ -152,12 +152,16 @@ export const updateComplaint = async (req, res) => {
 };
 
 export const getAllComplaints = async (req, res) => {
+  let query = {
+    type: "Complaint",
+  };
+  if (req.user.role !== "Admin") {
+    query.client = req.user.client;
+  }
   try {
-    const complaints = await Service.find({ type: "Complaint" }).populate({
-      path: "location",
-      select: "floor subLocation location",
-      path: "client",
-      select: "name",
+    const complaints = await Service.find(query).populate({
+      path: "location client",
+      select: "floor subLocation location name",
     });
 
     return res.status(200).json(complaints);

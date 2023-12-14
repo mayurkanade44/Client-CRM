@@ -1,14 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import {
-  AlertMessage,
-  Button,
-  InputRow,
-  InputSelect,
-  Loading,
-} from "../components";
+import { AlertMessage, Button, InputSelect, Loading } from "../components";
 import { ComplaintModal } from "../components/modals";
 import { toggleModal } from "../redux/helperSlice";
 import { useSingleLocationDetailsQuery } from "../redux/locationSlice";
@@ -24,10 +18,10 @@ const SingleLocation = () => {
   const dispatch = useDispatch();
 
   const { data, isLoading, error } = useSingleLocationDetailsQuery(id);
-  const [regularService] = useRegularServiceMutation();
+  const [regularService, { isLoading: regularLoading }] =
+    useRegularServiceMutation();
 
   const {
-    register,
     formState: { errors },
     handleSubmit,
     reset,
@@ -55,19 +49,22 @@ const SingleLocation = () => {
 
     const form = new FormData();
 
-    value.service.map((item, index) => {
-      return (
-        item.action &&
-        (form.append("name", data.location?.service[index]?.label),
-        form.append("action", item.action.label),
-        form.append("upload", item.image ? true : false),
-        form.append("images", item.image))
-      );
-    });
+    for (let i = 0; i < value.service.length; i++) {
+      const item = value.service[i];
+      if (item.image && !item.action) return toast.error("Action is required");
+      if (item.action) {
+        form.append("name", data.location?.service[i]?.label);
+        form.append("action", item.action.label);
+        form.append("upload", item.image ? true : false);
+        form.append("images", item.image);
+      }
+    }
 
     try {
       const res = await regularService({ id, form }).unwrap();
       toast.success(res.msg);
+      reset();
+      setRegular(false);
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);
@@ -152,7 +149,6 @@ const SingleLocation = () => {
               </table>
             </div>
           )}
-
           <hr className="h-px my-4 border-0 bg-gray-700" />
           {user.type === "PestEmployee" && (
             <div className="flex justify-center items-center">
@@ -216,6 +212,8 @@ const SingleLocation = () => {
                     type="submit"
                     width="w-full"
                     height="h-9"
+                    isLoading={regularLoading}
+                    disabled={regularLoading}
                   />
                 </form>
               )}

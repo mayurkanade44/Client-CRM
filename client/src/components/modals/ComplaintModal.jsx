@@ -1,23 +1,24 @@
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { useAllServiceQuery } from "../../redux/adminSlice";
-import { Button, InputRow, InputSelect, Loading } from "..";
-import { useDispatch, useSelector } from "react-redux";
-import FormModal from "./FormModal";
-import { toggleModal } from "../../redux/helperSlice";
 import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { InputRow, InputSelect } from "..";
+import { useAllServiceQuery } from "../../redux/adminSlice";
+import { toggleModal } from "../../redux/helperSlice";
 import {
   useNewComplaintMutation,
   useUpdateComplaintMutation,
 } from "../../redux/serviceSlice";
 import { jobStatus, operatorComment } from "../../utils/constData";
+import FormModal from "./FormModal";
 
 const ComplaintModal = ({ locationId }) => {
   const [images, setImages] = useState([]);
+
   const dispatch = useDispatch();
   const { isModalOpen, user } = useSelector((store) => store.helper);
 
-  const { data, isLoading, isFetching } = useAllServiceQuery();
+  const { data, isLoading } = useAllServiceQuery();
   const [addComplaint, { isLoading: addLoading }] = useNewComplaintMutation();
   const [updateComplaint, { isLoading: updateLoading }] =
     useUpdateComplaintMutation();

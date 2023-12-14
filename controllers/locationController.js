@@ -129,11 +129,40 @@ export const getLocationDetails = async (req, res) => {
       "complaintDetails.status": { $ne: "Close" },
     });
 
-    return res.json({ location, complaints });
+    let lastServices = [];
+    if (req.user.type === "ClientEmployee") {
+      const ser = await Service.find({ location: id })
+        .sort("-updatedAt")
+        .limit(10);
+      for (let service of ser) {
+        if (service.type === "Regular")
+          lastServices.push({
+            id: service._id,
+            type: service.type,
+            date: service.updatedAt,
+            pest: service.regularService.map((item) => item.name),
+            status: "NA",
+          });
+        else if (
+          service.type === "Complaint" &&
+          service.complaintDetails.status !== "Open"
+        ) {
+          lastServices.push({
+            id: service._id,
+            type: service.type,
+            date: service.updatedAt,
+            pest: service.complaintDetails.service,
+            status: service.complaintDetails.status,
+          });
+        }
+
+        if (lastServices.length === 3) break;
+      }
+    }
+
+    return res.json({ location, complaints, lastServices });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
-
-export const getPestEmployeeLocation = async (req, res) => {};

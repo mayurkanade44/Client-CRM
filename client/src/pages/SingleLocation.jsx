@@ -105,7 +105,6 @@ const SingleLocation = () => {
                     <th className="font-bold text-center border-neutral-500 border-2 px-3">
                       Date
                     </th>
-
                     <th className="font-bold text-center border-neutral-500 border-2 px-3">
                       Pest
                     </th>
@@ -150,6 +149,50 @@ const SingleLocation = () => {
             </div>
           )}
           <hr className="h-px my-4 border-0 bg-gray-700" />
+          {data.lastServices.length > 0 && (
+            <div className="overflow-y-auto my-3">
+              <p className="text-center text-lg font-medium mb-3">Last 3 Recent Services</p>
+              <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">
+                <thead>
+                  <tr className="h-8 w-full leading-none">
+                    <th className="font-bold text-center border-neutral-500 w-40 border-2 px-3">
+                      Type
+                    </th>
+                    <th className="font-bold text-center border-neutral-500 border-2 px-3">
+                      Date
+                    </th>
+                    <th className="font-bold text-center border-neutral-500 border-2 px-3">
+                      Pest
+                    </th>
+                    <th className="font-bold text-center border-neutral-500 border-2 w-24 px-3">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.lastServices?.map((service) => (
+                    <tr
+                      key={service.id}
+                      className="h-8 text-[14px] border-b border-neutral-500 hover:bg-slate-200"
+                    >
+                      <td className="px-3 border-r text-center border-neutral-500">
+                        {service.type}
+                      </td>
+                      <td className="px-3 border-r text-center border-neutral-500">
+                        {dateFormat(service.date)}
+                      </td>
+                      <td className="px-3 border-r text-center border-neutral-500">
+                        {service.pest.join(", ")}
+                      </td>
+                      <td className="px-3 border-r text-center border-neutral-500">
+                        {service.status}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
           {user.type === "PestEmployee" && (
             <div className="flex justify-center items-center">
               {!regular ? (

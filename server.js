@@ -33,7 +33,7 @@ app.use(fileUpload({ useTempFiles: true }));
 if (process.env.NODE_ENV !== "production") app.use(morgan("dev"));
 
 app.use("/api/user", userRoute);
-app.use("/api/client", authorizeUser, clientRoute);
+app.use("/api/client", authenticateUser, clientRoute);
 app.use(
   "/api/admin",
   authenticateUser,

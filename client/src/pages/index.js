@@ -9,3 +9,4 @@ export { default as Services } from "./Services";
 export { default as SingleLocation } from "./SingleLocation";
 export { default as Complaints } from "./Complaints";
 export { default as SingleComplaint } from "./SingleComplaint";
+export { default as Locations } from "./Locations";

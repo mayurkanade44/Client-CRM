@@ -70,10 +70,12 @@ export const addLocation = async (req, res) => {
 export const getAllLocations = async (req, res) => {
   const { id } = req.params;
   try {
-    const client = await Client.findById(id);
+    let clientId = id;
+    if (clientId === "ClientAdmin") clientId = req.user.client;
+    const client = await Client.findById(clientId);
     if (!client) return res.status(404).json({ msg: "Client not found" });
 
-    const locations = await Location.find({ client: id });
+    const locations = await Location.find({ client: clientId });
 
     return res.json({ client, locations });
   } catch (error) {

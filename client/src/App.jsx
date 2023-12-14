@@ -1,18 +1,19 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import {
+  Outlet,
   Route,
+  RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
-  RouterProvider,
-  Outlet,
 } from "react-router-dom";
+
 import {
   Clients,
   Complaints,
   Dashboard,
   Landing,
+  Locations,
   MainLayout,
   Reports,
   Services,
@@ -21,7 +22,6 @@ import {
   SingleLocation,
   Users,
 } from "./pages";
-import { Sidebar } from "./components";
 
 function App() {
   const Layout = () => {
@@ -46,6 +46,7 @@ function App() {
           <Route path="dashboard/reports" element={<Reports />} />
           <Route path="dashboard/services" element={<Services />} />
           <Route path="dashboard/complaints" element={<Complaints />} />
+          <Route path="dashboard/locations" element={<Locations />} />
           <Route path="dashboard/client/:id" element={<SingleClient />} />
           <Route path="/location/:id" element={<SingleLocation />} />
           <Route path="/complaint/:id" element={<SingleComplaint />} />

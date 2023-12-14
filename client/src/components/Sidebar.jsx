@@ -2,7 +2,11 @@ import { useState } from "react";
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { BsBarChartFill, BsDatabaseFillAdd } from "react-icons/bs";
 import { FaBuilding, FaFileAlt, FaPowerOff, FaUser } from "react-icons/fa";
-import { MdOutlineDashboard } from "react-icons/md";
+import {
+  MdOutlineDashboard,
+  MdLocationOn,
+  MdPestControl,
+} from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../assets/logo12.png";
@@ -29,10 +33,16 @@ const navList = [
     role: ["Admin"],
   },
   {
-    icon: <MdOutlineDashboard className="w-6 h-6" />,
+    icon: <MdPestControl className="w-6 h-6" />,
     name: "Complaints",
     to: "/complaints",
     role: ["Admin", "ClientAdmin", "ClientEmployee", "PestEmployee"],
+  },
+  {
+    icon: <MdLocationOn className="w-6 h-6" />,
+    name: "Locations",
+    to: "/locations",
+    role: ["ClientAdmin"],
   },
   {
     icon: <FaUser className="w-6 h-6" />,

@@ -151,7 +151,9 @@ const SingleLocation = () => {
           <hr className="h-px my-4 border-0 bg-gray-700" />
           {data.lastServices.length > 0 && (
             <div className="overflow-y-auto my-3">
-              <p className="text-center text-lg font-medium mb-3">Last 3 Recent Services</p>
+              <p className="text-center text-lg font-medium mb-3">
+                {`Last ${data.lastServices.length} Recent Services`}
+              </p>
               <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">
                 <thead>
                   <tr className="h-8 w-full leading-none">

@@ -8,7 +8,7 @@ export const serviceSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: form,
       }),
-      invalidatesTags: ["Complaint"],
+      invalidatesTags: ["Complaint", "Location"],
     }),
     singleComplaint: builder.query({
       query: (id) => ({
@@ -23,13 +23,20 @@ export const serviceSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: form,
       }),
-      invalidatesTags: ["Complaint"],
+      invalidatesTags: ["Complaint", "Location"],
     }),
     allComplaints: builder.query({
       query: () => ({
         url: "/api/service/allComplaints",
       }),
       providesTags: ["Complaint"],
+    }),
+    regularService: builder.mutation({
+      query: ({ id, form }) => ({
+        url: `/api/service/regular/${id}`,
+        method: "POST",
+        body: form,
+      }),
     }),
   }),
 });
@@ -39,4 +46,5 @@ export const {
   useSingleComplaintQuery,
   useUpdateComplaintMutation,
   useAllComplaintsQuery,
+  useRegularServiceMutation,
 } = serviceSlice;

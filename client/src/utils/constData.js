@@ -14,3 +14,9 @@ export const jobStatus = [
   { label: "In Progress", value: "In Progress" },
   { label: "Close", value: "Close" },
 ];
+
+export const serviceActions = [
+  { label: "Gel", value: "Gel" },
+  { label: "Spray", value: "Spray" },
+  { label: "Gel & Spray", value: "Gel & Spray" },
+];

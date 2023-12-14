@@ -12,7 +12,7 @@ export const locationSlice = apiSlice.injectEndpoints({
     }),
     allLocations: builder.query({
       query: ({ id }) => ({
-        url: `/api/location/${id}`,
+        url: `/api/location/client/${id}`,
       }),
       providesTags: ["Location"],
     }),
@@ -31,9 +31,9 @@ export const locationSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Location"],
     }),
-    clientEmployeeSingleLocation: builder.query({
+    singleLocationDetails: builder.query({
       query: (id) => ({
-        url: `/api/location/clientEmployee/${id}`,
+        url: `/api/location/${id}`,
       }),
       providesTags: ["Location"],
     }),
@@ -45,5 +45,5 @@ export const {
   useAllLocationsQuery,
   useUpdateLocationMutation,
   useDeleteLocationMutation,
-  useClientEmployeeSingleLocationQuery,
+  useSingleLocationDetailsQuery,
 } = locationSlice;

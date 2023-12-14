@@ -76,7 +76,7 @@ const Sidebar = () => {
 
   return (
     <aside className="antialiased">
-      <nav className="bg-slate-200 border-b-2 border-gray-500 py-2 lg:py-2.5 fixed top-0 left-0 lg:left-40 right-0">
+      <nav className="bg-slate-200 border-b-2 z-50 border-gray-500 py-2 lg:py-2.5 fixed top-0 left-0 lg:left-40 right-0">
         <div className="flex justify-between lg:justify-center items-center mx-5">
           <div className="lg:hidden">
             <button onClick={() => setShow(!show)}>
@@ -92,7 +92,7 @@ const Sidebar = () => {
         </div>
       </nav>
       <aside
-        className={`fixed top-0 left-0 w-60 h-screen transition-transform -translate-x-full border-r-2 bg-slate-700 border-gray-500 ${
+        className={`fixed top-0 left-0 w-60 z-50 h-screen transition-transform -translate-x-full border-r-2 bg-slate-700 border-gray-500 ${
           show ? "translate-x-0" : "lg:translate-x-0"
         }`}
       >

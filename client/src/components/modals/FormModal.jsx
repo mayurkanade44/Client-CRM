@@ -12,7 +12,7 @@ const FormModal = ({
 }) => {
   return (
     <div
-      className={`fixed inset-0 flex justify-center  items-center  transition-colors ${
+      className={`fixed inset-0 flex justify-center z-50  items-center  transition-colors ${
         open ? "visible bg-black/20" : "invisible"
       }`}
     >

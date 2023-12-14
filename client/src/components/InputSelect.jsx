@@ -12,7 +12,7 @@ const InputSelect = ({
     <div className="mt-2">
       <label className="block text-md font-medium leading-6 text-gray-900">
         {label}
-        <span className="text-red-500 required-dot ml-0.5">*</span>
+        <span className="text-red-500 ml-0.5">*</span>
       </label>
       <Select
         defaultValue={value}

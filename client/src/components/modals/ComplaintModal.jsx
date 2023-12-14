@@ -12,7 +12,7 @@ import {
 } from "../../redux/serviceSlice";
 import { jobStatus, operatorComment } from "../../utils/constData";
 
-const ComplaintModal = ({ complaintDetails, locationId }) => {
+const ComplaintModal = ({ locationId }) => {
   const [images, setImages] = useState([]);
   const dispatch = useDispatch();
   const { isModalOpen, user } = useSelector((store) => store.helper);
@@ -104,6 +104,7 @@ const ComplaintModal = ({ complaintDetails, locationId }) => {
           errors={errors}
           register={register}
           disabled={isLoading}
+          placeholder="Exact location of pest found"
         />
         <p className="text-xs text-red-500 -bottom-4 pl-1">
           {errors.comment && "Comment is required"}
@@ -165,14 +166,12 @@ const ComplaintModal = ({ complaintDetails, locationId }) => {
         formBody={
           user.type === "ClientEmployee" ? clientFormBody : operatorFormBody
         }
-        submitLabel={`${
-          user.type === "PestEmployee" ? "Update" : "Add"
-        } Complaint`}
+        submitLabel={user.type === "PestEmployee" ? "Update" : "Add Complaint"}
         handleClose={() =>
           dispatch(toggleModal({ name: "complaint", status: false }))
         }
-        disabled={addLoading}
-        isLoading={addLoading}
+        disabled={addLoading || updateLoading}
+        isLoading={addLoading || updateLoading}
         open={isModalOpen.complaint}
       />
     </div>

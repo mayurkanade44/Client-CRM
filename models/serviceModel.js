@@ -2,22 +2,30 @@ import mongoose from "mongoose";
 
 const serviceSchema = new mongoose.Schema(
   {
-    type: { type: String, required: true },
+    type: { type: String, default: "Regular" },
     complaintDetails: {
-      number: { type: String, required: true },
-      service: { type: Array, required: true },
-      status: { type: String, default: "Open" },
-      userName: { type: String, required: true },
+      number: { type: String },
+      service: { type: Array },
+      status: { type: String },
+      userName: { type: String },
       image: [String],
       comment: { type: String },
     },
     complaintUpdate: [
       {
         image: [String],
-        comment: { type: String, required: true },
-        userName: { type: String, required: true },
-        status: { type: String, required: true },
+        comment: { type: String },
+        userName: { type: String },
+        status: { type: String },
         date: { type: Date },
+      },
+    ],
+    regularService: [
+      {
+        name: { type: String },
+        action: { type: String },
+        image: { type: String },
+        userName: { type: String },
       },
     ],
     client: {

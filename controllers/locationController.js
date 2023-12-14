@@ -1,5 +1,6 @@
 import Client from "../models/clientModel.js";
 import Location from "../models/locationModel.js";
+import Service from "../models/serviceModel.js";
 import { qrCodeGenerator, uploadFile } from "../utils/helperFunction.js";
 import fs from "fs";
 
@@ -115,14 +116,20 @@ export const deleteLocation = async (req, res) => {
   }
 };
 
-export const getClientEmployeeLocation = async (req, res) => {
+export const getLocationDetails = async (req, res) => {
   const { id } = req.params;
   try {
     const location = await Location.findById(id);
     if (!location)
       return res.status(404).json({ msg: "Location not found, contact admin" });
 
-    return res.json(location);
+    const complaints = await Service.find({
+      type: "Complaint",
+      location: id,
+      "complaintDetails.status": { $ne: "Close" },
+    });
+
+    return res.json({ location, complaints });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

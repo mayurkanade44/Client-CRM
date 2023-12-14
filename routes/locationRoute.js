@@ -3,17 +3,17 @@ import {
   addLocation,
   deleteLocation,
   getAllLocations,
-  getClientEmployeeLocation,
+  getLocationDetails,
   updateLocation,
 } from "../controllers/locationController.js";
 const router = express.Router();
 
-router.route("/add").post(addLocation);
-router.get("/clientEmployee/:id", getClientEmployeeLocation)
 router
   .route("/:id")
-  .get(getAllLocations)
+  .post(addLocation)
+  .get(getLocationDetails)
   .put(updateLocation)
   .delete(deleteLocation);
+router.get("/client/:id", getAllLocations);
 
 export default router;

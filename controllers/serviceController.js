@@ -48,6 +48,7 @@ export const newComplaint = async (req, res) => {
         number: sr,
         service: req.body.service,
         userName: req.user.name,
+        status: "Open",
         image: imageLinks,
         comment: req.body.comment,
       },
@@ -67,23 +68,6 @@ export const newComplaint = async (req, res) => {
     return res.status(201).json({
       msg: `Your service request is ${complaint.complaintDetails.number}`,
     });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ msg: "Server error, try again later" });
-  }
-};
-
-export const getSingleClientComplaints = async (req, res) => {
-  try {
-    const complaints = await Service.find({
-      client: req.user.client,
-      type: "Complaint",
-    }).populate({
-      path: "location",
-      select: "floor subLocation location",
-    });
-
-    return res.json(complaints);
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });
@@ -165,6 +149,50 @@ export const getAllComplaints = async (req, res) => {
     });
 
     return res.status(200).json(complaints);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const newRegularService = async (req, res) => {
+  const { action } = req.body;
+  const { id } = req.params;
+  try {
+    if (action.length < 1)
+      return res.status(400).json({ msg: "One service action is required" });
+
+    let images = [];
+    if (req.files) {
+      if (req.files.images.length > 0) {
+        images = req.files.images;
+      } else {
+        images.push(req.files.images);
+      }
+    }
+    const regularService = [];
+    const service = req.body;
+    let imageUpload = 0;
+    for (let i = 0; i < action.length; i++) {
+      let link = "";
+      if (service.upload[i] === "true") {
+        link = await uploadFile({ filePath: images[imageUpload].tempFilePath });
+        imageUpload += 1;
+      }
+      regularService.push({
+        name: service.name[i],
+        action: service.action[i],
+        image: link,
+      });
+    }
+
+    await Service.create({
+      regularService,
+      client: req.user.client,
+      location: id,
+    });
+
+    return res.status(201).json({ msg: "Service updated" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

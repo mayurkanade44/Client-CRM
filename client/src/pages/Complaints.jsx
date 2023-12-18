@@ -1,10 +1,14 @@
 import { Link } from "react-router-dom";
-import { AlertMessage, Loading } from "../components";
+import { AlertMessage, Button, Loading } from "../components";
 import { useAllComplaintsQuery } from "../redux/serviceSlice";
 import { dateFormat, progress } from "../utils/helperFunctions";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { toggleModal } from "../redux/helperSlice";
+import { ComplaintModal } from "../components/modals";
 
 const Complaints = () => {
+  const dispatch = useDispatch();
   const { user } = useSelector((store) => store.helper);
 
   const { data, isLoading, isFetching, error } = useAllComplaintsQuery();
@@ -16,6 +20,13 @@ const Complaints = () => {
       ) : (
         error && <AlertMessage>{error?.data?.msg || error.error}</AlertMessage>
       )}
+      <Button
+        label="New Complaint"
+        onClick={() =>
+          dispatch(toggleModal({ name: "complaint", status: true }))
+        }
+      />
+      <ComplaintModal locationId="New Complaint" />
       {data && (
         <div className="overflow-y-auto my-4">
           <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">

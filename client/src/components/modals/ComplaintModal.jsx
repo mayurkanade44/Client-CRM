@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -11,9 +11,12 @@ import {
 } from "../../redux/serviceSlice";
 import { jobStatus, operatorComment } from "../../utils/constData";
 import FormModal from "./FormModal";
+import { useAllLocationsQuery } from "../../redux/locationSlice";
 
 const ComplaintModal = ({ locationId }) => {
   const [images, setImages] = useState([]);
+  const [floor, setFloor] = useState("Select");
+  const [locations, setLocations] = useState([]);
 
   const dispatch = useDispatch();
   const { isModalOpen, user } = useSelector((store) => store.helper);
@@ -22,6 +25,40 @@ const ComplaintModal = ({ locationId }) => {
   const [addComplaint, { isLoading: addLoading }] = useNewComplaintMutation();
   const [updateComplaint, { isLoading: updateLoading }] =
     useUpdateComplaintMutation();
+  const { data: clientLocations, isLoading: locationLoading } =
+    useAllLocationsQuery({
+      id: user.role,
+    });
+
+  useEffect(() => {
+    if (clientLocations) {
+      if (floor !== "Select") {
+        setLocations([]);
+        clientLocations.locations.map(
+          (item) =>
+            item.floor === floor &&
+            setLocations((prev) => [
+              ...prev,
+              {
+                label: `${item.location}, ${item.subLocation}`,
+                value: item._id,
+              },
+            ])
+        );
+      } else {
+        setLocations([]);
+        clientLocations.locations.map((item) =>
+          setLocations((prev) => [
+            ...prev,
+            {
+              label: `${item.location}, ${item.subLocation}`,
+              value: item._id,
+            },
+          ])
+        );
+      }
+    }
+  }, [floor, clientLocations]);
 
   const {
     register,
@@ -31,6 +68,7 @@ const ComplaintModal = ({ locationId }) => {
     control,
   } = useForm({
     defaultValues: {
+      location: "",
       service: "",
       comment: "",
       status: "",
@@ -54,7 +92,10 @@ const ComplaintModal = ({ locationId }) => {
     try {
       let res;
       if (user.type === "ClientEmployee") {
-        res = await addComplaint({ id: locationId, form }).unwrap();
+        res = await addComplaint({
+          id: user.role === "ClientAdmin" ? data.location.value : locationId,
+          form,
+        }).unwrap();
       } else if (user.type === "PestEmployee") {
         res = await updateComplaint({ id: locationId, form }).unwrap();
       }
@@ -68,21 +109,59 @@ const ComplaintModal = ({ locationId }) => {
   };
 
   const clientFormBody = (
-    <div className="grid gap-y-3 mb-4">
-      <Controller
-        name="service"
-        control={control}
-        render={({ field: { onChange, value, ref } }) => (
-          <InputSelect
-            options={data?.services}
-            onChange={onChange}
-            value={value}
-            label="Services"
-            isMulti={true}
+    <div className="grid md:grid-cols-2 gap-y-3 mb-4">
+      {user.role === "ClientAdmin" && (
+        <>
+          <div className="mr-2 mt-2">
+            <label className="block text-md font-medium leading-6 text-gray-900">
+              Floor
+              <span className="text-red-500 ml-0.5">*</span>
+            </label>
+            <select
+              value={floor}
+              onChange={(e) => setFloor(e.target.value)}
+              className="mr-2 mt-0.5 w-full py-0.5 px-2 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black disabled:bg-slate-100"
+            >
+              <option>Select</option>
+              {clientLocations?.locations
+                .map((item) => item.floor)
+                .map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <Controller
+            name="location"
+            control={control}
+            render={({ field: { onChange, value, ref } }) => (
+              <InputSelect
+                options={locations}
+                onChange={onChange}
+                value={value}
+                label="Location"
+              />
+            )}
           />
-        )}
-      />
-      <div>
+        </>
+      )}
+      <div className="col-span-2">
+        <Controller
+          name="service"
+          control={control}
+          render={({ field: { onChange, value, ref } }) => (
+            <InputSelect
+              options={data?.services}
+              onChange={onChange}
+              value={value}
+              label="Services"
+              isMulti={true}
+            />
+          )}
+        />
+      </div>
+      <div className="col-span-2">
         <label
           htmlFor="images"
           className="text-md font-medium leading-6 mr-2 text-gray-900"
@@ -98,7 +177,7 @@ const ComplaintModal = ({ locationId }) => {
           accept="image/*"
         />
       </div>
-      <div>
+      <div className="col-span-2">
         <InputRow
           label="Additional Comment"
           id="comment"

@@ -9,7 +9,7 @@ import { ComplaintModal } from "../components/modals";
 
 const Complaints = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((store) => store.helper);
+  const { user, isModalOpen } = useSelector((store) => store.helper);
 
   const { data, isLoading, isFetching, error } = useAllComplaintsQuery();
 
@@ -26,7 +26,7 @@ const Complaints = () => {
           dispatch(toggleModal({ name: "complaint", status: true }))
         }
       />
-      <ComplaintModal locationId="New Complaint" />
+      {isModalOpen.complaint && <ComplaintModal locationId="New Complaint" />}
       {data && (
         <div className="overflow-y-auto my-4">
           <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">

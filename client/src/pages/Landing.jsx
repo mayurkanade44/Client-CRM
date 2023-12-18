@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Button } from "../components";
 import hotel from "../assets/hotel.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useLoginMutation } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 import { setCredentials } from "../redux/helperSlice";
 
 const Landing = () => {
+  const { user, locationId } = useSelector((store) => store.helper);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -25,7 +26,8 @@ const Landing = () => {
       dispatch(setCredentials({ ...res }));
       toast.success(`Welcome ${res.name}`);
       setForm({ email: "", password: "" });
-      navigate("/dashboard");
+      if (locationId) return navigate(`/location/${locationId}`);
+      navigate("/dashboard/stats");
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);

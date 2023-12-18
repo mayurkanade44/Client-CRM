@@ -22,6 +22,7 @@ import {
   SingleLocation,
   Users,
 } from "./pages";
+import { ProtectedRoute } from "./components";
 
 function App() {
   const Layout = () => {
@@ -40,16 +41,31 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index={true} path="/" element={<Landing />} />
         <Route path="" element={<MainLayout />}>
-          <Route index={true} path="dashboard" element={<Dashboard />} />
-          <Route path="dashboard/clients" element={<Clients />} />
-          <Route path="dashboard/users" element={<Users />} />
-          <Route path="dashboard/reports" element={<Reports />} />
-          <Route path="dashboard/services" element={<Services />} />
-          <Route path="dashboard/complaints" element={<Complaints />} />
-          <Route path="dashboard/locations" element={<Locations />} />
-          <Route path="dashboard/client/:id" element={<SingleClient />} />
-          <Route path="/location/:id" element={<SingleLocation />} />
-          <Route path="/complaint/:id" element={<SingleComplaint />} />
+          <Route path="" element={<ProtectedRoute />}>
+            <Route
+              index={true}
+              path="dashboard/stats"
+              element={<Dashboard />}
+            />
+            <Route path="/location/:id" element={<SingleLocation />} />
+            <Route path="/complaint/:id" element={<SingleComplaint />} />
+          </Route>
+
+          <Route path="" element={<ProtectedRoute roles={["Admin"]} />}>
+            <Route path="dashboard/clients" element={<Clients />} />
+            <Route path="dashboard/services" element={<Services />} />
+            <Route path="dashboard/client/:id" element={<SingleClient />} />
+          </Route>
+
+          <Route
+            path=""
+            element={<ProtectedRoute roles={["Admin", "ClientAdmin"]} />}
+          >
+            <Route path="dashboard/users" element={<Users />} />
+            <Route path="dashboard/reports" element={<Reports />} />
+            <Route path="dashboard/complaints" element={<Complaints />} />
+            <Route path="dashboard/locations" element={<Locations />} />
+          </Route>
         </Route>
       </Route>
     )

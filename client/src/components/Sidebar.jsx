@@ -1,23 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { BsBarChartFill, BsDatabaseFillAdd } from "react-icons/bs";
 import { FaBuilding, FaFileAlt, FaPowerOff, FaUser } from "react-icons/fa";
-import {
-  MdOutlineDashboard,
-  MdLocationOn,
-  MdPestControl,
-} from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { MdLocationOn, MdPestControl } from "react-icons/md";
+import { useSelector, useDispatch } from "react-redux";
+import { useMatch, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../assets/logo12.png";
 import { useLogoutMutation } from "../redux/userSlice";
-import { useSelector } from "react-redux";
+import { removeCredentials } from "../redux/helperSlice";
 
 const navList = [
   {
     icon: <BsBarChartFill className="w-6 h-6 " />,
     name: "Dashboard",
-    to: "",
+    to: "/stats",
     role: ["Admin", "ClientAdmin"],
   },
   {
@@ -61,15 +58,21 @@ const navList = [
 const Sidebar = () => {
   const [show, setShow] = useState(false);
   const [active, setActive] = useState("");
+  const dispatch = useDispatch();
+  const match = useMatch("/:firstRoute/:secondRoute");
+  const { secondRoute } = match.params;
 
   const { user } = useSelector((store) => store.helper);
   const navigate = useNavigate();
 
   const [logout, { isLoading }] = useLogoutMutation();
 
+  
+
   const handleLogout = async () => {
     try {
       const res = await logout().unwrap();
+      dispatch(removeCredentials());
       toast.success(res.msg);
       navigate("/");
     } catch (error) {
@@ -78,10 +81,13 @@ const Sidebar = () => {
     }
   };
 
+  useEffect(() => {
+    setActive(`/${secondRoute}`);
+  }, [secondRoute]);
+
   const handleNavigate = (to) => {
     setShow(!show);
     navigate(`/dashboard${to}`);
-    setActive(to);
   };
 
   return (
@@ -118,7 +124,7 @@ const Sidebar = () => {
           <ul className="space-y-4 mt-5 lg:mt-20">
             {navList.map((item) => {
               return (
-                item.role.includes(user.role) && (
+                item.role.includes(user?.role) && (
                   <li
                     key={item.name}
                     className={`hover:bg-gray-800 px-3 ${

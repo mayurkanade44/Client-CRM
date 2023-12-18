@@ -101,6 +101,7 @@ const ComplaintModal = ({ locationId }) => {
       }
       toast.success(res.msg);
       dispatch(toggleModal({ name: "complaint", status: false }));
+      setFloor("Select");
       reset();
     } catch (error) {
       console.log(error);

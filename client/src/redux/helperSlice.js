@@ -11,6 +11,7 @@ const initialState = {
     user: false,
     complaint: false,
   },
+  locationId: "",
 };
 
 const helperSlice = createSlice({
@@ -28,10 +29,13 @@ const helperSlice = createSlice({
     toggleModal: (state, { payload }) => {
       state.isModalOpen[payload.name] = payload.status;
     },
+    setLocation: (state, { payload }) => {
+      state.locationId = payload.id;
+    },
   },
 });
 
-export const { setCredentials, removeCredentials, toggleModal } =
+export const { setCredentials, removeCredentials, toggleModal, setLocation } =
   helperSlice.actions;
 
 export default helperSlice.reducer;

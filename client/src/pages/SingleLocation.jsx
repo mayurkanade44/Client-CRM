@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { AlertMessage, Button, InputSelect, Loading } from "../components";
 import { ComplaintModal } from "../components/modals";
 import { toggleModal } from "../redux/helperSlice";
 import { useSingleLocationDetailsQuery } from "../redux/locationSlice";
-import { dateFormat, progress } from "../utils/helperFunctions";
-import { serviceActions } from "../utils/constData";
-import { toast } from "react-toastify";
 import { useRegularServiceMutation } from "../redux/serviceSlice";
+import { serviceActions } from "../utils/constData";
+import { dateFormat, progress } from "../utils/helperFunctions";
 
 const SingleLocation = () => {
   const { id } = useParams();

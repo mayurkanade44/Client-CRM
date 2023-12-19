@@ -20,3 +20,16 @@ export const serviceActions = [
   { label: "Spray", value: "Spray" },
   { label: "Gel & Spray", value: "Gel & Spray" },
 ];
+
+export const productActions = [
+  { label: "Cockroach Trap Placed", value: "Cockroach Trap Placed" },
+  {
+    label: "Cockroach Trap Replaced & Placed New",
+    value: "Cockroach Trap Replaced & Placed New",
+  },
+  { label: "Glue Trap Placed", value: "Glue Trap Placed" },
+  {
+    label: "Glue Trap Replaced & Placed New",
+    value: "Glue Trap Replaced & Placed New",
+  },
+];

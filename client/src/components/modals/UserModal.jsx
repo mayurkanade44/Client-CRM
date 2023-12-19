@@ -132,6 +132,7 @@ const UserModal = ({ userDetails }) => {
           errors={errors}
           register={register}
           disabled={addLoading}
+          required={!userDetails}
         />
         <p className="text-xs text-red-500 -bottom-4 pl-1">
           {errors.password && "Password is required"}

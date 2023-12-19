@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true },
     role: { type: String, required: true },
     type: { type: String, required: true },
-    department: { type: String },
+    department: { type: String, required: true },
     client: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Client",

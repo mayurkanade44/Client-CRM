@@ -3,10 +3,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleModal } from "../redux/helperSlice";
 import { UserModal } from "../components/modals";
 import { useAllUserQuery } from "../redux/adminSlice";
+import { useState } from "react";
 
 const Users = () => {
   const dispatch = useDispatch();
+  const [userDetails, setUserDetails] = useState({});
   const { isModalOpen } = useSelector((store) => store.helper);
+
+  const handleUpdateUserModal = (user) => {
+    setUserDetails(user);
+    dispatch(toggleModal({ name: "user", status: true }));
+  };
+
+  const handleNewUserModal = () => {
+    setUserDetails({});
+    dispatch(toggleModal({ name: "user", status: true }));
+  };
 
   const { data, isLoading, isFetching, error } = useAllUserQuery();
 
@@ -22,11 +34,9 @@ const Users = () => {
           <Button
             label="Register User"
             height="h-10"
-            onClick={() =>
-              dispatch(toggleModal({ name: "user", status: true }))
-            }
+            onClick={() => handleNewUserModal()}
           />
-          {isModalOpen.user && <UserModal />}
+          {isModalOpen.user && <UserModal userDetails={userDetails} />}
           <div className="overflow-y-auto my-4">
             <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">
               <thead>
@@ -61,7 +71,11 @@ const Users = () => {
                       {user.department}
                     </td>
                     <td className="px-3 flex border-r font-normal border-neutral-500">
-                      <Button label="Password" color='bg-indigo-500' />
+                      <Button
+                        label="Password"
+                        color="bg-indigo-500"
+                        onClick={() => handleUpdateUserModal(user)}
+                      />
                       <Button label="Delete" color="bg-red-500" />
                     </td>
                   </tr>

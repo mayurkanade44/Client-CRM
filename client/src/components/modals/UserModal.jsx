@@ -4,13 +4,18 @@ import { InputRow } from "..";
 import { useDispatch, useSelector } from "react-redux";
 import FormModal from "./FormModal";
 import { toggleModal } from "../../redux/helperSlice";
-import { useRegisterUserMutation } from "../../redux/adminSlice";
+import {
+  useChangePasswordMutation,
+  useRegisterUserMutation,
+} from "../../redux/adminSlice";
 
 const UserModal = ({ userDetails }) => {
   const dispatch = useDispatch();
   const { isModalOpen, user } = useSelector((store) => store.helper);
 
   const [addUser, { isLoading: addLoading }] = useRegisterUserMutation();
+  const [changePassword, { isLoading: updateLoading }] =
+    useChangePasswordMutation();
 
   const {
     register,
@@ -28,9 +33,18 @@ const UserModal = ({ userDetails }) => {
 
   const submit = async (data) => {
     let res;
-    if(user.role === "Admin") data.department = "Pest Control"
+    if (data.password.length < 5)
+      return toast.error("Password must be of 5 characters or greater");
+    if (user.role === "Admin") data.department = "Pest Control";
     try {
-      res = await addUser(data).unwrap();
+      if (userDetails) {
+        res = await changePassword({
+          id: userDetails._id,
+          data,
+        }).unwrap();
+      } else {
+        res = await addUser(data).unwrap();
+      }
       toast.success(res.msg);
       reset();
       dispatch(toggleModal({ name: "user", status: false }));
@@ -48,20 +62,20 @@ const UserModal = ({ userDetails }) => {
           id="name"
           errors={errors}
           register={register}
-          disabled={addLoading}
+          disabled={addLoading || userDetails}
         />
         <p className="text-xs text-red-500 -bottom-4 pl-1">
           {errors.name && "Name is required"}
         </p>
       </div>
-      {user.role !== "Admin" && (
+      {user.role === "ClientAdmin" && (
         <div>
           <InputRow
             label="Department"
             id="department"
             errors={errors}
             register={register}
-            disabled={addLoading}
+            disabled={addLoading || userDetails}
           />
           <p className="text-xs text-red-500 -bottom-4 pl-1">
             {errors.department && "Department is required"}
@@ -74,7 +88,7 @@ const UserModal = ({ userDetails }) => {
           id="email"
           errors={errors}
           register={register}
-          disabled={addLoading}
+          disabled={addLoading || userDetails}
           type="email"
         />
         <p className="text-xs text-red-500 -bottom-4 pl-1">
@@ -101,7 +115,7 @@ const UserModal = ({ userDetails }) => {
       onSubmit={handleSubmit(submit)}
       title={`${userDetails ? "Update" : "Register"} User`}
       formBody={formBody}
-      submitLabel={`${userDetails ? "Update" : "Add"} User`}
+      submitLabel={userDetails ? "Update Password" : "Add User"}
       handleClose={() => dispatch(toggleModal({ name: "user", status: false }))}
       disabled={addLoading}
       isLoading={addLoading}

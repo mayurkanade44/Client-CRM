@@ -28,6 +28,7 @@ export const registerClient = async (req, res) => {
       email,
       password,
       name,
+      department: "Client Admin",
       role: "ClientAdmin",
       type: "ClientEmployee",
       client: client._id,

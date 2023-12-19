@@ -65,8 +65,35 @@ export const logoutUser = async (req, res) => {
 
 export const getAllUser = async (req, res) => {
   try {
-    const users = await User.find({ client: req.user.client });
+    const users = await User.find({ client: req.user.client }).select(
+      "-password"
+    );
     return res.json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const passwordChange = async (req, res) => {
+  const { id } = req.params;
+  const { password } = req.body;
+  try {
+    if (!password || password.length < 5)
+      return res
+        .status(400)
+        .json({ msg: "Password must be at least 5 characters" });
+
+    const user = await User.findById(id);
+    if (!user) return res.status(400).json({ msg: "User not found" });
+    if (await user.comparePassword(password)) {
+      return res.status(400).json({ msg: "Please provide new password" });
+    }
+
+    user.password = password;
+    await user.save();
+
+    return res.json({ msg: "Password updated successfully" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

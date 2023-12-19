@@ -45,6 +45,13 @@ export const adminSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ["User"],
     }),
+    changePassword: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/api/admin/singleUser/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -55,4 +62,5 @@ export const {
   useDeleteServiceMutation,
   useRegisterUserMutation,
   useAllUserQuery,
+  useChangePasswordMutation,
 } = adminSlice;

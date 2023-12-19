@@ -4,16 +4,28 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "../Button";
 import { toggleModal } from "../../redux/helperSlice";
 
-const DeleteModal = ({ title, description, handleDelete, isLoading, id }) => {
+const DeleteModal = ({
+  title,
+  description,
+  handleDelete,
+  isLoading,
+  id,
+  label,
+}) => {
   const { isModalOpen } = useSelector((store) => store.helper);
   const dispatch = useDispatch();
 
   return (
     <>
       <button
+        className={`flex ${
+          label &&
+          "bg-red-400 rounded-lg hover:opacity-80 h-8 px-2 mt-1 items-center"
+        } `}
         onClick={() => dispatch(toggleModal({ name: "delete", status: id }))}
       >
-        <MdDeleteForever className="w-7 h-7 text-red-600" />
+        <MdDeleteForever className="w-6 h-6 mr-0.5 text-red-600" />
+        <span className="text-white text-[15px] font-semibold">{label}</span>
       </button>
       <div
         className={`fixed inset-0 flex justify-center items-center  transition-colors ${
@@ -27,8 +39,8 @@ const DeleteModal = ({ title, description, handleDelete, isLoading, id }) => {
         >
           <AiOutlineDelete className="text-red-500 mx-auto w-10 h-10" />
           <div className="mx-auto my-1">
-            <h3 className="text-lg font-black text-gray-800">{title}</h3>
-            <p className="text-sm text-gray-700 pt-1">
+            <h3 className="text-lg font-black text-gray-800 text-center">{title}</h3>
+            <p className="text-sm text-gray-700 pt-4">
               Are you sure do you want to delete <b>{description}?</b>
             </p>
           </div>

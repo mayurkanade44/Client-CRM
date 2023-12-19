@@ -1,14 +1,18 @@
 import { AlertMessage, Button, Loading } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleModal } from "../redux/helperSlice";
-import { UserModal } from "../components/modals";
-import { useAllUserQuery } from "../redux/adminSlice";
+import { DeleteModal, UserModal } from "../components/modals";
+import { useAllUserQuery, useDeleteUserMutation } from "../redux/adminSlice";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const Users = () => {
   const dispatch = useDispatch();
-  const [userDetails, setUserDetails] = useState({});
+  const [userDetails, setUserDetails] = useState(null);
   const { isModalOpen } = useSelector((store) => store.helper);
+
+  const { data, isLoading, isFetching, error } = useAllUserQuery();
+  const [deleteUser, { isLoading: deleteLoading }] = useDeleteUserMutation();
 
   const handleUpdateUserModal = (user) => {
     setUserDetails(user);
@@ -16,11 +20,20 @@ const Users = () => {
   };
 
   const handleNewUserModal = () => {
-    setUserDetails({});
+    setUserDetails(null);
     dispatch(toggleModal({ name: "user", status: true }));
   };
 
-  const { data, isLoading, isFetching, error } = useAllUserQuery();
+  const handleDelete = async () => {
+    try {
+      const res = await deleteUser(isModalOpen.delete).unwrap();
+      toast.success(res.msg);
+      dispatch(toggleModal({ name: "delete", status: false }));
+    } catch (error) {
+      console.log(error);
+      toast.error("Error");
+    }
+  };
 
   return (
     <>
@@ -76,7 +89,16 @@ const Users = () => {
                         color="bg-indigo-500"
                         onClick={() => handleUpdateUserModal(user)}
                       />
-                      <Button label="Delete" color="bg-red-500" />
+                      {user.role !== "ClientAdmin" && (
+                        <DeleteModal
+                          label="Delete"
+                          title={`Delete ${user.name}`}
+                          description={`user ${user.name}`}
+                          handleDelete={handleDelete}
+                          isLoading={deleteLoading}
+                          id={user._id}
+                        />
+                      )}
                     </td>
                   </tr>
                 ))}

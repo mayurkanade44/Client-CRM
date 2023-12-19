@@ -99,3 +99,17 @@ export const passwordChange = async (req, res) => {
     res.status(500).json({ msg: "Server error, try again later" });
   }
 };
+
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    if (!user) return res.status(400).json({ msg: "User not found" });
+
+    await User.findByIdAndDelete(id);
+    return res.json({ msg: "User has been deleted" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};

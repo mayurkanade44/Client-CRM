@@ -26,8 +26,9 @@ export const serviceSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Complaint", "Location"],
     }),
     allComplaints: builder.query({
-      query: () => ({
+      query: ({ search, page }) => ({
         url: "/api/service/allComplaints",
+        params: { search, page },
       }),
       providesTags: ["Complaint"],
     }),

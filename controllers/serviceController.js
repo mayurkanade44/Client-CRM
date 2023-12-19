@@ -136,19 +136,45 @@ export const updateComplaint = async (req, res) => {
 };
 
 export const getAllComplaints = async (req, res) => {
+  const { search, page } = req.query;
+
   let query = {
     type: "Complaint",
   };
   if (req.user.role !== "Admin") {
     query.client = req.user.client;
   }
+  if (search) {
+    if (req.user.role !== "Admin") {
+      query = {
+        type: "Complaint",
+        "complaintDetails.number": { $regex: search, $options: "i" },
+        client: req.user.client,
+      };
+    } else {
+      query = {
+        type: "Complaint",
+        "complaintDetails.number": { $regex: search, $options: "i" },
+      };
+    }
+  }
   try {
-    const complaints = await Service.find(query).populate({
-      path: "location client",
-      select: "floor subLocation location name",
-    });
+    let pageNumber = Number(page) || 1;
 
-    return res.status(200).json(complaints);
+    const count = await Service.countDocuments({ ...query });
+
+    const complaints = await Service.find(query)
+      .populate({
+        path: "location client",
+        select: "floor subLocation location name",
+      })
+      .sort("-createdAt")
+      .skip(15 * (pageNumber - 1))
+      .limit(15);
+
+    return res
+      .status(200)
+      .json({ complaints, pages: Math.min(10, Math.ceil(count / 15)) });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

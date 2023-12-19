@@ -8,7 +8,8 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ msg: "Please provide required values" });
 
     const type = req.user.type;
-    const client = req.user.client;
+    let client = req.user.client;
+    if (req.user.role === "Admin") client = req.body.client.value;
 
     const userExists = await User.findOne({ email, client, type });
     if (userExists)
@@ -64,10 +65,17 @@ export const logoutUser = async (req, res) => {
 };
 
 export const getAllUser = async (req, res) => {
+  let query = {};
+  if (req.user.role === "ClientAdmin") {
+    query.client = req.user.client;
+    query.type = "ClientEmployee";
+  } else if (req.user.role === "Admin") {
+    query.type = "PestEmployee";
+  }
   try {
-    const users = await User.find({ client: req.user.client }).select(
-      "-password"
-    );
+    const users = await User.find(query)
+      .select("-password")
+      .populate({ path: "client", select: "name" });
     return res.json(users);
   } catch (error) {
     console.log(error);

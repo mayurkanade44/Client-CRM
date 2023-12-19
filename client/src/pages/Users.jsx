@@ -9,13 +9,16 @@ import { toast } from "react-toastify";
 const Users = () => {
   const dispatch = useDispatch();
   const [userDetails, setUserDetails] = useState(null);
-  const { isModalOpen } = useSelector((store) => store.helper);
+  const { isModalOpen, user: loginUser } = useSelector((store) => store.helper);
 
   const { data, isLoading, isFetching, error } = useAllUserQuery();
   const [deleteUser, { isLoading: deleteLoading }] = useDeleteUserMutation();
 
   const handleUpdateUserModal = (user) => {
-    setUserDetails(user);
+    setUserDetails({
+      ...user,
+      client: { label: user.client.name, value: user.client._id },
+    });
     dispatch(toggleModal({ name: "user", status: true }));
   };
 
@@ -61,7 +64,9 @@ const Users = () => {
                     Email
                   </th>
                   <th className="font-bold text-center border-neutral-500 border-2 px-3">
-                    Department
+                    {loginUser.role === "Client Admin"
+                      ? "Department"
+                      : "Location"}
                   </th>
                   <th className="font-bold max-w-[100px] text-center border-neutral-500 border-2 w-40 px-2">
                     Action
@@ -81,7 +86,9 @@ const Users = () => {
                       {user.email}
                     </td>
                     <td className="px-3 border-r font-normal border-neutral-500">
-                      {user.department}
+                      {loginUser.role === "Client Admin"
+                        ? user.department
+                        : user.client.name}
                     </td>
                     <td className="px-3 flex border-r font-normal border-neutral-500">
                       <Button

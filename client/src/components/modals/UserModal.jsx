@@ -1,15 +1,18 @@
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { InputRow } from "..";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import FormModal from "./FormModal";
-import { toggleModal } from "../../redux/helperSlice";
+import { toast } from "react-toastify";
+import { InputRow, InputSelect } from "..";
 import {
   useChangePasswordMutation,
   useRegisterUserMutation,
 } from "../../redux/adminSlice";
+import { useAllClientsQuery } from "../../redux/clientSlice";
+import { toggleModal } from "../../redux/helperSlice";
+import FormModal from "./FormModal";
 
 const UserModal = ({ userDetails }) => {
+  const [clients, setClients] = useState([]);
   const dispatch = useDispatch();
   const { isModalOpen, user } = useSelector((store) => store.helper);
 
@@ -17,15 +20,28 @@ const UserModal = ({ userDetails }) => {
   const [changePassword, { isLoading: updateLoading }] =
     useChangePasswordMutation();
 
+  const { data, isLoading, error } = useAllClientsQuery();
+
+  useEffect(() => {
+    setClients([]);
+    if (data) {
+      data.map((item) =>
+        setClients((prev) => [...prev, { label: item.name, value: item._id }])
+      );
+    }
+  }, [data]);
+
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
+    control,
   } = useForm({
     defaultValues: userDetails || {
       name: "",
       department: "",
+      client: "",
       email: "",
       password: "",
     },
@@ -68,6 +84,20 @@ const UserModal = ({ userDetails }) => {
           {errors.name && "Name is required"}
         </p>
       </div>
+      {user.role === "Admin" && (
+        <Controller
+          name="client"
+          control={control}
+          render={({ field: { onChange, value, ref } }) => (
+            <InputSelect
+              options={clients}
+              onChange={onChange}
+              value={value}
+              label="Client Name"
+            />
+          )}
+        />
+      )}
       {user.role === "ClientAdmin" && (
         <div>
           <InputRow
@@ -117,8 +147,8 @@ const UserModal = ({ userDetails }) => {
       formBody={formBody}
       submitLabel={userDetails ? "Update Password" : "Add User"}
       handleClose={() => dispatch(toggleModal({ name: "user", status: false }))}
-      disabled={addLoading}
-      isLoading={addLoading}
+      disabled={addLoading || updateLoading}
+      isLoading={addLoading || updateLoading}
       open={isModalOpen.user}
     />
   );

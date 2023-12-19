@@ -59,15 +59,13 @@ const Sidebar = () => {
   const [show, setShow] = useState(false);
   const [active, setActive] = useState("");
   const dispatch = useDispatch();
-  const match = useMatch("/:firstRoute/:secondRoute");
+  const match = useMatch("/:firstRoute/:secondRoute/*");
   const { secondRoute } = match.params;
 
   const { user } = useSelector((store) => store.helper);
   const navigate = useNavigate();
 
   const [logout, { isLoading }] = useLogoutMutation();
-
-  
 
   const handleLogout = async () => {
     try {

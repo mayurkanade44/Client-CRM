@@ -27,7 +27,12 @@ const Landing = () => {
       toast.success(`Welcome ${res.name}`);
       setForm({ email: "", password: "" });
       if (locationId) return navigate(`/location/${locationId}`);
-      navigate("/dashboard/stats");
+      else if (res.type === "ClientEmployee" || res.type === "PestEmployee") {
+        navigate("/dashboard/complaints");
+        return;
+      } else {
+        navigate("/dashboard/stats");
+      }
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);

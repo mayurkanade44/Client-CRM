@@ -47,6 +47,7 @@ function App() {
               path="dashboard/stats"
               element={<Dashboard />}
             />
+            <Route path="dashboard/complaints" element={<Complaints />} />
             <Route path="/location/:id" element={<SingleLocation />} />
             <Route path="/complaint/:id" element={<SingleComplaint />} />
           </Route>
@@ -63,7 +64,6 @@ function App() {
           >
             <Route path="dashboard/users" element={<Users />} />
             <Route path="dashboard/reports" element={<Reports />} />
-            <Route path="dashboard/complaints" element={<Complaints />} />
             <Route path="dashboard/locations" element={<Locations />} />
           </Route>
         </Route>

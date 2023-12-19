@@ -51,7 +51,7 @@ const navList = [
     icon: <FaFileAlt className="w-6 h-6" />,
     name: "Reports",
     to: "/reports",
-    role: ["Admin", "ClientAdmin"],
+    role: ["Admin"],
   },
 ];
 

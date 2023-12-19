@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 import { BsBarChartFill, BsDatabaseFillAdd } from "react-icons/bs";
 import { FaBuilding, FaFileAlt, FaPowerOff, FaUser } from "react-icons/fa";
-import { MdLocationOn, MdPestControl } from "react-icons/md";
-import { useSelector, useDispatch } from "react-redux";
+import { FaBug } from "react-icons/fa6";
+import { MdLocationOn } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import { useMatch, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import logo from "../assets/logo12.png";
-import { useLogoutMutation } from "../redux/userSlice";
 import { removeCredentials } from "../redux/helperSlice";
+import { useLogoutMutation } from "../redux/userSlice";
 
 const navList = [
   {
@@ -30,7 +31,7 @@ const navList = [
     role: ["Admin"],
   },
   {
-    icon: <MdPestControl className="w-6 h-6" />,
+    icon: <FaBug className="w-6 h-6" />,
     name: "Complaints",
     to: "/complaints",
     role: ["Admin", "ClientAdmin", "ClientEmployee", "PestEmployee"],

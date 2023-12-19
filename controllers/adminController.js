@@ -1,4 +1,6 @@
 import Admin from "../models/adminModel.js";
+import Client from "../models/clientModel.js";
+import Service from "../models/serviceModel.js";
 import { capitalLetter } from "../utils/helperFunction.js";
 
 export const addService = async (req, res) => {
@@ -78,6 +80,38 @@ export const deleteService = async (req, res) => {
     await Admin.findByIdAndDelete(id);
 
     return res.json({ msg: "Successfully deleted" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const clientAdminDashboard = async (req, res) => {
+  try {
+    const client = await Client.findById(req.user.client);
+    if (!client) return res.status(404).json({ msg: "Client not found" });
+
+    const complaints = await Service.find({
+      type: "Complaint",
+      client: req.user.client,
+    })
+      .sort("-updatedAt")
+      .populate({ path: "location", select:"floor subLocation location" });
+
+    const complaintData = [complaints.length, 0, 0, 0];
+
+    for (let complaint of complaints) {
+      if (complaint.complaintDetails.status === "Open") complaintData[1] += 1;
+      else if (complaint.complaintDetails.status === "In Progress")
+        complaintData[2] += 1;
+      else if (complaint.complaintDetails.status === "Close")
+        complaintData[3] += 1;
+    }
+
+    return res.json({
+      complaintData,
+      latestComplaints: complaints.slice(0, 5),
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

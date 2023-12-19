@@ -1,6 +1,7 @@
 import express from "express";
 import {
   addService,
+  clientAdminDashboard,
   deleteService,
   editService,
   getAllService,
@@ -16,6 +17,7 @@ const router = express.Router();
 
 router.route("/user").post(registerUser).get(getAllUser);
 router.route("/service").post(addService).get(getAllService);
+router.get("/clientAdminDashboard", clientAdminDashboard);
 router.route("/singleService/:id").put(editService).delete(deleteService);
 router.route("/singleUser/:id").put(passwordChange).delete(deleteUser);
 

@@ -60,6 +60,11 @@ export const adminSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+    clientAdminDashboard: builder.query({
+      query: () => ({
+        url: `/api/admin/clientAdminDashboard`,
+      }),
+    }),
   }),
 });
 
@@ -72,4 +77,5 @@ export const {
   useAllUserQuery,
   useChangePasswordMutation,
   useDeleteUserMutation,
+  useClientAdminDashboardQuery,
 } = adminSlice;

@@ -71,6 +71,11 @@ const SingleLocation = () => {
     }
   };
 
+  const handleCancel = () => {
+    setRegular(false);
+    reset();
+  };
+
   return (
     <>
       {isLoading ? (
@@ -207,7 +212,7 @@ const SingleLocation = () => {
                   onSubmit={handleSubmit(submit)}
                   className="w-[70%] md:w-[40%]"
                 >
-                  {data.location?.service?.map((service, index) => (
+                  {data.location.service?.map((service, index) => (
                     <div key={index} className="mt-4">
                       <p className="text-center font-medium text-lg">
                         {service.label}
@@ -252,14 +257,23 @@ const SingleLocation = () => {
                       <hr className="h-px mt-5 mb-4 border-0 bg-gray-700" />
                     </div>
                   ))}
-                  <Button
-                    label="Submit"
-                    type="submit"
-                    width="w-full"
-                    height="h-9"
-                    isLoading={regularLoading}
-                    disabled={regularLoading}
-                  />
+                  <div className="flex justify-center">
+                    <Button
+                      label="Submit"
+                      type="submit"
+                      height="h-9"
+                      width="w-[45%]"
+                      isLoading={regularLoading}
+                      disabled={regularLoading}
+                    />
+                    <Button
+                      label="Cancel"
+                      color="bg-red-600"
+                      height="h-9"
+                      width="w-[45%]"
+                      onClick={handleCancel}
+                    />
+                  </div>
                 </form>
               )}
             </div>

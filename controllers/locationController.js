@@ -121,9 +121,11 @@ export const deleteLocation = async (req, res) => {
 export const getLocationDetails = async (req, res) => {
   const { id } = req.params;
   try {
-    const location = await Location.findById(id);
+    let location = await Location.findById(id);
     if (!location)
       return res.status(404).json({ msg: "Location not found, contact admin" });
+
+    location.service = location.service.concat(location.product);
 
     const complaints = await Service.find({
       type: "Complaint",

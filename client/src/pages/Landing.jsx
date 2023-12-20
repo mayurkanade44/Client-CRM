@@ -27,7 +27,7 @@ const Landing = () => {
       toast.success(`Welcome ${res.name}`);
       setForm({ email: "", password: "" });
       if (locationId) return navigate(`/location/${locationId}`);
-      else if (res.type === "ClientEmployee" || res.type === "PestEmployee") {
+      else if (res.role === "ClientEmployee" || res.role === "PestEmployee") {
         navigate("/dashboard/complaints");
         return;
       } else {

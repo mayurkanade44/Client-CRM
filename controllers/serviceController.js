@@ -199,7 +199,7 @@ export const newRegularService = async (req, res) => {
     const regularService = [];
     const service = req.body;
     let imageUpload = 0;
-    for (let i = 0; i < action.length; i++) {
+    for (let i = 1; i < action.length; i++) {
       let link = "";
       if (service.upload[i] === "true") {
         link = await uploadFile({ filePath: images[imageUpload].tempFilePath });

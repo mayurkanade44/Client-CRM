@@ -76,8 +76,12 @@ const ComplaintModal = ({ locationId }) => {
   });
 
   const submit = async (data) => {
-    if (images.length < 1) return toast.error("Atleast one image is required");
-    if (images.length > 2) return toast.error("Maximum 2 images are required");
+    if (user.type === "PestEmployee") {
+      if (images.length < 1)
+        return toast.error("Atleast one image is required");
+      if (images.length > 2)
+        return toast.error("Maximum 2 images are required");
+    }
 
     const form = new FormData();
     images.map((image) => form.append("images", image));
@@ -124,33 +128,38 @@ const ComplaintModal = ({ locationId }) => {
               className="mr-2 mt-0.5 w-full py-0.5 px-2 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black disabled:bg-slate-100"
             >
               <option>Select</option>
-              {clientLocations?.locations
-                .map((item) => item.floor)
-                .map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
-                  </option>
-                ))}
+              {clientLocations?.floors.map((item, index) => (
+                <option key={index} value={item}>
+                  {item}
+                </option>
+              ))}
             </select>
           </div>
-          <Controller
-            name="location"
-            control={control}
-            render={({ field: { onChange, value, ref } }) => (
-              <InputSelect
-                options={locations}
-                onChange={onChange}
-                value={value}
-                label="Location"
-              />
-            )}
-          />
+          <div>
+            <Controller
+              name="location"
+              control={control}
+              rules={{ required: "Location is required" }}
+              render={({ field: { onChange, value, ref } }) => (
+                <InputSelect
+                  options={locations}
+                  onChange={onChange}
+                  value={value}
+                  label="Location"
+                />
+              )}
+            />
+            <p className="text-xs text-red-500 -bottom-4 pl-1">
+              {errors.location?.message}
+            </p>
+          </div>
         </>
       )}
       <div className="col-span-2">
         <Controller
           name="service"
           control={control}
+          rules={{ required: "Select service name" }}
           render={({ field: { onChange, value, ref } }) => (
             <InputSelect
               options={data?.services}
@@ -161,6 +170,9 @@ const ComplaintModal = ({ locationId }) => {
             />
           )}
         />
+        <p className="text-xs text-red-500 -bottom-4 pl-1">
+          {errors.service?.message}
+        </p>
       </div>
       <div className="col-span-2">
         <label
@@ -196,30 +208,42 @@ const ComplaintModal = ({ locationId }) => {
 
   const operatorFormBody = (
     <div className="grid gap-y-3 mb-4">
-      <Controller
-        name="comment"
-        control={control}
-        render={({ field: { onChange, value, ref } }) => (
-          <InputSelect
-            options={operatorComment}
-            onChange={onChange}
-            value={value}
-            label="Job Comment"
-          />
-        )}
-      />
-      <Controller
-        name="status"
-        control={control}
-        render={({ field: { onChange, value, ref } }) => (
-          <InputSelect
-            options={jobStatus}
-            onChange={onChange}
-            value={value}
-            label="Complaint Status"
-          />
-        )}
-      />
+      <div>
+        <Controller
+          name="comment"
+          control={control}
+          rules={{ required: "Job comment is required" }}
+          render={({ field: { onChange, value, ref } }) => (
+            <InputSelect
+              options={operatorComment}
+              onChange={onChange}
+              value={value}
+              label="Job Comment"
+            />
+          )}
+        />
+        <p className="text-xs text-red-500 -bottom-4 pl-1">
+          {errors.comment?.message}
+        </p>
+      </div>
+      <div>
+        <Controller
+          name="status"
+          control={control}
+          rules={{ required: "Complaint status is required" }}
+          render={({ field: { onChange, value, ref } }) => (
+            <InputSelect
+              options={jobStatus}
+              onChange={onChange}
+              value={value}
+              label="Complaint Status"
+            />
+          )}
+        />
+        <p className="text-xs text-red-500 -bottom-4 pl-1">
+          {errors.status?.message}
+        </p>
+      </div>
       <div>
         <label
           htmlFor="images"

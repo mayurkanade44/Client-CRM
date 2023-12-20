@@ -49,6 +49,10 @@ const SingleLocation = () => {
 
     const form = new FormData();
 
+    form.append("name", "NA");
+    form.append("action", "NA");
+    form.append("upload", false);
+
     for (let i = 0; i < value.service.length; i++) {
       const item = value.service[i];
       if (item.image && !item.action) return toast.error("Action is required");

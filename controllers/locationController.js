@@ -33,7 +33,7 @@ export const addLocation = async (req, res) => {
     const qrData = await qrCodeGenerator({
       link: `https://www.pestXz/location/${locationId}`,
       floor,
-      location: `${subLocation}, ${location}`,
+      location: `${location}, ${subLocation}`,
     });
     if (!qrData) {
       await Location.findByIdAndDelete(locationId);
@@ -76,8 +76,12 @@ export const getAllLocations = async (req, res) => {
     if (!client) return res.status(404).json({ msg: "Client not found" });
 
     const locations = await Location.find({ client: clientId });
+    const floors = [];
+    locations.map(
+      (item) => !floors.includes(item.floor) && floors.push(item.floor)
+    );
 
-    return res.json({ client, locations });
+    return res.json({ client, locations, floors });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

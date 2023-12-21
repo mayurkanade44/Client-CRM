@@ -96,16 +96,14 @@ const Users = () => {
                         color="bg-indigo-500"
                         onClick={() => handleUpdateUserModal(user)}
                       />
-                      {user.role !== "ClientAdmin" && (
-                        <DeleteModal
-                          label="Delete"
-                          title={`Delete ${user.name}`}
-                          description={`user ${user.name}`}
-                          handleDelete={handleDelete}
-                          isLoading={deleteLoading}
-                          id={user._id}
-                        />
-                      )}
+                      <DeleteModal
+                        label="Delete"
+                        title={`Delete`}
+                        description="this user"
+                        handleDelete={handleDelete}
+                        isLoading={deleteLoading}
+                        id={user._id}
+                      />
                     </td>
                   </tr>
                 ))}

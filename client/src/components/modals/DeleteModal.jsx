@@ -28,7 +28,7 @@ const DeleteModal = ({
         <span className="text-white text-[15px] font-semibold">{label}</span>
       </button>
       <div
-        className={`fixed inset-0 flex justify-center items-center  transition-colors ${
+        className={`fixed inset-0 z-50 flex justify-center items-center  transition-colors ${
           isModalOpen.delete ? "visible bg-black/20" : "invisible"
         }`}
       >

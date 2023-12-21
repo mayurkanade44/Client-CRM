@@ -130,7 +130,7 @@ const SingleClient = () => {
                         }
                       />
                     </td>
-                    <td className="flex justify-center items-center font-normal text-center border-neutral-500">
+                    <td className="flex items-center justify-center h-9 space-x-3 font-normal text-center border-neutral-500">
                       <button
                         type="button"
                         onClick={() => handleEditModal(location)}

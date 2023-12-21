@@ -129,6 +129,9 @@ export const getLocationDetails = async (req, res) => {
     if (!location)
       return res.status(404).json({ msg: "Location not found, contact admin" });
 
+    if (req.user.role !== "Admin" && location.client !== req.user.client)
+      return res.status(401).json({ msg: "You are not authorized" });
+
     location.service = location.service.concat(location.product);
 
     const complaints = await Service.find({

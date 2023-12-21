@@ -212,6 +212,7 @@ export const newRegularService = async (req, res) => {
         name: service.name[i],
         action: service.action[i],
         image: link,
+        userName: req.user.name,
       });
     }
 
@@ -246,6 +247,9 @@ export const dailyServiceReport = async (req, res) => {
           $lt: today,
         },
       },
+      populate: {
+        path: "location",
+      },
     });
 
     for (let client of clients) {
@@ -257,42 +261,53 @@ export const dailyServiceReport = async (req, res) => {
         for (let i = 0; i < client.services.length; i++) {
           let row = worksheet.getRow(i + 4);
           const service = client.services[i];
+          const location = `${service.location.floor}, ${service.location.location}, ${service.location.subLocation}`;
           if (
             service.type === "Complaint" &&
             service.complaintUpdate.length > 0
           ) {
             let length = service.complaintUpdate.length - 1;
             row.getCell(1).value = "Complaint";
-            row.getCell(2).value = new Date(service.updatedAt + "Z");
-            row.getCell(3).value = service.complaintDetails.service.join(", ");
-            row.getCell(4).value = "NA";
-            row.getCell(5).value = service.complaintUpdate[length].status;
-            row.getCell(6).value = service.complaintUpdate[length].comment;
-            row.getCell(7).value = service.complaintUpdate[length].userName;
-            row.getCell(8).value = service.complaintUpdate[length].image
-              .length >= 1 && {
-              text: "Download",
-              hyperlink: service.complaintUpdate[length].image[0],
-            };
-            row.getCell(9).value = service.complaintUpdate[length].image
-              .length >= 2 && {
-              text: "Download",
-              hyperlink: service.complaintUpdate[length].image[1],
-            };
+            row.getCell(2).value = moment(service.updatedAt)
+              .local()
+              .format("HH:mm:ss");
+            row.getCell(3).value = location;
+            row.getCell(4).value = service.complaintDetails.service.join(", ");
+            row.getCell(5).value = "NA";
+            row.getCell(6).value = service.complaintUpdate[length].status;
+            row.getCell(7).value = service.complaintUpdate[length].comment;
+            row.getCell(8).value = service.complaintUpdate[length].userName;
+            row.getCell(9).value =
+              (service.complaintUpdate[length].image.length >= 1 && {
+                text: "Download",
+                hyperlink: service.complaintUpdate[length].image[0],
+              }) ||
+              "No Image";
+            row.getCell(10).value =
+              (service.complaintUpdate[length].image.length >= 2 && {
+                text: "Download",
+                hyperlink: service.complaintUpdate[length].image[1],
+              }) ||
+              "No Image";
             row.commit();
           } else {
             for (let regular of service.regularService) {
               row.getCell(1).value = "Regular";
-              row.getCell(2).value = new Date(service.updatedAt + "Z");
-              row.getCell(3).value = regular.name;
-              row.getCell(4).value = regular.action;
-              row.getCell(5).value = "NA";
+              row.getCell(2).value = moment(service.updatedAt)
+                .local()
+                .format("HH:mm:ss");
+              row.getCell(3).value = location;
+              row.getCell(4).value = regular.name;
+              row.getCell(5).value = regular.action;
               row.getCell(6).value = "NA";
-              row.getCell(7).value = regular.username;
-              row.getCell(8).value = regular.image.length > 1 && {
-                text: "Download",
-                hyperlink: regular.image,
-              };
+              row.getCell(7).value = "NA";
+              row.getCell(8).value = regular.username;
+              row.getCell(9).value =
+                (regular.image.length > 1 && {
+                  text: "Download",
+                  hyperlink: regular.image,
+                }) ||
+                "No Image";
               row.commit();
             }
           }

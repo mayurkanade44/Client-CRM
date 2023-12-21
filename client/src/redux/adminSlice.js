@@ -12,7 +12,7 @@ export const adminSlice = apiSlice.injectEndpoints({
     }),
     allService: builder.query({
       query: () => ({
-        url: "/api/admin/service",
+        url: "/api/location/allServices",
       }),
       providesTags: ["Admin"],
     }),

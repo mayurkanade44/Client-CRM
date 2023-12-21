@@ -26,9 +26,12 @@ const ComplaintModal = ({ locationId }) => {
   const [updateComplaint, { isLoading: updateLoading }] =
     useUpdateComplaintMutation();
   const { data: clientLocations, isLoading: locationLoading } =
-    useAllLocationsQuery({
-      id: user.role,
-    });
+    useAllLocationsQuery(
+      {
+        id: user.role,
+      },
+      { skip: user.role !== "ClientAdmin" }
+    );
 
   useEffect(() => {
     if (clientLocations) {

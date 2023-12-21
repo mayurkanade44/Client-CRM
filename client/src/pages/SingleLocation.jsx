@@ -13,7 +13,7 @@ import { dateFormat, progress } from "../utils/helperFunctions";
 
 const SingleLocation = () => {
   const { id } = useParams();
-  const { user } = useSelector((store) => store.helper);
+  const { user, isModalOpen } = useSelector((store) => store.helper);
   const [regular, setRegular] = useState(false);
   const dispatch = useDispatch();
 
@@ -100,7 +100,7 @@ const SingleLocation = () => {
                   dispatch(toggleModal({ name: "complaint", status: true }))
                 }
               />
-              <ComplaintModal locationId={id} />
+              {isModalOpen.complaint && <ComplaintModal locationId={id} />}
             </>
           )}
           {data.complaints?.length > 0 && (

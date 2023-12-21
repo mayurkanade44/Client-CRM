@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../components";
 import hotel from "../assets/hotel.png";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,17 @@ const Landing = () => {
   });
 
   const [login, { isLoading }] = useLoginMutation();
+
+  useEffect(() => {
+    if (user) {
+      if (user.role === "ClientEmployee" || user.role === "PestEmployee") {
+        navigate("/dashboard/complaints");
+        return;
+      } else {
+        navigate("/dashboard/stats");
+      }
+    }
+  }, [user]);
 
   const submitLogin = async (e) => {
     e.preventDefault();

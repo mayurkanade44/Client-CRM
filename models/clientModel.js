@@ -7,8 +7,15 @@ const clientSchema = new mongoose.Schema(
     contractNo: { type: String, required: true },
     email: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true, toObject: { virtuals: true }, toJSON: { virtuals: true } }
 );
+
+clientSchema.virtual("services", {
+  ref: "Service",
+  localField: "_id",
+  foreignField: "client",
+  justOne: false,
+});
 
 const Client = mongoose.model("Client", clientSchema);
 export default Client;

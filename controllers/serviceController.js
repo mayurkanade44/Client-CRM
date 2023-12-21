@@ -1,5 +1,8 @@
 import Service from "../models/serviceModel.js";
+import Client from "../models/clientModel.js";
 import { uploadFile } from "../utils/helperFunction.js";
+import moment from "moment";
+import exceljs from "exceljs";
 
 export const newComplaint = async (req, res) => {
   try {
@@ -219,6 +222,76 @@ export const newRegularService = async (req, res) => {
     });
 
     return res.status(201).json({ msg: "Service updated" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const dailyServiceReport = async (req, res) => {
+  try {
+    const date = new Date();
+    const today = date.setUTCHours(0, 0, 0, 0);
+    const yesterday = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    ).setUTCHours(0, 0, 0, 0);
+
+    const clients = await Client.find().populate({
+      path: "services",
+      match: {
+        updatedAt: {
+          $gte: yesterday,
+          $lt: today,
+        },
+      },
+    });
+
+    for (let client of clients) {
+      if (client.services.length > 0) {
+        const workbook = new exceljs.Workbook();
+        await workbook.xlsx.readFile("./tmp/dailyReport.xlsx");
+        let worksheet = workbook.getWorksheet("Sheet1");
+
+        for (let i = 0; i < client.services.length; i++) {
+          let row = worksheet.getRow(i + 4);
+          const service = client.services[i];
+          if (
+            service.type === "Complaint" &&
+            service.complaintUpdate.length > 0
+          ) {
+            let length = service.complaintUpdate.length - 1;
+            row.getCell(1).value = "Complaint";
+            row.getCell(2).value = service.updatedAt;
+            row.getCell(3).value = service.complaintDetails.service.join(", ");
+            row.getCell(4).value = "NA";
+            row.getCell(5).value = service.complaintUpdate[length].status;
+            row.getCell(6).value = service.complaintUpdate[length].comment;
+            row.getCell(7).value = service.complaintUpdate[length].userName;
+            row.getCell(8).value = service.complaintUpdate[length].image[0];
+            row.getCell(9).value = service.complaintUpdate[length].image[1];
+            row.commit();
+          } else {
+            for (let regular of service.regularService) {
+              row.getCell(1).value = "Regular";
+              row.getCell(2).value = service.updatedAt;
+              row.getCell(3).value = regular.name;
+              row.getCell(4).value = regular.action;
+              row.getCell(5).value = "NA";
+              row.getCell(6).value = "NA";
+              row.getCell(7).value = regular.username;
+              row.getCell(8).value = regular.image;
+              row.commit();
+            }
+          }
+        }
+        const filePath = `./tmp/${client.name}_Daily_Service_Report.xlsx`;
+        await workbook.xlsx.writeFile(filePath);
+      }
+    }
+
+    return res.json({ msg: "Report generated" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

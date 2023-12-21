@@ -96,6 +96,7 @@ export const sendEmail = async ({
       name: "EPCORN",
       email: process.env.NO_REPLY_EMAIL,
     };
+    sendSmtpEmail.cc = { email: process.env.NO_REPLY_EMAIL };
     sendSmtpEmail.to = emailList;
     sendSmtpEmail.params = dynamicData;
     sendSmtpEmail.templateId = templateId;

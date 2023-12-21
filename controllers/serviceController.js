@@ -316,7 +316,7 @@ export const dailyServiceReport = async (req, res) => {
         await workbook.xlsx.writeFile(filePath);
         const link = await uploadFile({ filePath });
         if (link) {
-          const mail = await sendEmail({
+          await sendEmail({
             attachment: [
               {
                 url: link,
@@ -324,7 +324,7 @@ export const dailyServiceReport = async (req, res) => {
               },
             ],
             emailList: [{ email: client.email }],
-            templateId: 6,
+            templateId: 1,
             dynamicData: {
               subject: `Daily Service Report`,
               description: `Open/Unverified Single Service Slip report till`,

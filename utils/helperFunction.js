@@ -3,6 +3,7 @@ import QRCode from "qrcode";
 import fs from "fs";
 import { createCanvas, loadImage } from "canvas";
 import { v2 as cloudinary } from "cloudinary";
+import brevo from "@getbrevo/brevo";
 
 export const capitalLetter = (name) => {
   return name
@@ -75,6 +76,34 @@ export const uploadFile = async ({ filePath }) => {
     return result.secure_url;
   } catch (error) {
     console.log("Upload Error", error);
+    return false;
+  }
+};
+
+export const sendEmail = async ({
+  attachment,
+  dynamicData,
+  emailList,
+  templateId,
+}) => {
+  try {
+    let apiInstance = new brevo.TransactionalEmailsApi();
+    let apiKey = apiInstance.authentications["apiKey"];
+    apiKey.apiKey = process.env.BREVO_KEY;
+    let sendSmtpEmail = new brevo.SendSmtpEmail();
+
+    sendSmtpEmail.sender = {
+      name: "EPCORN",
+      email: process.env.NO_REPLY_EMAIL,
+    };
+    sendSmtpEmail.to = emailList;
+    sendSmtpEmail.params = dynamicData;
+    sendSmtpEmail.templateId = templateId;
+    if (attachment) sendSmtpEmail.attachment = attachment;
+    await apiInstance.sendTransacEmail(sendSmtpEmail);
+    return true;
+  } catch (error) {
+    console.log(error);
     return false;
   }
 };

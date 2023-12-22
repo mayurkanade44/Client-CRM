@@ -114,6 +114,7 @@ export const deleteLocation = async (req, res) => {
     const location = await Location.findById(id);
     if (!location) return res.status(404).json({ msg: "Location not found" });
 
+    await Service.deleteMany({ location: id });
     await Location.findByIdAndDelete(id);
     return res.json({ msg: "Location & all its records deleted" });
   } catch (error) {
@@ -129,8 +130,13 @@ export const getLocationDetails = async (req, res) => {
     if (!location)
       return res.status(404).json({ msg: "Location not found, contact admin" });
 
-    if (req.user.role !== "Admin" && location.client !== req.user.client)
+    if (
+      req.user.role !== "Admin" &&
+      location.client.toString() !== req.user.client.toString()
+    ) {
+      console.log("ok");
       return res.status(401).json({ msg: "You are not authorized" });
+    }
 
     location.service = location.service.concat(location.product);
 

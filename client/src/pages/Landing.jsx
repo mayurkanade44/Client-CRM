@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Button } from "../components";
-import hotel from "../assets/hotel.png";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { useLoginMutation } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import logo from '../assets/logo1.png';
+import { Button } from "../components";
 import { setCredentials } from "../redux/helperSlice";
+import { useLoginMutation } from "../redux/userSlice";
 
 const Landing = () => {
   const { user, locationId } = useSelector((store) => store.helper);
@@ -53,12 +53,11 @@ const Landing = () => {
   return (
     <section className="bg-gray-700 bg-opacity-60 bg-[url('https://res.cloudinary.com/djc8opvcg/image/upload/v1701669902/samples/Caravela_Beach_Resort_eukgag.jpg')] bg-cover bg-center bg-no-repeat bg-blend-multiply">
       <div className="pt:mt-0 mx-auto flex flex-col items-center justify-center px-6 py-8 h-screen">
-        <div className="mb-6 flex items-center text-3xl font-semibold text-white">
-          <img className="mr-5 h-10 w-10" src={hotel} alt="logo" />
-          Client CRM
-        </div>
         <div className="w-[350px] rounded-lg bg-white shadow dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
-          <div className="space-y-4 p-6 sm:p-8 md:space-y-6 lg:space-y-8">
+          <div className="space-y-4 p-6 sm:p-8">
+            <div className="flex justify-center">
+              <img className="w-40" src={logo} alt="logo" />
+            </div>
             <h1 className="text-center text-xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
               Sign in to your account
             </h1>

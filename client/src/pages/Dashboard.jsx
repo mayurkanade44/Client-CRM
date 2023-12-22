@@ -37,6 +37,7 @@ const Dashboard = () => {
   const { user } = useSelector((store) => store.helper);
 
   const { data, isLoading, error } = useClientAdminDashboardQuery();
+
   return (
     <div>
       {isLoading ? (

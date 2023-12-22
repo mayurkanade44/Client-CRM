@@ -69,7 +69,7 @@ export const newComplaint = async (req, res) => {
     });
 
     return res.status(201).json({
-      msg: `Your service request is ${complaint.complaintDetails.number}`,
+      msg: `Your complaint number is ${complaint.complaintDetails.number}`,
     });
   } catch (error) {
     console.log(error);
@@ -139,7 +139,7 @@ export const updateComplaint = async (req, res) => {
 };
 
 export const getAllComplaints = async (req, res) => {
-  const { search, page } = req.query;
+  const { search, page, location } = req.query;
 
   let query = {
     type: "Complaint",
@@ -151,8 +151,8 @@ export const getAllComplaints = async (req, res) => {
     if (req.user.role !== "Admin") {
       query = {
         type: "Complaint",
-        "complaintDetails.number": { $regex: search, $options: "i" },
         client: req.user.client,
+        "complaintDetails.number": { $regex: search, $options: "i" },
       };
     } else {
       query = {
@@ -164,9 +164,7 @@ export const getAllComplaints = async (req, res) => {
   try {
     let pageNumber = Number(page) || 1;
 
-    const count = await Service.countDocuments({ ...query });
-
-    const complaints = await Service.find(query)
+    let complaints = await Service.find(query)
       .populate({
         path: "location client",
         select: "floor subLocation location name",
@@ -175,9 +173,16 @@ export const getAllComplaints = async (req, res) => {
       .skip(15 * (pageNumber - 1))
       .limit(15);
 
-    return res
-      .status(200)
-      .json({ complaints, pages: Math.min(10, Math.ceil(count / 15)) });
+    if (location !== "All") {
+      complaints = complaints.filter(
+        (complaint) => complaint.location.floor === location
+      );
+    }
+
+    return res.status(200).json({
+      complaints,
+      pages: Math.min(10, Math.ceil(complaints.length / 15)),
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

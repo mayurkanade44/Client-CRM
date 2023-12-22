@@ -8,17 +8,27 @@ import { toggleModal } from "../redux/helperSlice";
 import { ComplaintModal } from "../components/modals";
 import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 import { useState } from "react";
+import { useAllLocationsQuery } from "../redux/locationSlice";
 
 const Complaints = () => {
   const [page, setPage] = useState(1);
   const [tempSearch, setTempSearch] = useState("");
   const [search, setSearch] = useState("");
+  const [location, setLocation] = useState("All");
   const dispatch = useDispatch();
   const { user, isModalOpen } = useSelector((store) => store.helper);
 
+  const { data: clientLocations, isLoading: locationLoading } =
+    useAllLocationsQuery(
+      {
+        id: user.role,
+      },
+      { skip: user.role !== "ClientAdmin" }
+    );
   const { data, isLoading, isFetching, error } = useAllComplaintsQuery({
     search,
     page,
+    location,
   });
 
   const pages = Array.from({ length: data?.pages }, (_, index) => index + 1);
@@ -31,6 +41,7 @@ const Complaints = () => {
   const clearSearch = () => {
     setTempSearch("");
     setSearch("");
+    setLocation("All");
   };
   return (
     <>
@@ -56,6 +67,18 @@ const Complaints = () => {
               </button>
             )}
           </div>
+          <select
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="mr-2 mt-0.5 w-40 py-0.5 h-[34px] px-2 border-2 rounded-md outline-none transition border-neutral-300 focus:border-black disabled:bg-slate-100"
+          >
+            <option>All</option>
+            {clientLocations?.floors.map((item, index) => (
+              <option key={index} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
           <Button type="submit" label="Search" color="bg-black" height="h-8" />
         </form>
         <Button

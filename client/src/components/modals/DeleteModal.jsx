@@ -4,14 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "../Button";
 import { toggleModal } from "../../redux/helperSlice";
 
-const DeleteModal = ({
-  title,
-  description,
-  handleDelete,
-  isLoading,
-  id,
-  label,
-}) => {
+const DeleteModal = ({ title, handleDelete, isLoading, id, label }) => {
   const { isModalOpen } = useSelector((store) => store.helper);
   const dispatch = useDispatch();
 
@@ -47,7 +40,8 @@ const DeleteModal = ({
               {title}
             </h3>
             <p className="text-sm text-gray-700 pt-4">
-              Are you sure do you want to delete <b>{isModalOpen.delete.name}?</b>
+              Are you sure do you want to delete{" "}
+              <b>{isModalOpen.delete.name}?</b>
             </p>
           </div>
           <div className="flex pt-2">

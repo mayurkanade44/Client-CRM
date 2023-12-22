@@ -77,9 +77,11 @@ const Services = () => {
 
   const handleDelete = async () => {
     try {
-      await deleteService(isModalOpen.delete).unwrap();
+      await deleteService(isModalOpen.delete.id).unwrap();
       toast.success("Deleted successfully");
-      dispatch(toggleModal({ name: "delete", status: false }));
+      dispatch(
+        toggleModal({ name: "delete", status: { id: null, name: null } })
+      );
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);
@@ -167,16 +169,18 @@ const Services = () => {
                     <td className="px-3 border-r  border-neutral-500">
                       {service.serviceName.label}
                     </td>
-                    <td className="px-3 flex justify-center items-center space-x-3 border-r text-center border-neutral-500">
+                    <td className="px-3 flex justify-center h-8 items-center space-x-3 border-r text-center border-neutral-500">
                       <button type="button" onClick={() => copyData(service)}>
                         <FaEdit className="h-5 w-5 text-indigo-600" />
                       </button>
                       <DeleteModal
-                        title={`Delete ${service.serviceType.label}`}
-                        description={service.serviceName.label}
+                        title="Delete Service"
                         handleDelete={handleDelete}
                         isLoading={deleteLoading}
-                        id={service._id}
+                        id={{
+                          id: service._id,
+                          name: service.serviceName.label,
+                        }}
                       />
                     </td>
                   </tr>

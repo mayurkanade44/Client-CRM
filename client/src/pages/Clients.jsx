@@ -12,7 +12,7 @@ import { toggleModal } from "../redux/helperSlice";
 const Clients = () => {
   const dispatch = useDispatch();
   const { isModalOpen } = useSelector((store) => store.helper);
-  
+
   const { data, isLoading, isFetching, error } = useAllClientsQuery();
   const [deleteClient, { isLoading: deleteLoading }] =
     useDeleteClientMutation();
@@ -41,7 +41,7 @@ const Clients = () => {
         <div className="overflow-y-auto my-4">
           <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">
             <thead>
-              <tr className="h-12 w-full text-md md:text-lg leading-none">
+              <tr className="h-10 w-full text-md md:text-lg leading-none">
                 <th className="font-bold text-center border-neutral-500 border-2 px-3">
                   Client Name
                 </th>
@@ -72,16 +72,20 @@ const Clients = () => {
                     {client.contractNo}
                   </td>
                   <td className="px-3 flex justify-center items-center border-r font-normal border-neutral-500">
-                    <Link to={`/dashboard/client/${client._id}`}>
-                      <Button label="Details" />
-                    </Link>
-                    <DeleteModal
-                      label="Delete"
-                      title="Delete Client"
-                      id={{ id: client._id, name: client.name }}
-                      handleDelete={handleDelete}
-                      isLoading={deleteLoading}
-                    />
+                    {client.name !== "EPCORN" && (
+                      <>
+                        <Link to={`/dashboard/client/${client._id}`}>
+                          <Button label="Details" />
+                        </Link>
+                        <DeleteModal
+                          label="Delete"
+                          title="Delete Client"
+                          id={{ id: client._id, name: client.name }}
+                          handleDelete={handleDelete}
+                          isLoading={deleteLoading}
+                        />
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}

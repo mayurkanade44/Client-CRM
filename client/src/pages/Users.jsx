@@ -66,7 +66,7 @@ const Users = () => {
                     Email
                   </th>
                   <th className="font-bold text-center border-neutral-500 border-2 px-3">
-                    {loginUser.role === "Client Admin"
+                    {loginUser.role === "ClientAdmin"
                       ? "Department"
                       : "Location"}
                   </th>
@@ -88,7 +88,7 @@ const Users = () => {
                       {user.email}
                     </td>
                     <td className="px-3 border-r font-normal border-neutral-500">
-                      {loginUser.role === "Client Admin"
+                      {loginUser.role === "ClientAdmin"
                         ? user.department
                         : user.client.name}
                     </td>
@@ -98,13 +98,15 @@ const Users = () => {
                         color="bg-indigo-500"
                         onClick={() => handleUpdateUserModal(user)}
                       />
-                      <DeleteModal
-                        label="Delete"
-                        title={`Delete`}
-                        handleDelete={handleDelete}
-                        isLoading={deleteLoading}
-                        id={{ id: user._id, name: user.name }}
-                      />
+                      {user.role !== "ClientAdmin" && (
+                        <DeleteModal
+                          label="Delete"
+                          title={`Delete`}
+                          handleDelete={handleDelete}
+                          isLoading={deleteLoading}
+                          id={{ id: user._id, name: user.name }}
+                        />
+                      )}
                     </td>
                   </tr>
                 ))}

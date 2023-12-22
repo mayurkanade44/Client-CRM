@@ -17,7 +17,18 @@ export const clientSlice = apiSlice.injectEndpoints({
       providesTags: ["Client"],
       keepUnusedDataFor: 60,
     }),
+    deleteClient: builder.mutation({
+      query: (id) => ({
+        url: `/api/client/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Client"],
+    }),
   }),
 });
 
-export const { useRegisterClientMutation, useAllClientsQuery } = clientSlice;
+export const {
+  useRegisterClientMutation,
+  useAllClientsQuery,
+  useDeleteClientMutation,
+} = clientSlice;

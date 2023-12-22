@@ -1,4 +1,6 @@
 import Client from "../models/clientModel.js";
+import Location from "../models/locationModel.js";
+import Service from "../models/serviceModel.js";
 import User from "../models/userModel.js";
 import { capitalLetter } from "../utils/helperFunction.js";
 
@@ -46,6 +48,24 @@ export const getAllClient = async (req, res) => {
     const clients = await Client.find();
 
     return res.json(clients);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Server error, try again later" });
+  }
+};
+
+export const deleteClient = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const client = await Client.findById(id);
+    if (!client) return res.status(404).json({ msg: "Client not found" });
+
+    await Service.deleteMany({ client: id });
+    await Location.deleteMany({ client: id });
+    await User.deleteMany({ client: id });
+    await Client.findByIdAndDelete(id);
+
+    return res.json({ msg: "Client has been deleted" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

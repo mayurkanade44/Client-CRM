@@ -34,9 +34,11 @@ const SingleClient = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await deleteLocation(isModalOpen.delete).unwrap();
-      toast.success(res.msg);
-      dispatch(toggleModal({ name: "delete", status: false }));
+      await deleteLocation(isModalOpen.delete.id).unwrap();
+      toast.success(`${isModalOpen.delete.name} deleted successfully`);
+      dispatch(
+        toggleModal({ name: "delete", status: { id: null, name: null } })
+      );
     } catch (error) {
       console.log(error);
       toast.error(error?.data?.msg || error.error);
@@ -64,19 +66,26 @@ const SingleClient = () => {
               <h6 className="text-center">Email: {data.client.email}</h6>
             </div>
           </div>
-          <Button
-            height="h-10"
-            color="bg-green-600"
-            label={
-              <div className="flex items-center">
-                <MdAddCircle className="w-6 h-6 pr-1" /> New Location
-              </div>
-            }
-            onClick={handleNewModal}
-          />
-          {isModalOpen.location && (
-            <LocationModal clientId={id} locationDetails={locationDetails} />
-          )}
+          <div className="flex justify-between">
+            <div>
+              <Button
+                height="h-10"
+                color="bg-green-600"
+                label={
+                  <div className="flex items-center">
+                    <MdAddCircle className="w-6 h-6 pr-1" /> New Location
+                  </div>
+                }
+                onClick={handleNewModal}
+              />
+              {isModalOpen.location && (
+                <LocationModal
+                  clientId={id}
+                  locationDetails={locationDetails}
+                />
+              )}
+            </div>
+          </div>
           <div className="overflow-y-auto my-4">
             <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">
               <thead>
@@ -105,7 +114,7 @@ const SingleClient = () => {
                 {data.locations?.map((location) => (
                   <tr
                     key={location._id}
-                    className="h-10 text-sm leading-none bg-text border-b border-neutral-500 hover:bg-slate-200"
+                    className="h-9 text-sm leading-none bg-text border-b border-neutral-500 hover:bg-slate-200"
                   >
                     <td className="px-3 border-r font-normal border-neutral-500">
                       {location.floor}
@@ -124,7 +133,6 @@ const SingleClient = () => {
                         label="Download"
                         small
                         height="h-7"
-                        color="bg-green-600"
                         onClick={() =>
                           saveAs(location.qr, `QR-${location.location}`)
                         }
@@ -142,7 +150,10 @@ const SingleClient = () => {
                         description="this location"
                         handleDelete={handleDelete}
                         isLoading={deleteLoading}
-                        id={location._id}
+                        id={{
+                          id: location._id,
+                          name: `${location.location}, ${location.subLocation}`,
+                        }}
                       />
                     </td>
                   </tr>

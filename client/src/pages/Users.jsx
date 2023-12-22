@@ -29,9 +29,11 @@ const Users = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await deleteUser(isModalOpen.delete).unwrap();
-      toast.success(res.msg);
-      dispatch(toggleModal({ name: "delete", status: false }));
+      await deleteUser(isModalOpen.delete.id).unwrap();
+      toast.success(`${isModalOpen.delete.name} deleted successfully`);
+      dispatch(
+        toggleModal({ name: "delete", status: { id: null, name: null } })
+      );
     } catch (error) {
       console.log(error);
       toast.error("Error");
@@ -90,7 +92,7 @@ const Users = () => {
                         ? user.department
                         : user.client.name}
                     </td>
-                    <td className="px-3 flex border-r font-normal border-neutral-500">
+                    <td className="px-3 flex justify-center items-center border-r font-normal border-neutral-500">
                       <Button
                         label="Password"
                         color="bg-indigo-500"
@@ -99,10 +101,9 @@ const Users = () => {
                       <DeleteModal
                         label="Delete"
                         title={`Delete`}
-                        description="this user"
                         handleDelete={handleDelete}
                         isLoading={deleteLoading}
-                        id={user._id}
+                        id={{ id: user._id, name: user.name }}
                       />
                     </td>
                   </tr>

@@ -6,7 +6,7 @@ const initialState = {
     : null,
   isModalOpen: {
     newClient: false,
-    delete: false,
+    delete: { id: null, name: null },
     location: false,
     user: false,
     complaint: false,
@@ -25,7 +25,7 @@ const helperSlice = createSlice({
     removeCredentials: (state) => {
       state.user = null;
       localStorage.clear();
-      state.locationId = ""
+      state.locationId = "";
     },
     toggleModal: (state, { payload }) => {
       state.isModalOpen[payload.name] = payload.status;

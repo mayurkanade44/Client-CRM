@@ -1,10 +1,34 @@
 import { Link } from "react-router-dom";
 import { AlertMessage, Button, Loading } from "../components";
-import { NewClientModal } from "../components/modals";
-import { useAllClientsQuery } from "../redux/clientSlice";
+import { DeleteModal, NewClientModal } from "../components/modals";
+import {
+  useAllClientsQuery,
+  useDeleteClientMutation,
+} from "../redux/clientSlice";
+import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleModal } from "../redux/helperSlice";
 
 const Clients = () => {
+  const dispatch = useDispatch();
+  const { isModalOpen } = useSelector((store) => store.helper);
+  
   const { data, isLoading, isFetching, error } = useAllClientsQuery();
+  const [deleteClient, { isLoading: deleteLoading }] =
+    useDeleteClientMutation();
+
+  const handleDelete = async () => {
+    try {
+      await deleteClient(isModalOpen.delete.id).unwrap();
+      toast.success(`${isModalOpen.delete.name} deleted successfully`);
+      dispatch(
+        toggleModal({ name: "delete", status: { id: null, name: null } })
+      );
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.data?.msg || error.error);
+    }
+  };
   return (
     <>
       {isLoading || isFetching ? (
@@ -36,7 +60,7 @@ const Clients = () => {
               {data?.map((client) => (
                 <tr
                   key={client._id}
-                  className="h-12 text-sm leading-none bg-text border-b border-neutral-500 hover:bg-slate-200"
+                  className="h-10 text-sm leading-none bg-text border-b border-neutral-500 hover:bg-slate-200"
                 >
                   <td className="px-3 border-r font-normal border-neutral-500">
                     {client.name}
@@ -47,10 +71,17 @@ const Clients = () => {
                   <td className="px-3 border-r font-normal text-center border-neutral-500">
                     {client.contractNo}
                   </td>
-                  <td className="px-3 border-r font-normal text-center border-neutral-500">
+                  <td className="px-3 flex justify-center items-center border-r font-normal border-neutral-500">
                     <Link to={`/dashboard/client/${client._id}`}>
                       <Button label="Details" />
                     </Link>
+                    <DeleteModal
+                      label="Delete"
+                      title="Delete Client"
+                      id={{ id: client._id, name: client.name }}
+                      handleDelete={handleDelete}
+                      isLoading={deleteLoading}
+                    />
                   </td>
                 </tr>
               ))}

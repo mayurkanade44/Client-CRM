@@ -18,30 +18,36 @@ const DeleteModal = ({
   return (
     <>
       <button
-        className={`flex ${
+        className={
           label &&
-          "bg-red-400 rounded-lg hover:opacity-80 h-8 px-2 mt-1 items-center"
-        } `}
+          `bg-red-600 flex rounded-lg hover:opacity-80 px-2 items-center h-8`
+        }
         onClick={() => dispatch(toggleModal({ name: "delete", status: id }))}
       >
-        <MdDeleteForever className="w-6 h-6 mr-0.5 text-red-600" />
+        <MdDeleteForever
+          className={`w-6 h-6 mr-0.5  ${label ? "text-white" : "text-red-600"}`}
+        />
         <span className="text-white text-[15px] font-semibold">{label}</span>
       </button>
       <div
         className={`fixed inset-0 z-50 flex justify-center items-center  transition-colors ${
-          isModalOpen.delete ? "visible bg-black/20" : "invisible"
+          isModalOpen.delete.id ? "visible bg-black/20" : "invisible"
         }`}
       >
         <div
           className={`bg-white rounded-xl shadow p-5 transition-all ${
-            isModalOpen.delete ? "scale-100 opacity-100" : "scale-125 opacity-0"
+            isModalOpen.delete.id
+              ? "scale-100 opacity-100"
+              : "scale-125 opacity-0"
           }`}
         >
           <AiOutlineDelete className="text-red-500 mx-auto w-10 h-10" />
           <div className="mx-auto my-1">
-            <h3 className="text-lg font-black text-gray-800 text-center">{title}</h3>
+            <h3 className="text-lg font-black text-gray-800 text-center">
+              {title}
+            </h3>
             <p className="text-sm text-gray-700 pt-4">
-              Are you sure do you want to delete <b>{description}?</b>
+              Are you sure do you want to delete <b>{isModalOpen.delete.name}?</b>
             </p>
           </div>
           <div className="flex pt-2">
@@ -57,7 +63,12 @@ const DeleteModal = ({
               label="Cancel"
               color="bg-slate-500"
               onClick={() =>
-                dispatch(toggleModal({ name: "delete", status: false }))
+                dispatch(
+                  toggleModal({
+                    name: "delete",
+                    status: { id: null, name: null },
+                  })
+                )
               }
               disabled={isLoading}
               width="w-full"

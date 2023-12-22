@@ -141,15 +141,15 @@ const Sidebar = () => {
                 )
               );
             })}
+            <li className="bottom-0 left-0 flex justify-center py-5 w-full">
+              <button onClick={handleLogout}>
+                <div className="flex justify-center items-center font-medium text-xl tracking-wider text-sky-400 hover:text-red-500">
+                  <FaPowerOff className="mr-2" />
+                  Logout
+                </div>
+              </button>
+            </li>
           </ul>
-          <div className="absolute bottom-0 left-0 flex justify-center py-5 w-full">
-            <button onClick={handleLogout}>
-              <div className="flex justify-center items-center font-medium text-xl tracking-wider text-sky-400 hover:text-red-500">
-                <FaPowerOff className="mr-2" />
-                Logout
-              </div>
-            </button>
-          </div>
         </div>
       </aside>
     </aside>

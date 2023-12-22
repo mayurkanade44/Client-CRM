@@ -11,9 +11,9 @@ export const registerUser = async (req, res) => {
     let client = req.user.client;
     if (req.user.role === "Admin") client = req.body.client.value;
 
-    const userExists = await User.findOne({ email, client, type });
+    const userExists = await User.findOne({ email });
     if (userExists)
-      return res.status(400).json({ msg: "User details already exists" });
+      return res.status(400).json({ msg: "Email id already exists" });
 
     const user = await User.create({
       name: capitalLetter(name),

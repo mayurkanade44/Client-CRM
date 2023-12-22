@@ -20,7 +20,7 @@ export const registerClient = async (req, res) => {
       return res.status(400).json({ msg: "Client already exists" });
 
     const client = await Client.create({
-      name: capitalLetter(name),
+      name: capitalName,
       address,
       contractNo,
       email,
@@ -29,7 +29,7 @@ export const registerClient = async (req, res) => {
     const user = await User.create({
       email,
       password,
-      name,
+      name: capitalName,
       department: "Client Admin",
       role: "ClientAdmin",
       type: "ClientEmployee",

@@ -251,6 +251,7 @@ const SingleLocation = () => {
                                     type="file"
                                     id={`service[${index}].image`}
                                     className="mt-2"
+                                    accept="image/*"
                                   />
                                 );
                               }}
@@ -276,6 +277,7 @@ const SingleLocation = () => {
                       height="h-9"
                       width="w-[45%]"
                       onClick={handleCancel}
+                      disabled={regularLoading}
                     />
                   </div>
                 </form>

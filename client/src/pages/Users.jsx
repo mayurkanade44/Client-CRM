@@ -98,7 +98,8 @@ const Users = () => {
                         color="bg-indigo-500"
                         onClick={() => handleUpdateUserModal(user)}
                       />
-                      {user.role !== "ClientAdmin" && (
+                      {(user.role === "ClientEmployee" ||
+                        user.role === "PestEmployee") && (
                         <DeleteModal
                           label="Delete"
                           title={`Delete`}

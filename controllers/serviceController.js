@@ -196,6 +196,9 @@ export const newRegularService = async (req, res) => {
     if (action.length < 1)
       return res.status(400).json({ msg: "One service action is required" });
 
+    const location = await Location.findById(id);
+    if (!location) return res.status(404).json({ msg: "Location not found" });
+
     let images = [];
     if (req.files) {
       if (req.files.images.length > 0) {
@@ -223,7 +226,7 @@ export const newRegularService = async (req, res) => {
 
     await Service.create({
       regularService,
-      client: req.user.client,
+      client: location.client,
       location: id,
     });
 
@@ -331,8 +334,8 @@ export const dailyServiceReport = async (req, res) => {
             emailList: [{ email: client.email }],
             templateId: 1,
             dynamicData: {
-              subject: `Daily Service Report`,
-              description: `Open/Unverified Single Service Slip report till`,
+              client: client.name,
+              date: moment(yesterday).format("DD/MM/YY"),
             },
           });
         }

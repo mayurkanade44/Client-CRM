@@ -30,29 +30,29 @@ export const qrCodeGenerator = async ({ link, floor, location }) => {
   let loc = location.substring(0, 25);
   let subLoc = location.substring(25);
   try {
-    let height = 200,
-      width = 200,
-      margin = 2;
+    let height = 360,
+      width = 340,
+      margin = 6;
 
     const qrCode = await QRCode.toDataURL(link, { width, height, margin });
 
     // Load the QR code image into a canvas
-    const canvas = createCanvas(width, height + 75);
+    const canvas = createCanvas(width, height + 95);
     const ctx = canvas.getContext("2d");
     const qrCodeImg = await loadImage(qrCode);
-    ctx.drawImage(qrCodeImg, 0, 25);
+    ctx.drawImage(qrCodeImg, 0, 40);
 
     // Add the bottom text to the canvas
     ctx.fillStyle = "rgb(255,255,255)";
-    ctx.font = "12px Arial";
+    ctx.font = "20px Arial";
     ctx.textAlign = "start";
-    ctx.fillText(`Floor: ${floor}`, 2, height + 40);
-    ctx.fillText(`Location: ${loc}`, 2, height + 54);
-    ctx.fillText(subLoc, 2, height + 67);
+    ctx.fillText(`Floor: ${floor}`, 2, height + 42);
+    ctx.fillText(`Location: ${loc}`, 2, height + 64);
+    ctx.fillText(subLoc, 2, height + 86);
     ctx.fillStyle = "rgb(32, 125, 192)";
     ctx.textAlign = "center";
-    ctx.font = "italic bold 15px Arial";
-    ctx.fillText(`Powered By PestXZ`, width / 2, 17);
+    ctx.font = "italic bold 33px Arial";
+    ctx.fillText(`Powered By PestXZ`, width / 2, 30);
 
     const buf = canvas.toBuffer("image/jpeg");
     return buf;
@@ -96,7 +96,6 @@ export const sendEmail = async ({
       name: "EPCORN",
       email: process.env.NO_REPLY_EMAIL,
     };
-    sendSmtpEmail.cc = { email: process.env.NO_REPLY_EMAIL };
     sendSmtpEmail.to = emailList;
     sendSmtpEmail.params = dynamicData;
     sendSmtpEmail.templateId = templateId;

@@ -1,7 +1,11 @@
 import Client from "../models/clientModel.js";
 import Location from "../models/locationModel.js";
 import Service from "../models/serviceModel.js";
-import { qrCodeGenerator, uploadFile } from "../utils/helperFunction.js";
+import {
+  capitalLetter,
+  qrCodeGenerator,
+  uploadFile,
+} from "../utils/helperFunction.js";
 import fs from "fs";
 
 let locationId = null;
@@ -21,9 +25,9 @@ export const addLocation = async (req, res) => {
       return res.status(400).json({ msg: "Location already exist" });
 
     const newLocation = await Location.create({
-      floor,
-      subLocation,
-      location,
+      floor: capitalLetter(floor),
+      subLocation: capitalLetter(subLocation),
+      location: capitalLetter(location),
       service: req.body.service.length > 0 ? req.body.service : [],
       product: req.body.product.length > 0 ? req.body.product : [],
       client: client._id,
@@ -32,8 +36,8 @@ export const addLocation = async (req, res) => {
 
     const qrData = await qrCodeGenerator({
       link: `https://www.pestxz.com/location/${locationId}`,
-      floor,
-      location: `${location}, ${subLocation}`,
+      floor: newLocation.floor,
+      location: `${newLocation.location}, ${newLocation.subLocation}`,
     });
     if (!qrData) {
       await Location.findByIdAndDelete(locationId);

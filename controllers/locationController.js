@@ -181,7 +181,12 @@ export const getLocationDetails = async (req, res) => {
       }
     }
 
-    return res.json({ location, complaints, lastServices });
+    const regularService = await Service.findOne({
+      type: "Regular",
+      location: id,
+    }).sort("-createdAt");
+
+    return res.json({ location, complaints, lastServices, regularService });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Server error, try again later" });

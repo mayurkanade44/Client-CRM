@@ -95,7 +95,7 @@ const SingleLocation = () => {
           {user.type === "ClientEmployee" && (
             <>
               <Button
-                label="New Complaint"
+                label="Raise Complaint"
                 onClick={() =>
                   dispatch(toggleModal({ name: "complaint", status: true }))
                 }
@@ -139,7 +139,6 @@ const SingleLocation = () => {
                       <td className="px-3 border-r text-center border-neutral-500">
                         {dateFormat(complaint.createdAt)}
                       </td>
-
                       <td className="px-3 border-r text-center border-neutral-500">
                         {complaint.complaintDetails.service?.join(", ")}
                       </td>
@@ -205,83 +204,131 @@ const SingleLocation = () => {
             </div>
           )}
           {user.type === "PestEmployee" && (
-            <div className="flex justify-center items-center">
-              {!regular ? (
-                <Button
-                  label="Regular Service"
-                  onClick={() => setRegular(true)}
-                />
-              ) : (
-                <form
-                  onSubmit={handleSubmit(submit)}
-                  className="w-[70%] md:w-[40%]"
-                >
-                  {data.location.service?.map((service, index) => (
-                    <div key={index} className="mt-4">
-                      <p className="text-center font-medium text-lg">
-                        {service.label}
-                      </p>
-                      {fields.map((field) => {
-                        return (
-                          <div key={field.id}>
-                            <Controller
-                              name={`service[${index}].action`}
-                              control={control}
-                              render={({ field: { onChange, value, ref } }) => (
-                                <InputSelect
-                                  options={serviceActions}
-                                  onChange={onChange}
-                                  value={value}
-                                  label="Services Action"
-                                />
-                              )}
-                            />
-                            <Controller
-                              control={control}
-                              name={`service[${index}].image`}
-                              render={({
-                                field: { value, onChange, ...field },
-                              }) => {
-                                return (
-                                  <input
-                                    {...field}
-                                    onChange={(event) => {
-                                      onChange(event.target.files[0]);
-                                    }}
-                                    type="file"
-                                    id={`service[${index}].image`}
-                                    className="mt-2"
-                                    accept="image/*"
-                                  />
-                                );
-                              }}
-                            />
-                          </div>
-                        );
-                      })}
-                      <hr className="h-px mt-5 mb-4 border-0 bg-gray-700" />
-                    </div>
-                  ))}
-                  <div className="flex justify-center">
-                    <Button
-                      label="Submit"
-                      type="submit"
-                      height="h-9"
-                      width="w-[45%]"
-                      isLoading={regularLoading}
-                      disabled={regularLoading}
-                    />
-                    <Button
-                      label="Cancel"
-                      color="bg-red-600"
-                      height="h-9"
-                      width="w-[45%]"
-                      onClick={handleCancel}
-                      disabled={regularLoading}
-                    />
+            <div>
+              {data.regularService?.regularService?.length > 0 && (
+                <>
+                  <h6 className="text-lg font-medium text-blue-700">
+                    Last Regular Service Done
+                  </h6>
+                  <div className="overflow-y-auto my-3">
+                    <table className="w-full border whitespace-nowrap border-neutral-500 bg-text">
+                      <thead>
+                        <tr className="h-8 w-full leading-none">
+                          <th className="font-bold text-center border-neutral-500 border-2 px-3">
+                            Date
+                          </th>
+                          <th className="font-bold text-center border-neutral-500 border-2 px-3">
+                            Pest
+                          </th>
+                          <th className="font-bold text-center border-neutral-500 border-2 w-24 px-3">
+                            Attended By
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr className="h-8 text-[14px] border-b border-neutral-500 hover:bg-slate-200">
+                          <td className="px-3 border-r text-center border-neutral-500">
+                            {dateFormat(data.regularService?.createdAt)}
+                          </td>
+
+                          <td className="px-3 border-r text-center border-neutral-500">
+                            {data.regularService.regularService?.map(
+                              (item) => item.name + ", "
+                            )}
+                          </td>
+                          <td className="px-3 border-r text-center border-neutral-500">
+                            <p
+                              className={`inline-flex items-center rounded-md px-2 font-medium ring-1 ring-gray-300`}
+                            >
+                              {data.regularService.regularService[0].userName}
+                            </p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-                </form>
+                </>
               )}
+              <div className="flex justify-center items-center">
+                {!regular ? (
+                  <Button
+                    label="Regular Service Update"
+                    onClick={() => setRegular(true)}
+                  />
+                ) : (
+                  <form
+                    onSubmit={handleSubmit(submit)}
+                    className="w-[70%] md:w-[40%]"
+                  >
+                    {data.location.service?.map((service, index) => (
+                      <div key={index} className="mt-4">
+                        <p className="text-center font-medium text-lg">
+                          {service.label}
+                        </p>
+                        {fields.map((field) => {
+                          return (
+                            <div key={field.id}>
+                              <Controller
+                                name={`service[${index}].action`}
+                                control={control}
+                                render={({
+                                  field: { onChange, value, ref },
+                                }) => (
+                                  <InputSelect
+                                    options={serviceActions}
+                                    onChange={onChange}
+                                    value={value}
+                                    label="Services Action"
+                                  />
+                                )}
+                              />
+                              <Controller
+                                control={control}
+                                name={`service[${index}].image`}
+                                render={({
+                                  field: { value, onChange, ...field },
+                                }) => {
+                                  return (
+                                    <input
+                                      {...field}
+                                      onChange={(event) => {
+                                        onChange(event.target.files[0]);
+                                      }}
+                                      type="file"
+                                      id={`service[${index}].image`}
+                                      className="mt-2"
+                                      accept="image/*"
+                                    />
+                                  );
+                                }}
+                              />
+                            </div>
+                          );
+                        })}
+                        <hr className="h-px mt-5 mb-4 border-0 bg-gray-700" />
+                      </div>
+                    ))}
+                    <div className="flex justify-center">
+                      <Button
+                        label="Submit"
+                        type="submit"
+                        height="h-9"
+                        width="w-[45%]"
+                        isLoading={regularLoading}
+                        disabled={regularLoading}
+                      />
+                      <Button
+                        label="Cancel"
+                        color="bg-red-600"
+                        height="h-9"
+                        width="w-[45%]"
+                        onClick={handleCancel}
+                        disabled={regularLoading}
+                      />
+                    </div>
+                  </form>
+                )}
+              </div>
             </div>
           )}
         </div>
